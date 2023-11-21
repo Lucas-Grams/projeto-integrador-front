@@ -20,4 +20,4 @@ build docker image:
          .
       - docker push "$IMAGE"
    tags:
-      - ufsm-docker
+      - ufsm-pnip
