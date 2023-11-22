@@ -24,4 +24,4 @@ build docker image:
 
 
 deploy docker image:
-   image: pdsa-rs/infra/review-app-deployer
+   image: registry.gitlab.com/pdsa-rs/infra/review-app-deployer:latest
