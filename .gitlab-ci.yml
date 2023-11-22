@@ -21,3 +21,7 @@ build docker image:
       - docker push "$IMAGE"
    tags:
       - ufsm-pnip
+
+
+deploy docker image:
+   image: pdsa-rs/infra/review-app-deployer
