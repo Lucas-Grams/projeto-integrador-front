@@ -24,4 +24,11 @@ build docker image:
 
 
 deploy docker image:
-   image: registry.gitlab.com/pdsa-rs/infra/review-app-deployer:latest
+   stage: deploy
+   variables:
+      SERVICE_REQUESTED: FRONT
+      COMMAND: deploy
+      BRANCH_NAME: $CI_COMMIT_BRANCH
+   trigger:
+      project: pnip-mpa/infra/review-env-deployer
+      strategy: depend
