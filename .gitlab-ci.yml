@@ -1,5 +1,6 @@
 stages:
    - build
+   - deploy
 
 build docker image:
    image: docker:20.10.5
