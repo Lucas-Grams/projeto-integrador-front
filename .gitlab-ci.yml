@@ -31,6 +31,7 @@ deploy_docker_image:
       SERVICE_REQUESTED: FRONT
       COMMAND: deploy
       BRANCH_NAME: $CI_COMMIT_BRANCH
-   trigger:
-      project: br.ufsm.lumac1/pnip-mpa/infra/review-env-deployer
-      strategy: depend
+   needs:
+      - project: br.ufsm.lumac1/pnip-mpa/infra/review-env-deployer
+        ref: $UPSTREAM_REF
+        job: main
