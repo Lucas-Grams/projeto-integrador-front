@@ -1,0 +1,43 @@
+<br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
+<br-divider size="medium" class="mt-0"></br-divider>
+<div class="p-5">
+   <br-message state="success" closable="true">
+      <br-icon-base icon-name="check-circle" family-name="fas" class="mr-2"/>
+      <span class="info">
+         <strong>Sucesso.</strong> Recebemos a sua solicitação de credenciamento.
+      </span>
+   </br-message>
+
+   <h2 class="text-bold text-blue-vivid-60 mt-4 mb-4 pb-0">Minhas solicitações</h2>
+
+   <table class="table">
+      <thead class="thead-light">
+         <tr>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Data</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Tipo de Solicitação</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Nº Processo</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Solicitante</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Status</th>
+            <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
+         </tr>
+      </thead>
+      <tbody>
+         <tr>
+            <td>22/11/2023</td>
+            <td>Habilitação de Técnico Responsável</td>
+            <td>010203040506070809-R</td>
+            <td>Joedeson Jr</td>
+            <td>
+               <div class="bg-secondary-06 text-center pt-1 pb-1 pl-2 pr-2" style="border-radius: 4px;">
+                  <div style="color: #FBFCFD;">Em análise</div>
+               </div>
+            </td>
+            <td class="text-center">
+               <br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60"/>
+               <br-icon-base icon-name="times" family-name="fas" class="text-danger"/>
+            </td>
+         </tr>
+      </tbody>
+   </table>
+
+</div>

@@ -1,0 +1,99 @@
+<form [formGroup]="formGroup" (ngSubmit)="submit()">
+
+   <!-- nome/cpf -->
+   <div class="row mb-2">
+      <div class="col-8">
+         <br-input density="small" name="nome" label="Nome completo" formControlName="nome" [attr.disabled]="true"/>
+      </div>
+      <div class="col-4">
+         <br-input density="small" name="cpf" label="CPF" formControlName="cpf" [attr.disabled]="true" mask="###.###.###-##"/>
+      </div>
+   </div>
+
+   <!-- email/telefone -->
+   <div class="row mb-2">
+      <div class="col-7">
+         <br-input density="small" name="email" label="E-mail" formControlName="email"/>
+      </div>
+      <div class="col-5">
+         <br-input density="small" name="telefone" label="Telefone" formControlName="telefone" mask="(##) #-####-####"/>
+      </div>
+   </div>
+
+   <!-- cep/logradouro/numero -->
+   <div class="row mb-2">
+      <div class="col-2">
+         <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"/>
+      </div>
+      <div class="col-8">
+         <br-input density="small" name="logradouro" label="Logradouro" formControlName="logradouro"/>
+      </div>
+      <div class="col-2">
+         <br-input density="small" name="numero" label="Número" formControlName="numero"/>
+      </div>
+   </div>
+
+   <!-- complemento/municipio/uf -->
+   <div class="row mb-2">
+      <div class="col-5">
+         <br-input density="small" name="complemento" label="Complemento" formControlName="complemento"/>
+      </div>
+      <div class="col-6">
+         <br-input density="small" name="municipio" label="Município" formControlName="municipio"/>
+      </div>
+      <div class="col-1">
+         <br-input density="small" name="uf" label="UF" formControlName="uf"/>
+      </div>
+   </div>
+
+   <!-- formacao/num habilitacao/conselho classe/uf conselho -->
+   <div class="row mb-2">
+      <div class="col-6">
+         <br-input density="small" name="formacao" label="Formação" formControlName="formacao"/>
+      </div>
+      <div class="col-2">
+         <br-input density="small" name="numHabilitacao" label="Nº da Habilitação" formControlName="numHabilitacao"/>
+      </div>
+      <div class="col-3">
+         <br-input density="small" name="conselhoClasse" label="Conselho de classe" formControlName="conselhoClasse"/>
+      </div>
+      <div class="col-1">
+         <br-input density="small" name="ufConselho" label="UF/Região" formControlName="ufConselho"/>
+      </div>
+   </div>
+
+   <!-- formacao/num habilitacao/conselho classe/uf conselho -->
+   <div class="row mb-2">
+      <div class="col-6">
+         <label>Cópia da Habilitação ou Comprovante de Quitação</label>
+         <div class="upload-file mt-1 mb-1 w-100" (click)="openCopiaHabilitacaoUpload()">
+            <div class="text-blue-vivid-60 pt-1 pb-1">
+               <br-icon-base icon-name="upload" family-name="fas" class="ml-2"/> <i> Selecione o(s) arquivo(s)</i>
+            </div>
+         </div>
+         <input #copiaHabilitacaoInput type="file" class="d-none" formControlName="copiaHabilitacao"
+                (change)="onCopiaHabilitacaoSelected($event)">
+      </div>
+      <div class="col-6 upload">
+
+         <label>Diploma/Certificado</label>
+         <div class="upload-file mt-1 mb-1 w-100" (click)="openDiplomaCertificadoUpload()">
+            <div class="text-blue-vivid-60 pt-1 pb-1">
+               <br-icon-base icon-name="upload" family-name="fas" class="ml-2"/> <i> Selecione o(s) arquivo(s)</i>
+            </div>
+         </div>
+         <input #diplomaCertificadoInput type="file" class="d-none" formControlName="diplomaCertificado"
+                (change)="onDiplomaCertificadoSelected($event)">
+
+         <!--
+         <br-input density="small" name="diplomaCertificado" label="Diploma/Certificado"
+            placeholder="Selecione o(s) arquivo(s)" icon-sign="upload" formControlName="diplomaCertificado"/>
+         -->
+      </div>
+   </div>
+
+   <div class="d-flex justify-content-end mt-4">
+      <br-button label="Cancelar" type="secondary" class="mr-2"/>
+      <br-button label="Solicitar Habilitação" type="primary" (click)="submit()"/>
+   </div>
+</form>

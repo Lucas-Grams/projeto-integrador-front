@@ -1,33 +1,15 @@
 <br-header
-   image="https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/images/logo-positive.png"
-   signature="Plaforma Nacional da Industria do Pescado">
-      <br-header-action
-         slot="headerAction"
-         has-login=""
-         label-login="Entrar"
-         image-avatar-login="https://picsum.photos/id/823/400"
-         title-links="Acesso Rápido"
-         title-functions="Funcionalidades do Sistema"
+      [image]="logo"
+      [signature]="signature"
+      [title]="title"
+      [hasMenu]="true"
+      [hasTitleLink]="false">
+   <br-header-action
+         [slot]="'headerAction'"
+         [hasLogin]="hasLogin"
+         [labelLogin]="loginService.getUsername() ? loginService.getUsername() : 'Entrar'"
          [listLinks]="portal"
-         list-functions="[
-            {
-               icon: 'chart-bar',
-               name: 'Funcionalidade 1',
-               url: '#',
-               clickEventName: 'click-funcionalidade-1'
-            },
-            {
-               icon: 'headset',
-               name: 'Funcionalidade 2',
-               url: '#',
-               clickEventName: 'click-funcionalidade-2'
-            },
-            {
-               icon: 'comment',
-               name: 'Funcionalidade 3',
-               url: '#',
-               clickEventName: 'click-funcionalidade-3'
-            }
-         ]">
-      </br-header-action>
+         [listFunctions]="actions"
+         (click)="login()">
+   </br-header-action>
 </br-header>
