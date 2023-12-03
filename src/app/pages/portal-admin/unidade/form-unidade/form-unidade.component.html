@@ -1,0 +1,60 @@
+<br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
+<br-divider size="medium" class="mt-0"></br-divider>
+<div class="p-5">
+   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Cadastrar nova unidade</h2>
+
+   <form [formGroup]="formGroup" (ngSubmit)="salvar()">
+
+      <!-- tipo/gerenciadora -->
+      <div class="row mb-2">
+         <div class="col-6">
+            <br-input density="small" name="tipo" label="Tipo da unidade" formControlName="tipo"/>
+         </div>
+         <div class="col-6">
+            <br-input density="small" name="idUnidadeGerenciadora" label="Reporta-se" formControlName="idUnidadeGerenciadora"/>
+         </div>
+      </div>
+
+      <!-- nome/cep -->
+      <div class="row mb-2">
+         <div class="col-8">
+            <br-input density="small" name="nome" label="Nome da unidade" formControlName="nome"/>
+         </div>
+         <div class="col-4">
+            <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"/>
+         </div>
+      </div>
+
+      <!-- rua/numero/bairro -->
+      <div class="row mb-2">
+         <div class="col-6">
+            <br-input density="small" name="rua" label="Rua" formControlName="rua"/>
+         </div>
+         <div class="col-2">
+            <br-input density="small" name="numero" label="Número" formControlName="numero"/>
+         </div>
+         <div class="col-4">
+            <br-input density="small" name="bairro" label="Bairro" formControlName="bairro"/>
+         </div>
+      </div>
+
+      <!-- complemento/uf/cidade -->
+      <div class="row mb-2">
+         <div class="col-4">
+            <br-input density="small" name="complemento" label="Complemento" formControlName="complemento"/>
+         </div>
+         <div class="col-4">
+            <br-input density="small" name="uf" label="UF" formControlName="uf"/>
+         </div>
+         <div class="col-4">
+            <br-input density="small" name="cidade" label="Cidade" formControlName="cidade"/>
+         </div>
+      </div>
+
+      <div class="d-flex justify-content-end mt-4">
+         <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/unidades'"/>
+         <br-button label="Salvar" type="primary" (click)="salvar()"/>
+      </div>
+   </form>
+
+</div>
