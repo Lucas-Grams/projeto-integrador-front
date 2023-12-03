@@ -1,1 +1,18 @@
-PRINCIPAL ADMIN
+<br-breadcrumb [links]="breadcrumb"/>
+<br-divider size="medium" class="mt-0"/>
+<div class="d-flex justify-content-md-center align-items-center" [style.height]="'70vh'">
+   <ng-container *ngFor="let item of menuItems">
+      <div class="pl-3 pr-3" [style.width]="'240px'">
+         <br-card>
+            <br-card-content slot="content">
+               <a [routerLink]="'/portal-admin' + item.url">
+                  <div class="d-flex justify-content-md-center align-items-center flex-column text-center" [style.height]="'120px'">
+                     <i class="fa fa-3x text-blue-vivid-60" [class]="'fa-' + item.icon"></i>
+                     <h6 class="mt-4 mb-0 p-0">{{item.label}}</h6>
+                  </div>
+               </a>
+            </br-card-content>
+         </br-card>
+      </div>
+   </ng-container>
+</div>

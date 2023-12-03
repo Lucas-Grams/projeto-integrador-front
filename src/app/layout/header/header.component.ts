@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from "@angular/router";
+import {LoginService} from "../../core/services/login.service";
 
 @Component({
    selector: 'pnip-header',
@@ -8,16 +9,39 @@ import {NavigationEnd, Router} from "@angular/router";
 })
 export class HeaderComponent implements OnInit {
 
-   portal: any = null;
+   public signature = 'Ministério da Pesca e Aquicultura';
+   public title = 'Plataforma Nacional da Indústria do Pescado';
+   public logo = 'assets/images/govbr-logo.png';
 
-   constructor(private router: Router) {}
+   public hasLogin = true;
+
+   public portal: {name: string, href: string}[] | null = null;
+
+   public actions = [
+      {
+         icon: 'headset',
+         name: 'Suporte',
+         title: 'Suporte',
+         url: '#',
+         clickEventName: 'suporte'
+      },
+      {
+         icon: 'comment',
+         name: 'Comentários',
+         title: 'Comentários',
+         url: '#',
+         clickEventName: 'comentarios'
+      }
+   ];
+
+   constructor(protected loginService: LoginService, private router: Router) {}
 
    ngOnInit() {
       this.router.events.subscribe((event) => {
          if (event instanceof NavigationEnd) {
+            this.portal = null;
             const url = event.url;
             if (!url) {
-               this.portal = null;
                return;
             }
             else if (url.includes('/portal-admin')) this.portal = [{name: 'Portal ADMIN', href: url}];
@@ -25,6 +49,10 @@ export class HeaderComponent implements OnInit {
             else if (url.includes('/portal-tr'))    this.portal = [{name: 'Portal TR', href: url}];
          }
       });
+   }
+
+   login() {
+      this.loginService.mockLogin();
    }
 
 }

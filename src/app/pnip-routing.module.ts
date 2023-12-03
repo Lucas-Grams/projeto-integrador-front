@@ -1,8 +1,18 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {NotFoundComponent} from "./layout/not-found/not-found.component";
+import {LoginComponent} from "./pages/login/login.component";
 
 const routes: Routes = [
+   {
+      path: '',
+      pathMatch: 'full',
+      redirectTo: 'login',
+   },
+   {
+      path: 'login',
+      component: LoginComponent,
+   },
    {
       path: 'portal-admin',
       loadChildren: () => import('./pages/portal-admin/admin.module').then((m) => m.AdminModule)

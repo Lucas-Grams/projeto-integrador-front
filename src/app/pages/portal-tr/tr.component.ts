@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 
 @Component({
    selector: 'tr-mpa',
-   templateUrl: './tr.component.html',
+   template: `<router-outlet></router-outlet>`,
    styleUrls: []
 })
 export class TrComponent {}
