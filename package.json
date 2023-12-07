@@ -37,10 +37,5 @@
       "karma-jasmine": "~5.1.0",
       "karma-jasmine-html-reporter": "~2.0.0",
       "typescript": "~4.8.2"
-   },
-   "/api": {
-      "target": "http://localhost:8089",
-      "secure": false
    }
-
 }
