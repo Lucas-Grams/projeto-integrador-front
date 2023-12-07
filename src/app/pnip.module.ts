@@ -8,6 +8,7 @@ import {LoginComponent} from "./pages/login/login.component";
 import {LoginService} from "./core/services/login.service";
 import {LoadingService} from "./core/services/loading.service";
 import {LoadingComponent} from "./layout/loading/loading.component";
+import {CommonModule} from "@angular/common";
 
 @NgModule({
    declarations: [

@@ -5,6 +5,8 @@ import {SharedModule} from "../../../shared/shared.module";
 import {UnidadeRoutingModule} from "./unidade-routing.module";
 import {ListarUnidadesComponent} from "./listar-unidades/listar-unidades.component";
 import {FormUnidadeComponent} from "./form-unidade/form-unidade.component";
+import {UnidadeService} from "../../../core/services/unidade.service";
+import {HttpClient, HttpClientModule, HttpHandler} from "@angular/common/http";
 
 @NgModule({
    declarations: [
@@ -15,7 +17,11 @@ import {FormUnidadeComponent} from "./form-unidade/form-unidade.component";
       SharedModule,
       CommonModule,
       ReactiveFormsModule,
-      UnidadeRoutingModule
+      UnidadeRoutingModule,
+       HttpClientModule
+   ],
+   providers: [
+       UnidadeService,
    ],
    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
