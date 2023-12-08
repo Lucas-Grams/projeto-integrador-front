@@ -3,21 +3,28 @@ import {BrowserModule} from '@angular/platform-browser';
 import {PnipRoutingModule} from "./pnip-routing.module";
 import {PnipComponent} from './pnip.component';
 import {HeaderComponent} from "./layout/header/header.component";
-import {FooterComponent} from "./layout/footer/footer.component";
 import {NotFoundComponent} from "./layout/not-found/not-found.component";
+import {LoginComponent} from "./pages/login/login.component";
+import {LoginService} from "./core/services/login.service";
+import {LoadingService} from "./core/services/loading.service";
+import {LoadingComponent} from "./layout/loading/loading.component";
 
 @NgModule({
    declarations: [
+      LoginComponent,
       PnipComponent,
       HeaderComponent,
-      FooterComponent,
-      NotFoundComponent
+      NotFoundComponent,
+      LoadingComponent
    ],
    imports: [
       BrowserModule,
       PnipRoutingModule
    ],
-   providers: [],
+   providers: [
+      LoadingService,
+      LoginService
+   ],
    bootstrap: [PnipComponent],
    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 
 @Component({
    selector: 'pnip-admin',
-   templateUrl: './admin.component.html',
+   template: `<router-outlet></router-outlet>`,
    styleUrls: []
 })
 export class AdminComponent {}
