@@ -7,14 +7,29 @@
       <!-- tipo/gerenciadora -->
       <div class="row mb-2">
          <div class="col-6">
-            <br-input density="small" name="tipo" label="Tipo da unidade" formControlName="tipo"/>
-         </div>
+            <div class="br-select">
+               <div class="br-input">
+                  <label for="select-simple">Selecione o tipo da Unidade</label>
+                  <input id="select-simple" type="text" placeholder=""/>
+                  <button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger"><i class="fas fa-angle-down" aria-hidden="true"></i>
+                  </button>
+               </div>
+               <div class="br-list" tabindex="0" *ngFor="let uni of tipoUnidade">
+                  <div class="br-item" tabindex="-1" >
+                     <div class="br-radio" (click)="validaTipoUnidade()" >
+                        <input id="rb0" type="radio" name="unidades" value="rb0"/>
+                        <label for="rb0">{{uni.value}} vai toma no cu</label>
+                     </div>
+                  </div>
+               </div>
+               </div>
+            </div>
          <div class="col-6">
-            <br-input density="small" name="idUnidadeGerenciadora" label="Reporta-se" formControlName="idUnidadeGerenciadora"/>
+            <ng-container *ngIf="!validarUc">
+               <br-input density="small" name="idUnidadeGerenciadora" label="Reporta-se" formControlName="idUnidadeGerenciadora" [ngModel]="selecionaGerenciadora()"/>
+            </ng-container>
          </div>
       </div>
-
-
 
       <!-- nome/cep -->
       <div class="row mb-2">

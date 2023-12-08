@@ -34,13 +34,13 @@ export class FormUnidadeComponent implements OnInit{
    public formGroup: FormGroup;
    unidade: Unidade;
 
-   validar: boolean = false;
+   validarUc: boolean = false;
 
    tipoUnidade = [
-      {id: 1, value: 'Unidade Central (UC)'},
-      {id: 2, value: 'Programa/Seção (PS)'},
-      {id: 3, value: 'Supeorvisão Regional (SR)'},
-      {id: 4, value: 'Inspetoria Vetrinária Local (IVZ)'}
+      {id: 1, value: 'Unidade Central (UC)', item: 'UC'},
+      {id: 2, value: 'Programa/Seção (PS)', item: 'PS'},
+      {id: 3, value: 'Supeorvisão Regional (SR)', item: 'SR'},
+      {id: 4, value: 'Inspetoria Vetrinária Local (IVZ)', item: 'IVZ'}
    ]
 
    constructor(private loadingService: LoadingService,
@@ -65,7 +65,33 @@ export class FormUnidadeComponent implements OnInit{
    }
 
    ngOnInit() {
+      console.log(this.tipoUnidade);
+   }
 
+   validaTipoUnidade(){
+      if(this.unidade.tipo == 'UC'){
+         this.validarUc = true;
+         console.log(this.validarUc)
+      }else{
+         this.validarUc = false;
+         console.log(this.validarUc)
+      }
+   }
+
+   selecionaGerenciadora() {
+      switch(this.unidade.tipo){
+         case 'PS':
+            return 'UC';
+            break;
+         case 'SR':
+            return 'PS';
+            break;
+         case 'IVZ':
+            return 'SR';
+            break;
+         default:
+            return ' ';
+      }
    }
 
    salvar() {

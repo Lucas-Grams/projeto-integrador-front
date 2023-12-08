@@ -1,5 +1,5 @@
 import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, NgSelectOption, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {SharedModule} from "../../../shared/shared.module";
 import {UnidadeRoutingModule} from "./unidade-routing.module";
@@ -7,6 +7,7 @@ import {ListarUnidadesComponent} from "./listar-unidades/listar-unidades.compone
 import {FormUnidadeComponent} from "./form-unidade/form-unidade.component";
 import {UnidadeService} from "../../../core/services/unidade.service";
 import {HttpClient, HttpClientModule, HttpHandler} from "@angular/common/http";
+import {NgSelectModule} from "@ng-select/ng-select";
 
 @NgModule({
    declarations: [
@@ -18,7 +19,9 @@ import {HttpClient, HttpClientModule, HttpHandler} from "@angular/common/http";
       CommonModule,
       ReactiveFormsModule,
       UnidadeRoutingModule,
-       HttpClientModule
+      HttpClientModule,
+      FormsModule,
+      NgSelectModule
    ],
    providers: [
        UnidadeService,
