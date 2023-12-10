@@ -8,6 +8,7 @@ import {LoginComponent} from "./pages/login/login.component";
 import {LoginService} from "./core/services/login.service";
 import {LoadingService} from "./core/services/loading.service";
 import {LoadingComponent} from "./layout/loading/loading.component";
+import {EnvServiceProvider} from "./core/services/env/env.service.provider";
 
 @NgModule({
    declarations: [
@@ -23,7 +24,8 @@ import {LoadingComponent} from "./layout/loading/loading.component";
    ],
    providers: [
       LoadingService,
-      LoginService
+      LoginService,
+      EnvServiceProvider
    ],
    bootstrap: [PnipComponent],
    schemas: [CUSTOM_ELEMENTS_SCHEMA]
