@@ -52,7 +52,7 @@ export class HeaderComponent implements OnInit {
    }
 
    login() {
-      this.loginService.mockLogin();
+      this.loginService.login();
    }
 
 }
