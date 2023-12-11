@@ -7,7 +7,7 @@ import {ListarUnidadesComponent} from "./listar-unidades/listar-unidades.compone
 import {FormUnidadeComponent} from "./form-unidade/form-unidade.component";
 import {UnidadeService} from "../../../core/services/unidade.service";
 import {HttpClient, HttpClientModule, HttpHandler} from "@angular/common/http";
-import {NgSelectModule} from "@ng-select/ng-select";
+
 
 @NgModule({
    declarations: [
@@ -20,8 +20,7 @@ import {NgSelectModule} from "@ng-select/ng-select";
       ReactiveFormsModule,
       UnidadeRoutingModule,
       HttpClientModule,
-      FormsModule,
-      NgSelectModule
+      FormsModule
    ],
    providers: [
        UnidadeService,

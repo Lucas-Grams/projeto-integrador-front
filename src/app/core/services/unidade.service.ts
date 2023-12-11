@@ -4,12 +4,12 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponseDto} from "../dto/response.dto";
 
-const URL= "api/"
+const URL= "https://localhost:8089"
 @Injectable({
    providedIn: 'root'
 })
 export class UnidadeService{
-   private readonly urlUnidade = URL+"unidade";
+   private readonly urlUnidade = URL+"/unidade";
    private http: HttpClient;
    constructor(http: HttpClient) {
       this.http = http;

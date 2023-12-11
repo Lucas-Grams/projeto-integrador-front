@@ -8,6 +8,10 @@ import {LoginComponent} from "./pages/login/login.component";
 import {LoginService} from "./core/services/login.service";
 import {LoadingService} from "./core/services/loading.service";
 import {LoadingComponent} from "./layout/loading/loading.component";
+import {OAuthModule} from 'angular-oauth2-oidc';
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {EnvServiceProvider} from "./core/services/env/env.service.provider";
+import {AuthInterceptor} from "./core/interceptor/auth/auth.interceptor";
 
 @NgModule({
    declarations: [
