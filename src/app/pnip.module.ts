@@ -8,7 +8,10 @@ import {LoginComponent} from "./pages/login/login.component";
 import {LoginService} from "./core/services/login.service";
 import {LoadingService} from "./core/services/loading.service";
 import {LoadingComponent} from "./layout/loading/loading.component";
-
+import {EnvServiceProvider} from "./core/services/env/env.service.provider";
+import {OAuthModule} from 'angular-oauth2-oidc';
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {AuthInterceptor} from "./core/interceptor/auth/auth.interceptor";
 @NgModule({
    declarations: [
       LoginComponent,
@@ -19,11 +22,16 @@ import {LoadingComponent} from "./layout/loading/loading.component";
    ],
    imports: [
       BrowserModule,
-      PnipRoutingModule
+      PnipRoutingModule,
+      OAuthModule.forRoot(),
+      HttpClientModule
    ],
    providers: [
       LoadingService,
-      LoginService
+      LoginService,
+      HttpClientModule,
+      EnvServiceProvider,
+      {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
    ],
    bootstrap: [PnipComponent],
    schemas: [CUSTOM_ELEMENTS_SCHEMA]
