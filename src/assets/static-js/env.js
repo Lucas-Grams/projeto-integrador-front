@@ -8,9 +8,9 @@
 
    //auth2 keycloak
    window.__env.keycloak = {
-      url: "http://localhost:8099",
-      realm: "pdsa-dev",
-      clientId: "pdsa-web"
+      url: "http://localhost:8098",
+      realm: "master",
+      clientId: "pnip-web"
    };
 
 }(this));

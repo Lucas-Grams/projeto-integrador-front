@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {LoginService} from "../../core/services/login.service";
 
 @Component({
@@ -6,7 +6,7 @@ import {LoginService} from "../../core/services/login.service";
    templateUrl: './login.component.html',
    styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
 
    public breadcrumb = [
       {
@@ -20,10 +20,16 @@ export class LoginComponent {
       }
    ];
 
-   constructor(private loginService: LoginService) {}
+   constructor(private loginService: LoginService) {
+
+   }
 
    login() {
-      this.loginService.mockLogin();
+      this.loginService.login();
+   }
+
+   ngOnInit(): void {
+      this.loginService.isLogin();
    }
 
 }
