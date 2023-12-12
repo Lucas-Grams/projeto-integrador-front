@@ -7,15 +7,17 @@
       <!-- tipo/gerenciadora -->
       <div class="row mb-2">
          <div class="col-6">
-            <div class="br-select">
-              <ng-select *ngFor="let unidade of tipoUnidade">
-                 <ng-option>{{unidade.value}}</ng-option>
-              </ng-select>
+               <div class="br-select">
+                  <div class="br-input">
+                     <select formControlName="tipo" (change)="selecionaGerenciadora()">
+                        <option *ngFor="let uni of tipoUnidade" [value]="uni.item">{{uni.value}}</option>
+                     </select>
+                  </div>
                </div>
             </div>
          <div class="col-6">
             <ng-container *ngIf="!validarUc">
-               <br-input density="small" name="idUnidadeGerenciadora" label="Reporta-se" formControlName="idUnidadeGerenciadora" [ngModel]="selecionaGerenciadora()"/>
+               <br-input density="small" type="number" name="idUnidadeGerenciadora" label="Reporta-se" formControlName="idUnidadeGerenciadora" />
             </ng-container>
          </div>
       </div>
@@ -53,6 +55,16 @@
          </div>
          <div class="col-4">
             <br-input density="small" name="cidade" label="Cidade" formControlName="cidade"/>
+         </div>
+      </div>
+
+      <!-- latitude/longitude -->
+      <div class="row mb-2">
+         <div class="col-6">
+            <br-input density="small" name="latitude" label="latitude" formControlName="latitude"/>
+         </div>
+         <div class="col-6">
+            <br-input density="small" name="longitude" label="longitude" formControlName="longitude"/>
          </div>
       </div>
 

@@ -18,4 +18,8 @@ export class UnidadeService{
          return this.http.post<ResponseDto<Unidade>>(this.urlUnidade + '/salvar', unidade);
       }
 
+      findAll():Observable<Unidade[]>{
+         return this.http.get<Unidade[]>(this.urlUnidade + '/findAll');
+      }
+
 }

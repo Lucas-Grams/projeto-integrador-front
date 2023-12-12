@@ -42,6 +42,7 @@ export class FormUnidadeComponent implements OnInit{
       {id: 3, value: 'Supeorvisão Regional (SR)', item: 'SR'},
       {id: 4, value: 'Inspetoria Vetrinária Local (IVZ)', item: 'IVZ'}
    ]
+   idUnidade: String = '';
 
    constructor(private loadingService: LoadingService,
                private router: Router,
@@ -69,7 +70,8 @@ export class FormUnidadeComponent implements OnInit{
    }
 
    validaTipoUnidade(){
-      if(this.unidade.tipo == 'UC'){
+      console.log(this.unidade.tipo+' //')
+      if(this.formGroup.get("tipo")?.value === 'UC'){
          this.validarUc = true;
          console.log(this.validarUc)
       }else{
@@ -79,32 +81,36 @@ export class FormUnidadeComponent implements OnInit{
    }
 
    selecionaGerenciadora() {
-      switch(this.unidade.tipo){
+      switch(this.formGroup.get("tipo")?.value){
          case 'PS':
-            return 'UC';
+            this.validarUc = false;
+            //this.formGroup.get("idUnidadeGerenciadora")?.setValue('UC');
             break;
          case 'SR':
-            return 'PS';
+            this.validarUc = false;
+            //this.formGroup.get("idUnidadeGerenciadora")?.setValue('PS') ;
             break;
          case 'IVZ':
-            return 'SR';
+            this.validarUc = false;
+            //this.formGroup.get("idUnidadeGerenciadora")?.setValue('SR');
             break;
          default:
-            return ' ';
+            this.validarUc = true;
+
       }
    }
 
    salvar() {
-      this.loadingService.show = true;
+      // this.loadingService.show = true;
       this.unidade = this.formGroup.value;
       console.log(this.unidade);
       this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
          swal.fire(mensagem.msg).then();
       });
-      setTimeout(() => {
-         this.loadingService.show = false;
-         this.router.navigate(['/portal-admin/unidades']);
-      }, 1200);
+      // setTimeout(() => {
+      //    this.loadingService.show = false;
+      //    this.router.navigate(['/portal-admin/unidades']);
+      // }, 1200);
       console.log({...this.formGroup.value});
    }
 
