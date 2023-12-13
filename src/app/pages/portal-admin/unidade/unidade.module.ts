@@ -8,6 +8,8 @@ import {FormUnidadeComponent} from "./form-unidade/form-unidade.component";
 import {UnidadeService} from "../../../core/services/unidade.service";
 import {HttpClient, HttpClientModule, HttpHandler} from "@angular/common/http";
 import {NgSelectModule} from "@ng-select/ng-select";
+import {FormsService} from "../../../core/services/forms.service";
+import {ToastrModule, ToastrService} from "ngx-toastr";
 
 
 @NgModule({
@@ -22,10 +24,17 @@ import {NgSelectModule} from "@ng-select/ng-select";
       UnidadeRoutingModule,
       HttpClientModule,
       FormsModule,
-      NgSelectModule
+      NgSelectModule,
+      ToastrModule.forRoot({
+         timeOut: 3000,
+         positionClass: 'toast-top-right',
+         preventDuplicates: true,
+      }),
    ],
    providers: [
-       UnidadeService,
+      UnidadeService,
+      FormsService,
+      ToastrService
    ],
    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -1,5 +1,5 @@
 export class Endereco{
-   id: number;
+   id?: number;
    rua: String;
    cep: String;
    numero: String;
@@ -11,7 +11,6 @@ export class Endereco{
    longitude: String;
 
    constructor() {
-      this.id = 0;
       this.rua = '';
       this.cep = '';
       this.numero = '';

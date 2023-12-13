@@ -4,6 +4,8 @@ import {LoadingService} from "../../../../core/services/loading.service";
 import {Router} from "@angular/router";
 import {Unidade} from "../../../../core/models/unidade.model";
 import {UnidadeService} from "../../../../core/services/unidade.service";
+import {EstadoCidades, FormsService} from "../../../../core/services/forms.service";
+import { ToastrService } from "ngx-toastr";
 
 
 
@@ -33,6 +35,8 @@ export class FormUnidadeComponent implements OnInit{
 
    public formGroup: FormGroup;
    unidade: Unidade;
+   regioes: EstadoCidades[] = [];
+   cidades: String[] = [];
 
    validarUc: boolean = false;
 
@@ -40,20 +44,26 @@ export class FormUnidadeComponent implements OnInit{
       {id: 1, value: 'Unidade Central (UC)', item: 'UC'},
       {id: 2, value: 'Programa/Seção (PS)', item: 'PS'},
       {id: 3, value: 'Supeorvisão Regional (SR)', item: 'SR'},
-      {id: 4, value: 'Inspetoria Vetrinária Local (IVZ)', item: 'IVZ'}
+      {id: 4, value: 'Inspetoria Vetrinária Local (IVZ)', item: 'IVZ'},
+      {id: 5, value: 'Ministério da Pesca e Aquicultura', item: 'MPA'},
+      {id: 6, value: 'Secretaria Nacional', item: 'SN'},
+      {id: 7, value: 'Departamento', item: 'DP'},
+      {id: 8, value: 'Superintendencia Federal da Pesca', item: 'SFP'}
    ]
    idUnidade: String = '';
 
    constructor(private loadingService: LoadingService,
                private router: Router,
                private fb: FormBuilder,
-               private unidadeService: UnidadeService) {
+               private unidadeService: UnidadeService,
+               private formService: FormsService,
+               private toast: ToastrService) {
       this.unidade = new Unidade();
       this.formGroup = this.fb.group({
          nome: this.fb.control(this.unidade.nome, [Validators.minLength(2), Validators.maxLength(100), Validators.required]),
          tipo: this.fb.control(this.unidade.tipo, [Validators.minLength(2), Validators.required]),
          idUnidadeGerenciadora: this.fb.control(this.unidade.idUnidadeGerenciadora, [Validators.required]),
-         cep: this.fb.control(this.unidade.endereco.cep, [Validators.minLength(8), Validators.maxLength(8), Validators.required]),
+         cep: this.fb.control(this.unidade.endereco.cep, [ Validators.required, Validators.minLength(10), Validators.maxLength(10) ]),
          rua: this.fb.control( this.unidade.endereco.rua, [Validators.minLength(2),Validators.maxLength(70), Validators.required]),
          numero: this.fb.control(this.unidade.endereco.numero, [ Validators.minLength(1)]),
          bairro: this.fb.control(this.unidade.endereco.bairro, [Validators.minLength(2), Validators.maxLength(50)]),
@@ -63,10 +73,13 @@ export class FormUnidadeComponent implements OnInit{
          latitude: this.fb.control( this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
          longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required])
       });
+      console.log(this.formGroup)
    }
 
    ngOnInit() {
-      console.log(this.tipoUnidade);
+      console.log(this.formGroup.get('cep')?.value)
+      console.log(this.formGroup.controls['cep']?.value)
+      console.log(this.formGroup.value)
    }
 
    validaTipoUnidade(){
@@ -84,19 +97,45 @@ export class FormUnidadeComponent implements OnInit{
       switch(this.formGroup.get("tipo")?.value){
          case 'PS':
             this.validarUc = false;
-            //this.formGroup.get("idUnidadeGerenciadora")?.setValue('UC');
             break;
          case 'SR':
             this.validarUc = false;
-            //this.formGroup.get("idUnidadeGerenciadora")?.setValue('PS') ;
             break;
          case 'IVZ':
             this.validarUc = false;
-            //this.formGroup.get("idUnidadeGerenciadora")?.setValue('SR');
             break;
          default:
             this.validarUc = true;
+            break;
+      }
+   }
 
+   listaCidades(uf: any) {
+      this.cidades = [];
+      for (const r of this.regioes) {
+         if (r.sigla === uf) {
+            this.cidades = r.cidades;
+         }
+      }
+   }
+
+   validaCEP() {
+      console.log(this.formGroup)
+      if (this.formGroup.controls['cep']?.valid) {
+         console.log("valida")
+         this.formService.getCep(this.formGroup.get("cep")?.value).subscribe((data) => {
+            const res: any = data;
+            this.unidade.endereco.rua = res.logradouro;
+            this.unidade.endereco.bairro = res.bairro;
+            this.unidade.endereco.cidade = res.localidade;
+            this.unidade.endereco.uf = res.uf;
+
+            this.listaCidades(this.unidade.endereco.uf);
+
+            if (res.erro) {
+               this.toast.error("CEP não encontrado");
+            }
+         });
       }
    }
 

@@ -28,7 +28,7 @@
             <br-input density="small" name="nome" label="Nome da unidade" formControlName="nome"/>
          </div>
          <div class="col-4">
-            <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"/>
+            <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="##.###-###" (keyup)="validaCEP()" />
          </div>
       </div>
 
@@ -38,7 +38,7 @@
             <br-input density="small" name="rua" label="Rua" formControlName="rua"/>
          </div>
          <div class="col-2">
-            <br-input density="small" name="numero" label="Número" formControlName="numero"/>
+            <br-input density="small" name="numero" label="Número" formControlName="numero" type="number"/>
          </div>
          <div class="col-4">
             <br-input density="small" name="bairro" label="Bairro" formControlName="bairro"/>
@@ -75,3 +75,4 @@
    </form>
 
 </div>
+<button (click)="validaCEP()">test</button>
