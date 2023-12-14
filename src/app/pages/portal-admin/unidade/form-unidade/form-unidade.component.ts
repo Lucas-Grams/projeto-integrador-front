@@ -13,7 +13,7 @@ declare var swal: any;
 @Component({
    selector: 'pnip-admin-form-unidade',
    templateUrl: './form-unidade.component.html',
-   styleUrls: [],
+   styleUrls: ['./form.unidade.component.css'],
 })
 export class FormUnidadeComponent implements OnInit{
 
@@ -37,6 +37,7 @@ export class FormUnidadeComponent implements OnInit{
    unidade: Unidade;
    regioes: EstadoCidades[] = [];
    cidades: String[] = [];
+   unidadesGerenciadoras: Unidade[] = [];
 
    validarUc: boolean = false;
 
@@ -45,12 +46,12 @@ export class FormUnidadeComponent implements OnInit{
       {id: 2, value: 'Programa/Seção (PS)', item: 'PS'},
       {id: 3, value: 'Supeorvisão Regional (SR)', item: 'SR'},
       {id: 4, value: 'Inspetoria Vetrinária Local (IVZ)', item: 'IVZ'},
-      {id: 5, value: 'Ministério da Pesca e Aquicultura', item: 'MPA'},
-      {id: 6, value: 'Secretaria Nacional', item: 'SN'},
-      {id: 7, value: 'Departamento', item: 'DP'},
-      {id: 8, value: 'Superintendencia Federal da Pesca', item: 'SFP'}
+      {id: 5, value: 'Ministério da Pesca e Aquicultura (MPA)', item: 'MPA'},
+      {id: 6, value: 'Secretaria Nacional (SN)', item: 'SN'},
+      {id: 7, value: 'Departamento (DP)', item: 'DP'},
+      {id: 8, value: 'Superintendencia Federal da Pesca (SFP)', item: 'SFP'}
    ]
-   idUnidade: String = '';
+
 
    constructor(private loadingService: LoadingService,
                private router: Router,
@@ -63,7 +64,7 @@ export class FormUnidadeComponent implements OnInit{
          nome: this.fb.control(this.unidade.nome, [Validators.minLength(2), Validators.maxLength(100), Validators.required]),
          tipo: this.fb.control(this.unidade.tipo, [Validators.minLength(2), Validators.required]),
          idUnidadeGerenciadora: this.fb.control(this.unidade.idUnidadeGerenciadora, [Validators.required]),
-         cep: this.fb.control(this.unidade.endereco.cep, [ Validators.required, Validators.minLength(10), Validators.maxLength(10) ]),
+         cep: this.fb.control(this.unidade.endereco.cep, [ Validators.required, Validators.minLength(8), Validators.maxLength(10) ]),
          rua: this.fb.control( this.unidade.endereco.rua, [Validators.minLength(2),Validators.maxLength(70), Validators.required]),
          numero: this.fb.control(this.unidade.endereco.numero, [ Validators.minLength(1)]),
          bairro: this.fb.control(this.unidade.endereco.bairro, [Validators.minLength(2), Validators.maxLength(50)]),
@@ -73,36 +74,52 @@ export class FormUnidadeComponent implements OnInit{
          latitude: this.fb.control( this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
          longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required])
       });
-      console.log(this.formGroup)
+      this.regioes = JSON.parse(
+         JSON.stringify(this.formService.returnEstadosCidades())
+      );
    }
 
    ngOnInit() {
-      console.log(this.formGroup.get('cep')?.value)
-      console.log(this.formGroup.controls['cep']?.value)
-      console.log(this.formGroup.value)
    }
 
-   validaTipoUnidade(){
-      console.log(this.unidade.tipo+' //')
-      if(this.formGroup.get("tipo")?.value === 'UC'){
-         this.validarUc = true;
-         console.log(this.validarUc)
-      }else{
-         this.validarUc = false;
-         console.log(this.validarUc)
-      }
-   }
 
    selecionaGerenciadora() {
       switch(this.formGroup.get("tipo")?.value){
          case 'PS':
             this.validarUc = false;
+            this.unidadeService.getGerenciadoras("UC").subscribe((data) => {
+               this.unidadesGerenciadoras = data;
+            })
             break;
          case 'SR':
             this.validarUc = false;
+            this.unidadeService.getGerenciadoras("UC").subscribe((data) => {
+               this.unidadesGerenciadoras = data;
+            })
             break;
          case 'IVZ':
             this.validarUc = false;
+            this.unidadeService.getGerenciadoras("SR").subscribe((data) => {
+               this.unidadesGerenciadoras = data;
+            })
+            break;
+         case 'SN':
+            this.validarUc = false;
+            this.unidadeService.getGerenciadoras("MPA").subscribe((data) => {
+               this.unidadesGerenciadoras = data;
+            })
+            break;
+         case 'DP':
+            this.validarUc = false;
+            this.unidadeService.getGerenciadoras("SN").subscribe((data) => {
+               this.unidadesGerenciadoras = data;
+            })
+            break;
+         case 'SFP':
+            this.validarUc = false;
+            this.unidadeService.getGerenciadoras("MPA").subscribe((data) => {
+               this.unidadesGerenciadoras = data;
+            })
             break;
          default:
             this.validarUc = true;
@@ -120,18 +137,14 @@ export class FormUnidadeComponent implements OnInit{
    }
 
    validaCEP() {
-      console.log(this.formGroup)
-      if (this.formGroup.controls['cep']?.valid) {
-         console.log("valida")
+      if (this.formGroup.get("cep")?.valid) {
          this.formService.getCep(this.formGroup.get("cep")?.value).subscribe((data) => {
             const res: any = data;
-            this.unidade.endereco.rua = res.logradouro;
-            this.unidade.endereco.bairro = res.bairro;
-            this.unidade.endereco.cidade = res.localidade;
-            this.unidade.endereco.uf = res.uf;
-
-            this.listaCidades(this.unidade.endereco.uf);
-
+            this.formGroup.get("rua")?.setValue(res.logradouro) ;
+            this.formGroup.get("bairro")?.setValue(res.bairro);
+            this.formGroup.get("cidade")?.setValue(res.localidade);
+            this.formGroup.get("uf")?.setValue(res.uf);
+            this.listaCidades(this.formGroup.get("uf")?.value);
             if (res.erro) {
                this.toast.error("CEP não encontrado");
             }
@@ -150,7 +163,8 @@ export class FormUnidadeComponent implements OnInit{
       //    this.loadingService.show = false;
       //    this.router.navigate(['/portal-admin/unidades']);
       // }, 1200);
-      console.log({...this.formGroup.value});
+      this.ngOnInit();
    }
+
 
 }

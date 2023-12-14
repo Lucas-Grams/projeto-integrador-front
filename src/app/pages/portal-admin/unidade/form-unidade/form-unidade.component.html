@@ -7,17 +7,28 @@
       <!-- tipo/gerenciadora -->
       <div class="row mb-2">
          <div class="col-6">
+            <div class="br-select">
+               <div class="br-input">
+                  <label>Tipo de Unidade</label>
+                  <br>
+                  <select formControlName="tipo" (change)="selecionaGerenciadora()" class="select">
+                     <option *ngFor="let uni of tipoUnidade" [value]="uni.item">{{uni.value}}</option>
+                  </select>
+               </div>
+            </div>
+         </div>
+         <div class="col-6">
+            <ng-container *ngIf="!validarUc">
                <div class="br-select">
                   <div class="br-input">
-                     <select formControlName="tipo" (change)="selecionaGerenciadora()">
-                        <option *ngFor="let uni of tipoUnidade" [value]="uni.item">{{uni.value}}</option>
+                     <label>Reporta-se</label>
+                     <br>
+                     <select formControlName="idUnidadeGerenciadora" >
+                        <option *ngFor="let unidade of unidadesGerenciadoras"
+                                [value]="unidade.id">{{unidade.nome}}</option>
                      </select>
                   </div>
                </div>
-            </div>
-         <div class="col-6">
-            <ng-container *ngIf="!validarUc">
-               <br-input density="small" type="number" name="idUnidadeGerenciadora" label="Reporta-se" formControlName="idUnidadeGerenciadora" />
             </ng-container>
          </div>
       </div>
@@ -28,7 +39,8 @@
             <br-input density="small" name="nome" label="Nome da unidade" formControlName="nome"/>
          </div>
          <div class="col-4">
-            <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="##.###-###" (keyup)="validaCEP()" />
+            <br-input density="small" name="cep" label="CEP" icon="search" (change)="validaCEP()" formControlName="cep"
+                      mask="########"/>
          </div>
       </div>
 
@@ -51,10 +63,31 @@
             <br-input density="small" name="complemento" label="Complemento" formControlName="complemento"/>
          </div>
          <div class="col-4">
-            <br-input density="small" name="uf" label="UF" formControlName="uf"/>
+            <div class="br-select">
+               <div class="br-input">
+                  <label>UF</label>
+                  <br>
+                  <select (change)="listaCidades(unidade.endereco.uf)" formControlName="uf"
+                          >
+                     <option selected value="">--- Selecione UF ---</option>
+                     <option *ngFor="let r of regioes" [selected]="unidade.endereco.uf === r.sigla"
+                             [value]="r.sigla"> {{ r.sigla }} </option>
+                  </select>
+               </div>
+            </div>
          </div>
          <div class="col-4">
-            <br-input density="small" name="cidade" label="Cidade" formControlName="cidade"/>
+            <div class="br-select">
+               <div class="br-input">
+                  <label>Cidade</label>
+                  <br>
+                  <select formControlName="cidade" >
+                     <option selected value="">--- Selecione cidade ---</option>
+                     <option *ngFor="let c of cidades" [selected]="unidade.endereco.cidade === c"
+                             [value]="c"> {{ c }} </option>
+                  </select>
+               </div>
+            </div>
          </div>
       </div>
 
@@ -75,4 +108,3 @@
    </form>
 
 </div>
-<button (click)="validaCEP()">test</button>

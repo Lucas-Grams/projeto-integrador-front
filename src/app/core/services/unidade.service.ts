@@ -4,7 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponseDto} from "../dto/response.dto";
 
-const URL= "https://localhost:8089"
+const URL= "https://localhost:8089";
 @Injectable({
    providedIn: 'root'
 })
@@ -15,11 +15,14 @@ export class UnidadeService{
       this.http = http;
    }
       salvar(unidade: Unidade):Observable<ResponseDto<Unidade>>{
-         return this.http.post<ResponseDto<Unidade>>(this.urlUnidade + '/salvar', unidade);
+         return this.http.post<ResponseDto<Unidade>>(`${this.urlUnidade}` + '/salvar', unidade);
       }
 
       findAll():Observable<Unidade[]>{
-         return this.http.get<Unidade[]>(this.urlUnidade + '/findAll');
+         return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/findAll');
       }
 
+      getGerenciadoras(tipo: String):Observable<Unidade[]>{
+         return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/getGerenciadoras/'+tipo);
+      }
 }
