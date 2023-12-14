@@ -1,0 +1,62 @@
+<form [formGroup]="formGroup" (ngSubmit)="submit()">
+
+   <pnip-validators-forms-utils [formGroup]="formGroup" #validatorsFormsUtils></pnip-validators-forms-utils>
+
+   <!-- formacao/num habilitacao/conselho classe/uf conselho -->
+   <div class="row mb-2">
+      <div class="col-6">
+         <br-input density="small" name="formacao" label="Formação" formControlName="formacao"
+               [attr.state]="validatorsFormsUtils.getStateOfField('formacao')"/>
+         <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'formacao'}"></ng-container>
+      </div>
+      <div class="col-2">
+         <br-input density="small" name="numHabilitacao" label="Nº da Habilitação" formControlName="numHabilitacao"
+               [attr.state]="validatorsFormsUtils.getStateOfField('numHabilitacao')"/>
+      </div>
+      <div class="col-3">
+         <br-input density="small" name="conselhoClasse" label="Conselho de classe" formControlName="conselhoClasse"
+               [attr.state]="validatorsFormsUtils.getStateOfField('conselhoClasse')"/>
+      </div>
+      <div class="col-1">
+         <br-input density="small" name="ufConselho" label="UF/Região" formControlName="ufConselho"
+               [attr.state]="validatorsFormsUtils.getStateOfField('ufConselho')"/>
+      </div>
+   </div>
+
+   <!-- formacao/num habilitacao/conselho classe/uf conselho -->
+   <div class="row mb-2">
+      <div class="col-6">
+         <label>Cópia da Habilitação ou Comprovante de Quitação</label>
+         <div class="upload-file mt-1 mb-1 w-100" (click)="openInputUpload('copiaHabilitacaoInput')">
+            <div class="text-blue-vivid-60 pt-1 pb-1">
+               <br-icon-base icon-name="upload" family-name="fas" class="ml-2"/> <i> Selecione o(s) arquivo(s)</i>
+            </div>
+         </div>
+         <input #copiaHabilitacaoInput type="file" accept="application/pdf" class="d-none" formControleName="copiaHabilitacao"
+                (change)="onUploadSelected($event, 'copiaHabilitacao')">
+         <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'copiaHabilitacao'}"></ng-container>
+         <br-message *ngIf="formGroup.get('copiaHabilitacao')?.valid" feedback state="success" show-icon="true">
+            Arquivo selecionado
+         </br-message>
+      </div>
+      <div class="col-6 upload">
+         <label>Diploma/Certificado</label>
+         <div class="upload-file mt-1 mb-1 w-100" (click)="openInputUpload('diplomaCertificadoInput')">
+            <div class="text-blue-vivid-60 pt-1 pb-1">
+               <br-icon-base icon-name="upload" family-name="fas" class="ml-2"/> <i> Selecione o(s) arquivo(s)</i>
+            </div>
+         </div>
+         <input #diplomaCertificadoInput type="file" accept="application/pdf" class="d-none" formControleName="diplomaCertificacao"
+               (change)="onUploadSelected($event, 'diplomaCertificacao')">
+         <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'diplomaCertificacao'}"></ng-container>
+         <br-message *ngIf="formGroup.get('diplomaCertificacao')?.valid" feedback state="success" show-icon="true">
+            Arquivo selecionado
+         </br-message>
+      </div>
+   </div>
+   <br-divider size="medium" class="mt-3"></br-divider>
+   <div class="d-flex justify-content-end mt-4">
+      <br-button label="Voltar" type="secondary" class="mr-2" (click)="onBackToStepEvent.emit()"/>
+      <br-button label="Avançar" type="primary" (click)="submit()"/>
+   </div>
+</form>

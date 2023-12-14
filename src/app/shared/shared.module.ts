@@ -1,15 +1,21 @@
-import {NgModule} from "@angular/core";
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from "@angular/core";
+import {HttpClientModule} from "@angular/common/http";
+import {CommonModule} from "@angular/common";
 import {CustomValueAccessorDirective} from "../utils/directives/CustomValueAccessor.directives";
-import {HttpHandler} from "@angular/common/http";
 
 @NgModule({
   declarations: [
+     ValidatorsFormsUtils,
      CustomValueAccessorDirective
   ],
-  imports: [],
+  imports: [
+     CommonModule,
+     HttpClientModule
+  ],
   exports: [
+     ValidatorsFormsUtils,
      CustomValueAccessorDirective
   ],
-  providers: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule {}

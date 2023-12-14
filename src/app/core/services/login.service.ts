@@ -3,7 +3,9 @@ import {Router} from "@angular/router";
 import {LoadingService} from "./loading.service";
 import {AuthService} from "./auth/auth.service";
 
-@Injectable()
+@Injectable({
+   providedIn: 'root'
+})
 export class LoginService {
 
    private username: string | null = null;
