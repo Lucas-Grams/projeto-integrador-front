@@ -25,7 +25,7 @@
             <td>{{unidade.tipo}}</td>
             <td>{{unidade.nome}}</td>
             <td>{{unidade.endereco.cidade}}/{{unidade.endereco.uf}}</td>
-            <td>{{unidade.dataCadastro}}</td>
+            <td>{{unidade.dataCadastro | date: 'dd/MM/yy'}}</td>
             <td class="text-center">
                <br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60"/>
                <br-icon-base icon-name="pencil-alt" family-name="fas" class="mr-2 text-success"/>

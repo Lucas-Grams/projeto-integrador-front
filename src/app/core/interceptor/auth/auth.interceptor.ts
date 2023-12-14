@@ -14,14 +14,14 @@ import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(private env: EnvService, private auth : AuthService) {}
+  constructor(private env: EnvService, private auth? : AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
      // verificar se já existe token, nao sobreescrever
      if (request.headers.get('Authorization')) {
         return next.handle(request);
         //se está logado, insere o token e é a url da api
-     }else if(this.auth.usuarioLogado() && request.url.startsWith(this.env.url.api)){
+     }else if(this.auth?.usuarioLogado() && request.url.startsWith(this.env.url.api)){
         const token = this.auth.keycloackgetToken();
         const authRequest = request.clone(
            {

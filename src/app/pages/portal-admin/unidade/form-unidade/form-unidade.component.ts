@@ -4,16 +4,19 @@ import {LoadingService} from "../../../../core/services/loading.service";
 import {Router} from "@angular/router";
 import {Unidade} from "../../../../core/models/unidade.model";
 import {UnidadeService} from "../../../../core/services/unidade.service";
-import {EstadoCidades, FormsService} from "../../../../core/services/forms.service";
 import { ToastrService } from "ngx-toastr";
-
+import {CepService} from "../../../../core/services/cep.service";
+import {cpfValidator} from "../../../../utils/validators/cpf.validator";
+import {cepValidator} from "../../../../utils/validators/cep.validator";
+import {ValidatorsFormsUtils} from "../../../../utils/components/validators-forms.utils";
 
 
 declare var swal: any;
 @Component({
    selector: 'pnip-admin-form-unidade',
    templateUrl: './form-unidade.component.html',
-   styleUrls: ['./form.unidade.component.css'],
+   styleUrls: [],
+   providers:[CepService]
 })
 export class FormUnidadeComponent implements OnInit{
 
@@ -35,8 +38,6 @@ export class FormUnidadeComponent implements OnInit{
 
    public formGroup: FormGroup;
    unidade: Unidade;
-   regioes: EstadoCidades[] = [];
-   cidades: String[] = [];
    unidadesGerenciadoras: Unidade[] = [];
 
    validarUc: boolean = false;
@@ -57,7 +58,7 @@ export class FormUnidadeComponent implements OnInit{
                private router: Router,
                private fb: FormBuilder,
                private unidadeService: UnidadeService,
-               private formService: FormsService,
+               private cepService: CepService,
                private toast: ToastrService) {
       this.unidade = new Unidade();
       this.formGroup = this.fb.group({
@@ -66,7 +67,7 @@ export class FormUnidadeComponent implements OnInit{
          idUnidadeGerenciadora: this.fb.control(this.unidade.idUnidadeGerenciadora, [Validators.required]),
          cep: this.fb.control(this.unidade.endereco.cep, [ Validators.required, Validators.minLength(8), Validators.maxLength(10) ]),
          rua: this.fb.control( this.unidade.endereco.rua, [Validators.minLength(2),Validators.maxLength(70), Validators.required]),
-         numero: this.fb.control(this.unidade.endereco.numero, [ Validators.minLength(1)]),
+         numero: this.fb.control(this.unidade.endereco.numero, [ Validators.minLength(1), Validators.required]),
          bairro: this.fb.control(this.unidade.endereco.bairro, [Validators.minLength(2), Validators.maxLength(50)]),
          complemento: this.fb.control(this.unidade.endereco.complemento, [Validators.minLength(2), Validators.maxLength(50)]),
          cidade: this.fb.control(this.unidade.endereco.cidade, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
@@ -74,9 +75,7 @@ export class FormUnidadeComponent implements OnInit{
          latitude: this.fb.control( this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
          longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required])
       });
-      this.regioes = JSON.parse(
-         JSON.stringify(this.formService.returnEstadosCidades())
-      );
+
    }
 
    ngOnInit() {
@@ -127,43 +126,34 @@ export class FormUnidadeComponent implements OnInit{
       }
    }
 
-   listaCidades(uf: any) {
-      this.cidades = [];
-      for (const r of this.regioes) {
-         if (r.sigla === uf) {
-            this.cidades = r.cidades;
-         }
-      }
-   }
 
    validaCEP() {
-      if (this.formGroup.get("cep")?.valid) {
-         this.formService.getCep(this.formGroup.get("cep")?.value).subscribe((data) => {
-            const res: any = data;
-            this.formGroup.get("rua")?.setValue(res.logradouro) ;
-            this.formGroup.get("bairro")?.setValue(res.bairro);
-            this.formGroup.get("cidade")?.setValue(res.localidade);
-            this.formGroup.get("uf")?.setValue(res.uf);
-            this.listaCidades(this.formGroup.get("uf")?.value);
-            if (res.erro) {
-               this.toast.error("CEP não encontrado");
+      const field = this.formGroup.get('cep');
+      if (!field?.value) return;
+      const cep = field?.value[0];
+      if (cep.length === 9) {
+         this.cepService.getAddrress(cep).subscribe(response => {
+            if (response && !response.erro) {
+               this.formGroup.get('rua')?.setValue(response.logradouro);
+               this.formGroup.get('cidade')?.setValue(response.localidade);
+               this.formGroup.get('uf')?.setValue(response.uf);
             }
          });
       }
+
    }
 
    salvar() {
-      // this.loadingService.show = true;
+      this.loadingService.show = true;
       this.unidade = this.formGroup.value;
       console.log(this.unidade);
       this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
          swal.fire(mensagem.msg).then();
       });
-      // setTimeout(() => {
-      //    this.loadingService.show = false;
-      //    this.router.navigate(['/portal-admin/unidades']);
-      // }, 1200);
-      this.ngOnInit();
+      setTimeout(() => {
+         this.loadingService.show = false;
+         this.router.navigate(['/portal-admin/unidades']);
+      }, 1200);
    }
 
 
