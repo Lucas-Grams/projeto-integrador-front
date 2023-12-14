@@ -2,7 +2,9 @@ import {Injectable} from "@angular/core";
 import {Router} from "@angular/router";
 import {LoadingService} from "./loading.service";
 
-@Injectable()
+@Injectable({
+   providedIn: 'root'
+})
 export class LoginService {
 
    private username: string | null = null;
