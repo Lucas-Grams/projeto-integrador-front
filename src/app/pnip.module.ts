@@ -8,20 +8,15 @@ import {LoginComponent} from "./pages/login/login.component";
 import {LoginService} from "./core/services/login.service";
 import {LoadingService} from "./core/services/loading.service";
 import {LoadingComponent} from "./layout/loading/loading.component";
-<<<<<<< Updated upstream
-import {EnvServiceProvider} from "./core/services/env/env.service.provider";
 import {OAuthModule} from 'angular-oauth2-oidc';
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {AuthInterceptor} from "./core/interceptor/auth/auth.interceptor";
-=======
-import {OAuthModule} from 'angular-oauth2-oidc';
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {EnvServiceProvider} from "./core/services/env/env.service.provider";
-import {AuthInterceptor} from "./core/interceptor/auth/auth.interceptor";
+import {HttpClientModule} from "@angular/common/http";
+
 
 const browserWindow: any = window || {};
 
->>>>>>> Stashed changes
+
+
 @NgModule({
    declarations: [
       LoginComponent,
@@ -33,15 +28,21 @@ const browserWindow: any = window || {};
    imports: [
       BrowserModule,
       PnipRoutingModule,
-      OAuthModule.forRoot(),
+      OAuthModule.forRoot({
+         resourceServer: {
+            allowedUrls: [browserWindow['__env'].url.api],
+            sendAccessToken: true
+         }
+      }),
       HttpClientModule
    ],
+
    providers: [
       LoadingService,
       LoginService,
       HttpClientModule,
-      EnvServiceProvider,
-      {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+      EnvServiceProvider
+      
    ],
    bootstrap: [PnipComponent],
    schemas: [CUSTOM_ELEMENTS_SCHEMA]
