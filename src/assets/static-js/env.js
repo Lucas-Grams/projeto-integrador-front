@@ -3,7 +3,8 @@
 
    // API url
    window.__env.url = {
-      api: 'http://localhost:8089'
+      api: 'http://localhost:8089',
+      home: 'http://localhost:4200'
    };
 
    //auth2 keycloak

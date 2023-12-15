@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import {LoginService} from "../../core/services/login.service";
 
 @Component({
@@ -6,7 +6,7 @@ import {LoginService} from "../../core/services/login.service";
    templateUrl: './login.component.html',
    styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements AfterViewInit{
 
    public breadcrumb = [
       {
@@ -28,7 +28,8 @@ export class LoginComponent implements OnInit{
       this.loginService.login();
    }
 
-   ngOnInit(): void {
+
+   ngAfterViewInit(): void {
       this.loginService.isLogin();
    }
 

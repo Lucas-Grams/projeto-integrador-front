@@ -10,7 +10,10 @@ import {LoadingService} from "./core/services/loading.service";
 import {LoadingComponent} from "./layout/loading/loading.component";
 import {OAuthModule} from 'angular-oauth2-oidc';
 import {EnvServiceProvider} from "./core/services/env/env.service.provider";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {AuthInterceptor} from "./utils/interceptors/auth/auth.interceptor";
+import {AuthGuard} from "./utils/guards/auth/auth.guard";
+import {AuthServiceProvider} from "./core/services/auth/auth.service.provider";
 
 
 const browserWindow: any = window || {};
@@ -41,8 +44,11 @@ const browserWindow: any = window || {};
       LoadingService,
       LoginService,
       HttpClientModule,
-      EnvServiceProvider
-      
+      EnvServiceProvider,
+      AuthServiceProvider,
+      AuthGuard,
+      {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+
    ],
    bootstrap: [PnipComponent],
    schemas: [CUSTOM_ELEMENTS_SCHEMA]

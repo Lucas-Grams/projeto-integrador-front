@@ -1,7 +1,8 @@
 export class EnvService {
 
    public url = {
-      api: ''
+      api: '',
+      home: ''
    };
 
    public keycloak = {

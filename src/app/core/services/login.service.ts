@@ -16,16 +16,18 @@ export class LoginService {
    }
 
    public isLogin() {
-      if(this.authService?.usuarioLogado()){
-         this.loadingService.show = true;
-         setTimeout(() => {
+      this.loadingService.show = true;
+      this.authService?.asynccheckLogado().then(data => {
+         console.log(data);
+         if(data == true){
             this.username = 'Joedeson Jr';
             this.role = 'tr';
             this.primeiroAcesso = true;
             this.router?.navigate([`/portal-${this.role}`]);
-            setTimeout(() => this.loadingService.show = false, 200);
-         }, 1000);
-      }
+         }
+
+         this.loadingService.show = false
+      });
    }
    public login(){
       this.authService?.login();
@@ -35,8 +37,8 @@ export class LoginService {
       return this.authService?.getName();
    }
 
-   public init(){
-      this.authService?.init();
+   public async init() {
+      await this.authService?.init();
    }
 
    public isPrimeiroAcesso() {

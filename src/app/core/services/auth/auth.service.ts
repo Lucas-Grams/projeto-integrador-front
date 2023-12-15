@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {OAuthService} from 'angular-oauth2-oidc';
 import {EnvService} from "../env/env.service";
+import {forkJoin} from "rxjs";
 
 
 @Injectable({
@@ -13,28 +14,27 @@ export class AuthService {
   }
 
   init(){
-     const cutUrl = window.document.URL.split('/');
-     let urlPortal = cutUrl[0] + '//' + cutUrl[2] + '/';
-     if (cutUrl[3] !== '#' && cutUrl[3]) {
-        urlPortal = urlPortal + cutUrl[3] + '/';
-     }
-
-     const authCodeFlowConfig = {
-        issuer: `${this.env.keycloak.url}/realms/${this.env.keycloak.realm}`,
-        redirectUri: `${urlPortal}`,
-        clientId: this.env.keycloak.clientId,
-        responseType: 'code',
-        scope: 'openid profile email offline_access',
-        showDebugInformation: false,
-        //dummyClientSecret: environment.keycloak.clientSecret,
-        timeoutFactor: 0.7
-     };
-     this.oidcSecurityService.configure(authCodeFlowConfig);
-     this.oidcSecurityService.setStorage(localStorage);
-     this.oidcSecurityService.loadDiscoveryDocumentAndTryLogin().then(r => {
-        this.oidcSecurityService.setupAutomaticSilentRefresh();
+     return new Promise((resolve, reject) => {
+        const authCodeFlowConfig = {
+           issuer: `${this.env.keycloak.url}/realms/${this.env.keycloak.realm}`,
+           redirectUri: this.env.url.home,
+           clientId: this.env.keycloak.clientId,
+           responseType: 'code',
+           scope: 'openid profile email offline_access',
+           showDebugInformation: false,
+           //dummyClientSecret: environment.keycloak.clientSecret,
+           timeoutFactor: 0.7
+        };
+        this.oidcSecurityService.configure(authCodeFlowConfig);
+        this.oidcSecurityService.setStorage(localStorage);
+        this.oidcSecurityService.loadDiscoveryDocumentAndTryLogin().then(r => {
+           this.oidcSecurityService.setupAutomaticSilentRefresh();
+           resolve(true);
+        });
      });
+
   }
+
 
    login() {
       this.keycloakLoginSSO();
@@ -49,6 +49,17 @@ export class AuthService {
 
    usuarioLogado(): boolean {
       return this.oidcSecurityService.hasValidAccessToken();
+   }
+   asynccheckLogado(){
+     console.log("")
+      return new Promise((resolve, reject) => {
+         this.oidcSecurityService.loadDiscoveryDocument().then(r => {
+            console.log(this.oidcSecurityService.hasValidAccessToken());
+            resolve(this.oidcSecurityService.hasValidAccessToken());
+         }).catch(err => {
+            resolve(this.oidcSecurityService.hasValidAccessToken());
+         });
+      });
    }
    logout() {
       this.oidcSecurityService.logOut();
