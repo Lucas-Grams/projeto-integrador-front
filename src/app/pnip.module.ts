@@ -9,9 +9,10 @@ import {LoginService} from "./core/services/login.service";
 import {LoadingService} from "./core/services/loading.service";
 import {LoadingComponent} from "./layout/loading/loading.component";
 import {OAuthModule} from 'angular-oauth2-oidc';
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {HttpClientModule} from "@angular/common/http";
 import {EnvServiceProvider} from "./core/services/env/env.service.provider";
-import {AuthInterceptor} from "./core/interceptor/auth/auth.interceptor";
+
+const browserWindow: any = window || {};
 
 @NgModule({
    declarations: [
@@ -26,12 +27,13 @@ import {AuthInterceptor} from "./core/interceptor/auth/auth.interceptor";
       PnipRoutingModule,
       OAuthModule.forRoot({
          resourceServer: {
-            allowedUrls: ['http://localhost:8089'],
+            allowedUrls: [browserWindow['__env'].url.api],
             sendAccessToken: true
          }
       }),
       HttpClientModule
    ],
+
    providers: [
       LoadingService,
       LoginService,
