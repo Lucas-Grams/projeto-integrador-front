@@ -1,19 +1,20 @@
-import { Injectable } from '@angular/core';
+import {Injectable, Injector} from '@angular/core';
 import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor
+   HttpRequest,
+   HttpHandler,
+   HttpEvent,
+   HttpInterceptor, HttpErrorResponse
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import {EnvService} from "../../services/env/env.service";
+import {Observable, throwError} from 'rxjs';
 import {AuthService} from "../../services/auth/auth.service";
-import { v4 as uuidv4 } from 'uuid';
+import {LoginService} from "../../services/login.service";
+
 
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
+<<<<<<< Updated upstream
   constructor(private env: EnvService, private auth : AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -33,6 +34,27 @@ export class AuthInterceptor implements HttpInterceptor {
         );
         return next.handle(authRequest);
      }
+=======
+  constructor(private injector: Injector) {}
+
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+     const loginService = this.injector.get(AuthService);
+
+>>>>>>> Stashed changes
     return next.handle(request);
   }
+
+   catchExpiredToken(loginService: LoginService) {
+      return (err: HttpErrorResponse) => {
+         console.log("erro, deu erro");
+         if (err instanceof HttpErrorResponse
+            && err.status == 403 || err.status == 0 || err.status == 401 || err.status == 302) {
+            loginService.logout();
+         } else {
+            return throwError(err);
+         }
+         return throwError(err);
+      };
+   }
+
 }

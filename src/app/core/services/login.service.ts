@@ -41,4 +41,7 @@ export class LoginService {
       return this.primeiroAcesso;
    }
 
+   logout() {
+      this.authService?.logout();
+   }
 }
