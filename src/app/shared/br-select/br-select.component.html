@@ -1,0 +1,26 @@
+<div class="br-select" [attr.multiple]="multiple ? '' : null" [attr.disabled]="disabled ? '' : null">
+   <div class="br-input small">
+      <label [for]="id">{{label}}</label>
+      <input [id]="id" type="text" [placeholder]="placeholder" autocomplete="off"/>
+      <button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1" data-trigger="data-trigger">
+         <i class="fas fa-angle-up" aria-hidden="true"></i>
+      </button>
+   </div>
+   <div class="br-list" tabindex="0">
+      <div *ngIf="multiple" class="br-item highlighted" data-all="data-all" tabindex="-1">
+         <div class="br-checkbox">
+            <input [id]="id + '-all'" name="cbsm" type="checkbox" />
+            <label [for]="id + '-all'">Selecionar Todos</label>
+         </div>
+      </div>
+      <ng-container *ngFor="let op of options; let i = index">
+         <div class="br-item" [class.selected]="optionSelected && optionSelected === op.value" tabindex="-1" (click)="setSelected();">
+            <div [class]="multiple ? 'br-checkbox' : 'br-radio'">
+               <input [id]="id + i" [attr.type]="multiple ? 'checkbox' : 'radio'" [value]="op?.value"/>
+               <label [for]="id + i">{{op?.label}}</label>
+            </div>
+         </div>
+      </ng-container>
+
+   </div>
+</div>
