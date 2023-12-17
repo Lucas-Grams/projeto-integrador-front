@@ -11,7 +11,6 @@ import {LoginService} from "./core/services/login.service";
 export class PnipComponent {
 
    constructor(protected loadingService: LoadingService, protected login: LoginService) {
-      login.init();
    }
 
 }

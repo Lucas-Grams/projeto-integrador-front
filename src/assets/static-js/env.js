@@ -3,13 +3,14 @@
 
    // API url
    window.__env.url = {
-      api: 'http://dev.your-api.com'
+      api: 'http://localhost:8089',
+      home: 'http://localhost:4200'
    };
 
    //auth2 keycloak
    window.__env.keycloak = {
       url: "http://localhost:8098",
-      realm: "master",
+      realm: "pnip-local",
       clientId: "pnip-web"
    };
 

@@ -4,34 +4,57 @@
    <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Cadastrar nova unidade</h2>
 
    <form [formGroup]="formGroup" (ngSubmit)="salvar()">
-
+      <pnip-validators-forms-utils [formGroup]="formGroup" #validatorsFormsUtils></pnip-validators-forms-utils>
       <!-- tipo/gerenciadora -->
       <div class="row mb-2">
          <div class="col-6">
-            <br-input density="small" name="tipo" label="Tipo da unidade" formControlName="tipo"/>
+            <div class="br-select">
+               <div class="br-input">
+                  <label>Tipo de Unidade</label>
+                  <br>
+                  <select formControlName="tipo" (change)="selecionaGerenciadora()" class="select">
+                     <option *ngFor="let uni of tipoUnidade" [value]="uni.item">{{uni.value}}</option>
+                  </select>
+               </div>
+            </div>
          </div>
          <div class="col-6">
-            <br-input density="small" name="idUnidadeGerenciadora" label="Reporta-se" formControlName="idUnidadeGerenciadora"/>
+            <ng-container *ngIf="!validarUc">
+               <div class="br-select">
+                  <div class="br-input">
+                     <label>Reporta-se</label>
+                     <br>
+                     <select formControlName="idUnidadeGerenciadora" >
+                        <option *ngFor="let unidade of unidadesGerenciadoras"
+                                [value]="unidade.id">{{unidade.nome}}</option>
+                     </select>
+                  </div>
+               </div>
+            </ng-container>
          </div>
       </div>
 
       <!-- nome/cep -->
       <div class="row mb-2">
          <div class="col-8">
-            <br-input density="small" name="nome" label="Nome da unidade" formControlName="nome"/>
+            <br-input density="small" name="nome" label="Nome da unidade" formControlName="nome"
+                      [attr.state]="validatorsFormsUtils.getStateOfField('nome')"/>
          </div>
          <div class="col-4">
-            <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"/>
+            <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"
+                      [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (change)="validaCEP()" (ngModelChange)="validaCEP()"/>
+            <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
+
          </div>
       </div>
 
       <!-- rua/numero/bairro -->
       <div class="row mb-2">
          <div class="col-6">
-            <br-input density="small" name="rua" label="Rua" formControlName="rua"/>
+            <br-input density="small" name="rua" label="Rua" formControlName="rua" [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
          </div>
          <div class="col-2">
-            <br-input density="small" name="numero" label="Número" formControlName="numero"/>
+            <br-input density="small" name="numero" label="Número" formControlName="numero" type="number" [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
          </div>
          <div class="col-4">
             <br-input density="small" name="bairro" label="Bairro" formControlName="bairro"/>
@@ -44,10 +67,31 @@
             <br-input density="small" name="complemento" label="Complemento" formControlName="complemento"/>
          </div>
          <div class="col-4">
-            <br-input density="small" name="uf" label="UF" formControlName="uf"/>
+            <div class="br-select">
+               <div class="br-input">
+                  <br-input density="small" name="uf" label="UF" formControlName="uf"
+                            [attr.state]="validatorsFormsUtils.getStateOfField('uf')"/>
+
+               </div>
+            </div>
          </div>
          <div class="col-4">
-            <br-input density="small" name="cidade" label="Cidade" formControlName="cidade"/>
+            <div class="br-select">
+               <div class="br-input">
+                  <br-input density="small" name="municipio" label="Município" formControlName="cidade"
+                            [attr.state]="validatorsFormsUtils.getStateOfField('cidade')"/>
+               </div>
+         </div>
+         </div>
+      </div>
+
+      <!-- latitude/longitude -->
+      <div class="row mb-2">
+         <div class="col-6">
+            <br-input density="small" name="latitude" label="latitude" formControlName="latitude"/>
+         </div>
+         <div class="col-6">
+            <br-input density="small" name="longitude" label="longitude" formControlName="longitude"/>
          </div>
       </div>
 

@@ -4,3 +4,7 @@
    border: 2px #005ea2 dotted;
    cursor: pointer
 }
+
+.br-step .step-progress-btn:disabled:before {
+   color: #97b2de;
+}
