@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {LoadingService} from "../../../../core/services/loading.service";
 import {Router} from "@angular/router";
+import {HabilitarTRDTO} from "../../../../core/dtos/habilitar-tr.dto";
+import {TrService} from "../../../../core/services/tr.service";
 
 @Component({
    selector: 'pnip-tr-solicitar-acesso',
@@ -25,15 +27,20 @@ export class SolicitarAcessoComponent {
       }
    ];
 
-   constructor(private loadingService: LoadingService, private router: Router) {}
+   constructor(private trService: TrService, private loadingService: LoadingService, private router: Router) {}
 
-   salvar(tr: any) {
+   salvar(dto: HabilitarTRDTO) {
       this.loadingService.show = true;
-      setTimeout(() => {
-         this.loadingService.show = false;
-         this.router.navigate(['/portal-tr/primeiro-acesso/minhas-solicitacoes']);
-      }, 1200);
-      console.log(tr);
+      this.trService.solicitarHabilitacao(dto).subscribe(
+         (response) => {
+            this.router.navigate(['/portal-tr/primeiro-acesso/minhas-solicitacoes']);
+            this.loadingService.show = false;
+         },
+         (error) => {
+            console.error(error);
+            this.loadingService.show = false;
+         }
+      );
    }
 
 }

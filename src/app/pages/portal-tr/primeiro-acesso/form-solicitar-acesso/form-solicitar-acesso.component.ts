@@ -1,5 +1,8 @@
-import {Component, ElementRef, EventEmitter, Output, Renderer2, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {HabilitarTRDTO} from "../../../../core/dtos/habilitar-tr.dto";
+import {EmbarcacoesComponent} from "./embarcacoes/embarcacoes.component";
+import {DadosProfissionaisComponent} from "./dados-profissionais/dados-profissionais.component";
+import {DadosPessoaisComponent} from "./dados-pessoais/dados-pessoais.component";
 
 @Component({
    selector: 'pnip-tr-form-solicitar-acesso',
@@ -8,54 +11,65 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 })
 export class FormSolicitarAcessoComponent {
 
-   public formGroup: FormGroup;
+   @ViewChild('dadosPessoais') dadosPessoaisComponent!: DadosPessoaisComponent;
+   @ViewChild('dadosProfissionais') dadosProfissionaisComponent!: DadosProfissionaisComponent;
+   @ViewChild('embarcacoes') embarcacoesComponent!: EmbarcacoesComponent;
 
-   @ViewChild('copiaHabilitacaoInput', { static: false }) copiaHabilitacaoInput!: ElementRef;
-   @ViewChild('diplomaCertificadoInput', { static: false }) diplomaCertificadoInput!: ElementRef;
+   public dto: HabilitarTRDTO;
 
-   @Output() onSaveEvent = new EventEmitter<void>();
+   public steps = [
+      {id: 'dados-pessoais',      title: 'Dados Pessoais',      enabled: true,  done: false},
+      {id: 'dados-profissionais', title: 'Dados profissionais', enabled: false, done: false},
+      {id: 'embarcacoes',         title: 'Embarcações',         enabled: false, done: false},
+      {id: 'revisar-solicitacao', title: 'Revisar solicitação', enabled: false, done: false},
+   ];
 
-   constructor(private fb: FormBuilder, private renderer: Renderer2) {
-      this.formGroup = this.fb.group({
-         nome: ['Joedeson Jr', Validators.required],
-         cpf: ['309.182.021-01', Validators.required],
-         email: [null, Validators.required],
-         telefone: [null, Validators.required],
-         cep: [null, Validators.required],
-         logradouro: [null, Validators.required],
-         numero: [null, Validators.required],
-         complemento: [null, Validators.required],
-         municipio: [null, Validators.required],
-         uf: [null, Validators.required],
-         formacao: [null, Validators.required],
-         numHabilitacao: [null, Validators.required],
-         conselhoClasse: [null, Validators.required],
-         ufConselho: [null, Validators.required],
-         copiaHabilitacao: [null, Validators.required],
-         diplomaCertificado: [null, Validators.required]
-      });
+   public active;
+
+   @Output() onSaveEvent = new EventEmitter<HabilitarTRDTO>();
+
+   constructor() {
+      this.dto = new HabilitarTRDTO();
+      this.active = 'dados-pessoais';
    }
 
-   submit() {
-      this.onSaveEvent.emit({...this.formGroup.value});
+   goToStep(step: string) {
+      if (step === this.active) return;
+      // antes de ir para atapa, verificamos se o formulario esta preenchido corretamente
+      const formValid = (() => {
+         switch (this.active) {
+            case 'dados-pessoais':      return this.dadosPessoaisComponent.submit(true);
+            case 'dados-profissionais': return this.dadosProfissionaisComponent.submit(true);
+            case 'embarcacoes':         return this.embarcacoesComponent.submit(true);
+            default: return true;
+         }
+      })();
+      if (formValid) this.active = step;
    }
 
-   openCopiaHabilitacaoUpload() {
-      this.renderer.selectRootElement(this.copiaHabilitacaoInput.nativeElement).click();
+   backToStep() {
+      let currentIndex = this.steps.findIndex(step => step.id === this.active);
+      if (currentIndex) {
+         this.active = this.steps[currentIndex - 1].id;
+      }
    }
 
-   openDiplomaCertificadoUpload() {
-      this.renderer.selectRootElement(this.diplomaCertificadoInput.nativeElement).click();
+   nextStep() {
+      let currentIndex = this.steps.findIndex(step => step.id === this.active);
+      if (currentIndex !== this.steps.length - 1) {
+         this.steps[currentIndex + 1].enabled = true;
+         this.active = this.steps[currentIndex + 1].id;
+      }
    }
 
-   onCopiaHabilitacaoSelected(event: any) {
-      const selectedFile = event.target.files[0];
-      console.log('Arquivo selecionado:', selectedFile);
+   onSaveStep() {
+      let step = this.steps.find(step => step.id === this.active);
+      if (step) step.done = true;
+      this.nextStep();
    }
 
-   onDiplomaCertificadoSelected(event: any) {
-      const selectedFile = event.target.files[0];
-      console.log('Arquivo selecionado:', selectedFile);
+   onSaveAll() {
+      this.onSaveEvent.emit(this.dto);
    }
 
 }
