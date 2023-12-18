@@ -94,14 +94,16 @@
             <br-input density="small" name="longitude" label="longitude" formControlName="longitude"/>
          </div>
       </div>
-
-      <div class="d-flex justify-content-end mt-4">
-         <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/unidades'"/>
-         <br-button label="Salvar" type="primary" (click)="salvar()"/>
-      </div>
    </form>
 
-   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Cadastrar Representante da unidade</h2>
 
+   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Representante da unidade</h2>
+
+   <pnip-admin-form-representante-unidade (newUserEmitter)="receberNovoUsuario($event)"></pnip-admin-form-representante-unidade>
+
+   <div class="d-flex justify-content-end mt-4">
+      <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/unidades'"/>
+      <br-button label="Salvar" type="primary" (click)="salvar()"/>
+   </div>
 
 </div>

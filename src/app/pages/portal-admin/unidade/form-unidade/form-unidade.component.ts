@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LoadingService} from "../../../../core/services/loading.service";
 import {Router} from "@angular/router";
@@ -9,6 +9,7 @@ import {CepService} from "../../../../core/services/cep.service";
 import {cpfValidator} from "../../../../utils/validators/cpf.validator";
 import {cepValidator} from "../../../../utils/validators/cep.validator";
 import {ValidatorsFormsUtils} from "../../../../utils/components/validators-forms.utils";
+import {Usuario} from "../../../../core/models/usuario.model";
 
 
 declare var swal: any;
@@ -41,6 +42,8 @@ export class FormUnidadeComponent implements OnInit{
    unidadesGerenciadoras: Unidade[] = [];
 
    validarUc: boolean = false;
+   newUsuario: Usuario = new Usuario();
+
 
    tipoUnidade = [
       {id: 1, value: 'Unidade Central (UC)', item: 'UC'},
@@ -137,15 +140,25 @@ export class FormUnidadeComponent implements OnInit{
                this.formGroup.get('rua')?.setValue(response.logradouro);
                this.formGroup.get('cidade')?.setValue(response.localidade);
                this.formGroup.get('uf')?.setValue(response.uf);
+               // this.formGroup.get('latitude')?.setValue((response.latitude));
+               // this.formGroup.get('longitude')?.setValue((response.longitude));
             }
          });
       }
 
    }
+   receberNovoUsuario(novoUsuario: Usuario) {
+
+      console.log('Novo usuário recebido:', novoUsuario);
+
+      this.newUsuario = novoUsuario;
+   }
+
 
    salvar() {
       this.loadingService.show = true;
       this.unidade = this.formGroup.value;
+      this.unidade.usuarioResposavel = this.newUsuario;
       console.log(this.unidade);
       this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
         // swal.fire(mensagem.msg).then();
@@ -155,6 +168,5 @@ export class FormUnidadeComponent implements OnInit{
          this.router.navigate(['/portal-admin/unidades']);
       }, 1200);
    }
-
 
 }

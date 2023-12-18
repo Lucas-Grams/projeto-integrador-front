@@ -7,6 +7,8 @@ import { ToastrService } from "ngx-toastr";
 import { CepService } from "../../../../../core/services/cep.service";
 import { ValidatorsFormsUtils } from "../../../../../utils/components/validators-forms.utils";
 import {LoadingService} from "../../../../../core/services/loading.service";
+import {Usuario} from "../../../../../core/models/usuario.model";
+import {UsuarioService} from "../../../../../core/services/usuario.service";
 
 declare var swal: any;
 
@@ -29,7 +31,7 @@ export class FormEditarUnidadeComponent implements OnInit {
          url: '/portal-admin/unidades'
       },
       {
-         label: 'Cadastrar nova unidade',
+         label: 'Visualizar unidade',
          active: true
       }
    ];
@@ -40,6 +42,8 @@ export class FormEditarUnidadeComponent implements OnInit {
    uuid: string = '';
 
    validarUc: boolean = false;
+
+   representantes: Usuario[] = [];
 
    tipoUnidade = [
       { id: 1, value: 'Unidade Central (UC)', item: 'UC' },
@@ -58,7 +62,8 @@ export class FormEditarUnidadeComponent implements OnInit {
       private unidadeService: UnidadeService,
       private cepService: CepService,
       private route: ActivatedRoute,
-      private router: Router
+      private router: Router,
+      private usuarioService: UsuarioService
    ) {
       this.unidade = new Unidade();
 
@@ -87,6 +92,9 @@ export class FormEditarUnidadeComponent implements OnInit {
          this.unidade.idUnidadeGerenciadora = this.unidade.unidadeGerenciadora?.id;
          this.formGroup.patchValue(this.unidade);
       });
+      this.usuarioService.findRepresentantesUnidade(this.unidade.uuid).subscribe((data) => {
+         this.representantes = data;
+      })
    }
    ngOnInit() {
 
@@ -158,7 +166,7 @@ export class FormEditarUnidadeComponent implements OnInit {
       this.loadingService.show = true;
       this.unidade = this.formGroup.value;
       console.log(this.unidade);
-      this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
+      this.unidadeService.update(this.unidade).subscribe(mensagem => {
          swal.fire(mensagem.msg).then();
       });
       setTimeout(() => {

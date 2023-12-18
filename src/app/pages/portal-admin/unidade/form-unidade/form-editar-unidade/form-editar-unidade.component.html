@@ -103,14 +103,43 @@
             </div>
          </div>
 
-         <div class="d-flex justify-content-end mt-4">
-            <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/unidades'"/>
-            <br-button label="Atualizar" type="primary" (click)="salvar()"/>
-         </div>
       </form>
    </ng-container>
 
-   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Cadastrar Representante da unidade</h2>
+   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Representante da unidade</h2>
+   <ng-container *ngIf="representantes.length > 0; else semRepresentantes">
+   <table class="table">
+      <thead class="thead-light">
+      <tr>
+         <th class="text-blue-vivid-60 text-bold" scope="col">Nome</th>
+         <th class="text-blue-vivid-60 text-bold" scope="col">CPF</th>
+         <th class="text-blue-vivid-60 text-bold" scope="col">E-mail</th>
+      </tr>
+      </thead>
+      <tbody *ngFor="let usuario of representantes">
+      <tr>
+         <td>{{usuario.nome}}</td>
+         <td>{{usuario.cpf}}</td>
+         <td>{{usuario.email}}</td>
+      </tr>
+      </tbody>
+   </table>
+   </ng-container>
+   <ng-template #semRepresentantes>
+      <div class="br-message info" role="alert">
+         <div class="icon"><i class="fas fa-info-circle fa-lg" aria-hidden="true"></i>
+         </div>
+         <div class="content"><span class="message-title">Atenção.</span><span class="message-body"> Não há representantes cadastrados para essa unidade.</span></div>
+         <div class="close">
+            <button class="br-button circle small" type="button" aria-label="Fechar"><i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+         </div>
+      </div>
+   </ng-template>
 
+   <div class="d-flex justify-content-end mt-4">
+      <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/unidades'"/>
+      <br-button label="Atualizar" type="primary" (click)="salvar()"/>
+   </div>
 
 </div>

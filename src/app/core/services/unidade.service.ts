@@ -3,6 +3,7 @@ import {Unidade} from "../models/unidade.model";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponseDto} from "../dto/response.dto";
+import {Usuario} from "../models/usuario.model";
 
 const URL= "http://localhost:8089";
 @Injectable({
@@ -32,5 +33,9 @@ export class UnidadeService{
 
    findUnidadeByUuid(uuid: String): Observable<Unidade>{
       return this.http.get<Unidade>(`${this.urlUnidade}` + '/findUnidadeByUuid/'+ uuid);
+   }
+
+   update(unidade: Unidade):Observable<ResponseDto<Unidade>>{
+      return this.http.post<ResponseDto<Unidade>>(`${this.urlUnidade}` + '/update', unidade);
    }
 }

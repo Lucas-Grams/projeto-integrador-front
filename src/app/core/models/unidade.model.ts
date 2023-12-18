@@ -1,4 +1,5 @@
 import {Endereco} from "./endereco.model";
+import {Usuario} from "./usuario.model";
 
 export class Unidade{
    id: number;
@@ -11,6 +12,7 @@ export class Unidade{
    uuid: String;
    dataCadastro?: Date;
    ultima_atualizacao?: Date;
+   usuarioResposavel?: Usuario
 
 
    constructor() {
