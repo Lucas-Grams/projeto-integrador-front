@@ -17,15 +17,17 @@ const routes: Routes = [
    {
       path: 'portal-admin',
       loadChildren: () => import('./pages/portal-admin/admin.module').then((m) => m.AdminModule),
-      canActivate: [AuthGuard],
+      canActivate: [AuthGuard]
    },
    {
       path: 'portal-mpa',
-      loadChildren: () => import('./pages/portal-mpa/mpa.module').then((m) => m.MpaModule)
+      loadChildren: () => import('./pages/portal-mpa/mpa.module').then((m) => m.MpaModule),
+      canActivate: [AuthGuard]
    },
    {
       path: 'portal-tr',
-      loadChildren: () => import('./pages/portal-tr/tr.module').then((m) => m.TrModule)
+      loadChildren: () => import('./pages/portal-tr/tr.module').then((m) => m.TrModule),
+      canActivate: [AuthGuard]
    },
    {
       path: '**',
