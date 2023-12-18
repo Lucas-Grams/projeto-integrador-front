@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit{
          active: true
       }
    ];
+   private id: any;
 
    constructor(private loginService: LoginService) {
 
@@ -27,9 +28,17 @@ export class LoginComponent implements OnInit{
    login() {
       this.loginService.login();
    }
-
-   ngOnInit(): void {
+   
+   ngOnInit() {
       this.loginService.isLogin();
+      this.id = setInterval(() => {
+         this.loginService.isLogin();
+      }, 300);
    }
 
+   ngOnDestroy() {
+      if (this.id) {
+         clearInterval(this.id);
+      }
+   }
 }
