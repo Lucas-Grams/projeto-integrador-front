@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {LoginService} from "../../core/services/login.service";
 
 @Component({
@@ -6,7 +6,7 @@ import {LoginService} from "../../core/services/login.service";
    templateUrl: './login.component.html',
    styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
 
    public breadcrumb = [
       {
@@ -19,11 +19,26 @@ export class LoginComponent {
          active: true
       }
    ];
+   private id: any;
 
-   constructor(private loginService: LoginService) {}
+   constructor(private loginService: LoginService) {
 
-   login() {
-      this.loginService.mockLogin();
    }
 
+   login() {
+      this.loginService.login();
+   }
+   
+   ngOnInit() {
+      this.loginService.isLogin();
+      this.id = setInterval(() => {
+         this.loginService.isLogin();
+      }, 300);
+   }
+
+   ngOnDestroy() {
+      if (this.id) {
+         clearInterval(this.id);
+      }
+   }
 }

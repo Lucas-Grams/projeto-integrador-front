@@ -8,6 +8,17 @@ import {LoginComponent} from "./pages/login/login.component";
 import {LoginService} from "./core/services/login.service";
 import {LoadingService} from "./core/services/loading.service";
 import {LoadingComponent} from "./layout/loading/loading.component";
+import {OAuthModule} from 'angular-oauth2-oidc';
+import {EnvServiceProvider} from "./core/services/env/env.service.provider";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {AuthInterceptor} from "./utils/interceptors/auth/auth.interceptor";
+import {AuthGuard} from "./utils/guards/auth/auth.guard";
+import {AuthServiceProvider} from "./core/services/auth/auth.service.provider";
+
+
+const browserWindow: any = window || {};
+
+
 
 @NgModule({
    declarations: [
@@ -19,11 +30,25 @@ import {LoadingComponent} from "./layout/loading/loading.component";
    ],
    imports: [
       BrowserModule,
-      PnipRoutingModule
+      PnipRoutingModule,
+      OAuthModule.forRoot({
+         resourceServer: {
+            allowedUrls: [browserWindow['__env'].url.api],
+            sendAccessToken: true
+         }
+      }),
+      HttpClientModule
    ],
+
    providers: [
       LoadingService,
-      LoginService
+      LoginService,
+      HttpClientModule,
+      EnvServiceProvider,
+      AuthServiceProvider,
+      AuthGuard,
+      {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+
    ],
    bootstrap: [PnipComponent],
    schemas: [CUSTOM_ELEMENTS_SCHEMA]

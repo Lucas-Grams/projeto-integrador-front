@@ -1,7 +1,7 @@
 <br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
 <br-divider size="medium" class="mt-0"></br-divider>
 <div class="p-5">
-   <br-message state="success" closable="true">
+   <br-message *ngIf="showMessage" state="success" closable="true">
       <br-icon-base icon-name="check-circle" family-name="fas" class="mr-2"/>
       <span class="info">
          <strong>Sucesso.</strong> Recebemos a sua solicitação de credenciamento.
@@ -16,28 +16,40 @@
             <th class="text-blue-vivid-60 text-bold" scope="col">Data</th>
             <th class="text-blue-vivid-60 text-bold" scope="col">Tipo de Solicitação</th>
             <th class="text-blue-vivid-60 text-bold" scope="col">Nº Processo</th>
-            <th class="text-blue-vivid-60 text-bold" scope="col">Solicitante</th>
             <th class="text-blue-vivid-60 text-bold" scope="col">Status</th>
             <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
          </tr>
       </thead>
       <tbody>
-         <tr>
-            <td>22/11/2023</td>
-            <td>Habilitação de Técnico Responsável</td>
-            <td>010203040506070809-R</td>
-            <td>Joedeson Jr</td>
-            <td>
-               <div class="bg-secondary-06 text-center pt-1 pb-1 pl-2 pr-2" style="border-radius: 4px;">
-                  <div style="color: #FBFCFD;">Em análise</div>
-               </div>
-            </td>
-            <td class="text-center">
-               <br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60"/>
-               <br-icon-base icon-name="times" family-name="fas" class="text-danger"/>
-            </td>
-         </tr>
+         <ng-container *ngIf="solicitacoes?.length; else semSolicitacoes">
+            <ng-container *ngFor="let s of solicitacoes">
+               <tr>
+                  <td>{{s.dataSolicitacao | date: 'dd/MM/YYYY'}}</td>
+                  <td>Habilitação de Técnico Responsável</td>
+                  <td>{{s.uuid}}</td>
+                  <td>
+                     <div class="bg-secondary-06 text-center pt-1 pb-1 pl-2 pr-2" [style.border-radius]="'4px'">
+                        <div [style.color]="'#FBFCFD'">Em análise</div>
+                     </div>
+                  </td>
+                  <td class="text-center" [style.cursor]="'pointer'">
+                     <br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60" (click)="visualizar(s.uuid)"/>
+                  </td>
+               </tr>
+            </ng-container>
+         </ng-container>
+         <ng-template #semSolicitacoes>
+            <tr>
+               <td class="text-center text-secondary-07" colspan="5">
+                  <div [style.font-size]="'16px'">Não há solicitação</div>
+               </td>
+            </tr>
+         </ng-template>
       </tbody>
    </table>
+
+   <div class="d-flex justify-content-end mt-4">
+      <br-button label="Voltar" type="secondary" class="mr-2" (click)="voltar()"/>
+   </div>
 
 </div>

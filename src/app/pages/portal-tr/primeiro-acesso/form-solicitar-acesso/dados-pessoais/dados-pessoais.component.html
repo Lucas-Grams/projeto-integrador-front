@@ -1,0 +1,69 @@
+<form [formGroup]="formGroup" (ngSubmit)="submit()">
+
+   <pnip-validators-forms-utils [formGroup]="formGroup" #validatorsFormsUtils></pnip-validators-forms-utils>
+
+   <!-- nome/cpf -->
+   <div class="row mb-2">
+      <div class="col-8">
+         <br-input density="small" name="nome" label="Nome completo" formControlName="nome"
+               [attr.state]="validatorsFormsUtils.getStateOfField('nome')"/>
+         <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'nome'}"></ng-container>
+      </div>
+      <div class="col-4">
+         <br-input density="small" name="cpf" label="CPF" formControlName="cpf" mask="###.###.###-##"
+               [attr.state]="validatorsFormsUtils.getStateOfField('cpf')"/>
+         <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cpf'}"></ng-container>
+      </div>
+   </div>
+
+   <!-- email/telefone -->
+   <div class="row mb-2">
+      <div class="col-7">
+         <br-input density="small" name="email" label="E-mail" formControlName="email"
+               [attr.state]="validatorsFormsUtils.getStateOfField('email')"/>
+         <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'email'}"></ng-container>
+      </div>
+      <div class="col-5">
+         <br-input density="small" name="telefone" label="Telefone" formControlName="telefone" mask="(##) #-####-####"
+               [attr.state]="validatorsFormsUtils.getStateOfField('telefone')"/>
+      </div>
+   </div>
+
+   <!-- cep/logradouro/numero -->
+   <div class="row mb-2">
+      <div class="col-3">
+         <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"
+               [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (keyup)="getAddressByCep()" (ngModelChange)="getAddressByCep()"/>
+         <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
+      </div>
+      <div class="col-7">
+         <br-input density="small" name="logradouro" label="Logradouro" formControlName="logradouro"
+               [attr.state]="validatorsFormsUtils.getStateOfField('logradouro')"/>
+      </div>
+      <div class="col-2">
+         <br-input density="small" name="numero" label="Número" formControlName="numero"
+               [attr.state]="validatorsFormsUtils.getStateOfField('numero')"/>
+      </div>
+   </div>
+
+   <!-- complemento/municipio/uf -->
+   <div class="row mb-2">
+      <div class="col-5">
+         <br-input density="small" name="complemento" label="Complemento" formControlName="complemento"
+               [attr.state]="validatorsFormsUtils.getStateOfField('complemento')"/>
+      </div>
+      <div class="col-6">
+         <br-input density="small" name="municipio" label="Município" formControlName="municipio"
+               [attr.state]="validatorsFormsUtils.getStateOfField('municipio')"/>
+      </div>
+      <div class="col-1">
+         <br-input density="small" name="uf" label="UF" formControlName="uf"
+               [attr.state]="validatorsFormsUtils.getStateOfField('uf')"/>
+      </div>
+   </div>
+   <br-divider size="medium" class="mt-3"></br-divider>
+   <div class="d-flex justify-content-end mt-4">
+      <br-button label="Voltar" type="secondary" class="mr-2" (click)="voltar()"/>
+      <br-button label="Avançar" type="primary" (click)="submit()"/>
+   </div>
+</form>
