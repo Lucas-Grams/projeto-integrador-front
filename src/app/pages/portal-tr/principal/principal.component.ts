@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 
 @Component({
    selector: 'pnip-tr-principal',
-   templateUrl: './principal.component.html',
+   template: '',
    styleUrls: []
 })
 export class PrincipalComponent implements OnInit {
@@ -12,9 +12,8 @@ export class PrincipalComponent implements OnInit {
    constructor(private loginService: LoginService, private router: Router) {}
 
    ngOnInit() {
-      if (this.loginService.isPrimeiroAcesso()) {
-         this.router.navigate(['/portal-tr/primeiro-acesso']);
-      }
+      // TODO
+      this.router.navigate(['/portal-tr/primeiro-acesso']);
    }
 
 }

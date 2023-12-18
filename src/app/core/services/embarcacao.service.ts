@@ -8,7 +8,7 @@ import {ResponseDTO} from "../dtos/response.dto";
 })
 export class EmbarcacaoService {
 
-   // private readonly URL = `${environment.rabappApiUrl}/embarcacao`;
+   // TODO: environment baseUrl
    private readonly URL = `http://localhost:8089/embarcacao`;
 
    constructor(private http: HttpClient) {}

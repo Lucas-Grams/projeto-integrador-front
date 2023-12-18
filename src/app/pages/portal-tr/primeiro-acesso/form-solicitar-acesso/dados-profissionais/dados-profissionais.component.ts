@@ -33,17 +33,19 @@ export class DadosProfissionaisComponent implements OnInit {
       this.formGroup = this.fb.group({
          formacao: [this.dto.formacao, Validators.required],
          numHabilitacao: [this.dto.numHabilitacao],
-         conselhoClasse: [],
-         ufConselho: [],
+         conselhoClasse: [null],
+         ufConselho: [null],
          copiaHabilitacao: [this.dto.copiaHabilitacao, Validators.required],
          diplomaCertificacao: [this.dto.diplomaCertificacao, Validators.required],
       });
    }
 
    submit(goToStep = false) {
-      {
-         this.formGroup.get('conselhoClasse')?.setValue(this.conselhoClasseSelect.getOptionSelected());
-         this.formGroup.get('ufConselho')?.setValue(this.ufConselhoSelect.getOptionSelected());
+      if (this.conselhoClasseSelect && this.conselhoClasseSelect.getOptionSelected().length) {
+          this.formGroup.get('conselhoClasse')?.setValue(this.conselhoClasseSelect.getOptionSelected());
+      }
+      if (this.ufConselhoSelect && this.ufConselhoSelect.getOptionSelected().length) {
+          this.formGroup.get('ufConselho')?.setValue(this.ufConselhoSelect.getOptionSelected());
       }
       if (this.formGroup.valid) {
          const form: HabilitarTRDTO = <HabilitarTRDTO>{...this.formGroup.value};
