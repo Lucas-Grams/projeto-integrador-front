@@ -4,6 +4,7 @@ import {HabilitarTRDTO} from "../../../../../core/dtos/habilitar-tr.dto";
 import {CepService} from "../../../../../core/services/cep.service";
 import {cpfValidator} from "../../../../../utils/validators/cpf.validator";
 import {cepValidator} from "../../../../../utils/validators/cep.validator";
+import {Router} from "@angular/router";
 
 @Component({
    selector: 'pnip-tr-form-dados-pessoais',
@@ -18,7 +19,7 @@ export class DadosPessoaisComponent implements OnInit {
    @Input() dto!: HabilitarTRDTO;
    @Output() onSaveStep = new EventEmitter<any>();
 
-   constructor(private fb: FormBuilder, private cepService: CepService) {}
+   constructor(private fb: FormBuilder, private cepService: CepService, private router: Router) {}
 
    ngOnInit() {
       this.formGroup = this.fb.group({
@@ -63,6 +64,10 @@ export class DadosPessoaisComponent implements OnInit {
          this.formGroup.markAllAsTouched();
       }
       return false;
+   }
+
+   voltar() {
+      this.router.navigate(['/portal-tr/primeiro-acesso']);
    }
 
 }
