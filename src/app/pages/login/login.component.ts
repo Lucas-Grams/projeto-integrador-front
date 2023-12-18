@@ -1,4 +1,4 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {LoginService} from "../../core/services/login.service";
 
 @Component({
@@ -6,7 +6,7 @@ import {LoginService} from "../../core/services/login.service";
    templateUrl: './login.component.html',
    styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements AfterViewInit{
+export class LoginComponent implements OnInit{
 
    public breadcrumb = [
       {
@@ -19,6 +19,7 @@ export class LoginComponent implements AfterViewInit{
          active: true
       }
    ];
+   private id: any;
 
    constructor(private loginService: LoginService) {
 
@@ -30,7 +31,18 @@ export class LoginComponent implements AfterViewInit{
 
 
    ngAfterViewInit(): void {
+
+   }
+   ngOnInit() {
       this.loginService.isLogin();
+      this.id = setInterval(() => {
+         this.loginService.isLogin();
+      }, 300);
    }
 
+   ngOnDestroy() {
+      if (this.id) {
+         clearInterval(this.id);
+      }
+   }
 }
