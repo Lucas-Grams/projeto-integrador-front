@@ -15,6 +15,7 @@ import {
 } from "./form-unidade/form-representante-unidade/form-representante-unidade.component";
 
 
+
 @NgModule({
    declarations: [
       ListarUnidadesComponent,
@@ -22,20 +23,21 @@ import {
       FormEditarUnidadeComponent,
       FormRepresentanteUnidadeComponent
    ],
-   imports: [
-      SharedModule,
-      CommonModule,
-      ReactiveFormsModule,
-      UnidadeRoutingModule,
-      HttpClientModule,
-      FormsModule,
-      NgSelectModule,
-      ToastrModule.forRoot({
-         timeOut: 3000,
-         positionClass: 'toast-top-right',
-         preventDuplicates: true,
-      }),
-   ],
+    imports: [
+        SharedModule,
+        CommonModule,
+        ReactiveFormsModule,
+        UnidadeRoutingModule,
+        HttpClientModule,
+        FormsModule,
+        NgSelectModule,
+        ToastrModule.forRoot({
+            timeOut: 3000,
+            positionClass: 'toast-top-right',
+            preventDuplicates: true,
+        }),
+
+    ],
    providers: [
       UnidadeService,
       ToastrService

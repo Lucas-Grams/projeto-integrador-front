@@ -72,27 +72,29 @@ export class FormEditarUnidadeComponent implements OnInit {
       });
 
       this.formGroup = this.fb.group({
-         nome: [null, [Validators.minLength(2), Validators.maxLength(100), Validators.required]],
-         tipo: [null, [Validators.minLength(2), Validators.required]],
-         idUnidadeGerenciadora: [null, [Validators.required]],
-         cep: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(10)]],
-         rua: [null, [Validators.minLength(2), Validators.maxLength(70), Validators.required]],
-         numero: [null, [Validators.minLength(1), Validators.required]],
-         bairro: [null, [Validators.minLength(2), Validators.maxLength(50)]],
-         complemento: [null, [Validators.minLength(2), Validators.maxLength(50)]],
-         cidade: [null, [Validators.minLength(2), Validators.maxLength(50), Validators.required]],
-         uf: [null, [Validators.minLength(2), Validators.maxLength(2), Validators.required]],
-         latitude: [null, [Validators.minLength(2), Validators.maxLength(50), Validators.required]],
-         longitude: [null, [Validators.minLength(2), Validators.maxLength(50), Validators.required]]
-      });
+         id:[this.unidade.id],
+            nome: this.fb.control(this.unidade.nome, [Validators.minLength(2), Validators.maxLength(100), Validators.required]),
+            tipo: this.fb.control(this.unidade.tipo, [Validators.minLength(2), Validators.required]),
+            idUnidadeGerenciadora: this.fb.control(this.unidade.idUnidadeGerenciadora, [Validators.required]),
+            cep: this.fb.control(this.unidade.endereco.cep, [ Validators.required, Validators.minLength(8), Validators.maxLength(10) ]),
+            rua: this.fb.control( this.unidade.endereco.rua, [Validators.minLength(2),Validators.maxLength(70), Validators.required]),
+            numero: this.fb.control(this.unidade.endereco.numero, [ Validators.minLength(1), Validators.required]),
+            bairro: this.fb.control(this.unidade.endereco.bairro, [Validators.minLength(2), Validators.maxLength(50)]),
+            complemento: this.fb.control(this.unidade.endereco.complemento, [Validators.minLength(2), Validators.maxLength(50)]),
+            cidade: this.fb.control(this.unidade.endereco.cidade, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
+            uf: this.fb.control(this.unidade.endereco.uf, [Validators.minLength(2), Validators.maxLength(2), Validators.required]),
+            latitude: this.fb.control( this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
+            longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required])
+         });
 
       this.unidadeService.findUnidadeByUuid(this.uuid).subscribe((data) => {
          this.unidade = data;
+         console.log(this.unidade)
          this.selecionaGerenciadora()
          this.unidade.idUnidadeGerenciadora = this.unidade.unidadeGerenciadora?.id;
          this.formGroup.patchValue(this.unidade);
       });
-      this.usuarioService.findRepresentantesUnidade(this.unidade.uuid).subscribe((data) => {
+      this.usuarioService.findRepresentantesUnidade(this.uuid).subscribe((data) => {
          this.representantes = data;
       })
    }
@@ -163,9 +165,10 @@ export class FormEditarUnidadeComponent implements OnInit {
    }
 
    salvar() {
-      this.loadingService.show = true;
+      //this.loadingService.show = true;
       this.unidade = this.formGroup.value;
       console.log(this.unidade);
+      this.unidade.usuarioRepresentante = this.representantes[0];
       this.unidadeService.update(this.unidade).subscribe(mensagem => {
          swal.fire(mensagem.msg).then();
       });

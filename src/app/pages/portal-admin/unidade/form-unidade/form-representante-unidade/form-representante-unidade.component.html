@@ -55,7 +55,7 @@
       <div class="row mb-2">
          <div class="col-3">
             <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (keyup)="getAddressByCep()"
+                      [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (change)="getAddressByCep()"
                       (ngModelChange)="getAddressByCep()"/>
             <ng-container
                *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
@@ -95,14 +95,13 @@
             <div class="br-input">
                <label>Usuarios</label>
                <br>
-               <select formControlName="tipo" (change)="selecionaUsuario($event)" class="select">
-                  <option *ngFor="let user of usuarios" [value]="user">{{user.nome}}--{{user.email}}</option>
+               <select [(ngModel)]="newUsuario" class="select" (ngModelChange)="selecionaUsuario($event)">
+                  <option *ngFor="let user of usuarios" [ngValue]="user">{{user.nome}}--{{user.email}}</option>
                </select>
+
             </div>
          </div>
       </div>
    </div>
 </ng-template>
-<div class="p-3 ">
-   <button (click)="emitirNovoUsuario()" class="br-button" type="button">Guardar Usuario</button>
-</div>
+

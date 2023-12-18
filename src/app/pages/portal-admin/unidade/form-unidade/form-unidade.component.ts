@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LoadingService} from "../../../../core/services/loading.service";
 import {Router} from "@angular/router";
@@ -10,6 +10,7 @@ import {cpfValidator} from "../../../../utils/validators/cpf.validator";
 import {cepValidator} from "../../../../utils/validators/cep.validator";
 import {ValidatorsFormsUtils} from "../../../../utils/components/validators-forms.utils";
 import {Usuario} from "../../../../core/models/usuario.model";
+import {FormRepresentanteUnidadeComponent} from "./form-representante-unidade/form-representante-unidade.component";
 
 
 declare var swal: any;
@@ -37,13 +38,14 @@ export class FormUnidadeComponent implements OnInit{
       }
    ];
 
-   public formGroup: FormGroup;
+   formGroup: FormGroup;
    unidade: Unidade;
    unidadesGerenciadoras: Unidade[] = [];
 
    validarUc: boolean = false;
    newUsuario: Usuario = new Usuario();
 
+   @ViewChild('formUser') formUser?: FormRepresentanteUnidadeComponent;
 
    tipoUnidade = [
       {id: 1, value: 'Unidade Central (UC)', item: 'UC'},
@@ -76,7 +78,8 @@ export class FormUnidadeComponent implements OnInit{
          cidade: this.fb.control(this.unidade.endereco.cidade, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
          uf: this.fb.control(this.unidade.endereco.uf, [Validators.minLength(2), Validators.maxLength(2), Validators.required]),
          latitude: this.fb.control( this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
-         longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required])
+         longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
+         usuarioRepresentante: this.fb.control( this.unidade.usuarioRepresentante)
       });
 
    }
@@ -140,26 +143,24 @@ export class FormUnidadeComponent implements OnInit{
                this.formGroup.get('rua')?.setValue(response.logradouro);
                this.formGroup.get('cidade')?.setValue(response.localidade);
                this.formGroup.get('uf')?.setValue(response.uf);
-               // this.formGroup.get('latitude')?.setValue((response.latitude));
-               // this.formGroup.get('longitude')?.setValue((response.longitude));
+
             }
          });
       }
 
    }
    receberNovoUsuario(novoUsuario: Usuario) {
-
-      console.log('Novo usuário recebido:', novoUsuario);
-
       this.newUsuario = novoUsuario;
    }
 
 
    salvar() {
-      this.loadingService.show = true;
+      //this.loadingService.show = true;
       this.unidade = this.formGroup.value;
-      this.unidade.usuarioResposavel = this.newUsuario;
-      console.log(this.unidade);
+      // this.formUser?.newUsuario? = this.formUser?.formGroup2.value;
+      this.unidade.usuarioRepresentante = (this.formUser?.newUsuario);
+
+console.log(this.unidade);
       this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
         // swal.fire(mensagem.msg).then();
       });

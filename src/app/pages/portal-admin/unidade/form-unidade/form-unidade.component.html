@@ -52,9 +52,10 @@
       <div class="row mb-2">
          <div class="col-6">
             <br-input density="small" name="rua" label="Rua" formControlName="rua" [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
+            <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'rua'}"></ng-container>
          </div>
          <div class="col-2">
-            <br-input density="small" name="numero" label="Número" formControlName="numero" type="text" [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
+            <br-input density="small" name="numero" label="Número" formControlName="numero" type="number" [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
          </div>
          <div class="col-4">
             <br-input density="small" name="bairro" label="Bairro" formControlName="bairro"/>
@@ -71,6 +72,7 @@
                <div class="br-input">
                   <br-input density="small" name="uf" label="UF" formControlName="uf"
                             [attr.state]="validatorsFormsUtils.getStateOfField('uf')"/>
+                  <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'uf'}"></ng-container>
 
                </div>
             </div>
@@ -80,18 +82,9 @@
                <div class="br-input">
                   <br-input density="small" name="municipio" label="Município" formControlName="cidade"
                             [attr.state]="validatorsFormsUtils.getStateOfField('cidade')"/>
+                  <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cidade'}"></ng-container>
                </div>
          </div>
-         </div>
-      </div>
-
-      <!-- latitude/longitude -->
-      <div class="row mb-2">
-         <div class="col-6">
-            <br-input density="small" name="latitude" label="latitude" formControlName="latitude"/>
-         </div>
-         <div class="col-6">
-            <br-input density="small" name="longitude" label="longitude" formControlName="longitude"/>
          </div>
       </div>
    </form>
@@ -99,7 +92,9 @@
 
    <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Representante da unidade</h2>
 
-   <pnip-admin-form-representante-unidade (newUserEmitter)="receberNovoUsuario($event)"></pnip-admin-form-representante-unidade>
+   <pnip-admin-form-representante-unidade sdsdd (newUserEmitter)="receberNovoUsuario($event)"
+    #formUser>
+   </pnip-admin-form-representante-unidade>
 
    <div class="d-flex justify-content-end mt-4">
       <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/unidades'"/>

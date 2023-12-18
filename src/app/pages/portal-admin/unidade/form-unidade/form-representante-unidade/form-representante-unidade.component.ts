@@ -13,32 +13,33 @@ import {UsuarioService} from "../../../../../core/services/usuario.service";
 })
 export class FormRepresentanteUnidadeComponent implements OnInit{
 
-   public formGroup2!: FormGroup;
+   public formGroup2: FormGroup;
 
    novoUser: boolean = false;
    usuarios: Usuario[] = [];
-   @Input() newUsuario!: Usuario;
+   newUsuario: Usuario = new Usuario();
    @Output() newUserEmitter: EventEmitter<Usuario> = new EventEmitter<Usuario>();
 
    constructor(private fb: FormBuilder,
                private cepService: CepService,
                private usuarioService: UsuarioService) {
-
-   }
-
-   ngOnInit() {
       this.formGroup2 = this.fb.group({
          nome: [this.newUsuario?.nome, [Validators.required, Validators.maxLength(100)]],
          cpf: [this.newUsuario?.cpf, [Validators.required, cpfValidator()]],
          email: [this.newUsuario?.email, [Validators.required, Validators.email, Validators.maxLength(70)]],
          senha: [this.newUsuario?.senha, [Validators.required, Validators.minLength(8), Validators.maxLength(70)]],
-         cep: [this.newUsuario.endereco?.cep, [Validators.required, cepValidator()]],
-         rua: [this.newUsuario.endereco?.rua],
-         numero: [this.newUsuario.endereco?.numero],
-         complemento: [this.newUsuario.endereco?.complemento],
-         cidade: [this.newUsuario.endereco?.cidade],
-         uf: [this.newUsuario.endereco?.uf]
+         cep: [this.newUsuario?.endereco?.cep, [Validators.required, cepValidator()]],
+         rua: [this.newUsuario?.endereco?.rua],
+         numero: [this.newUsuario?.endereco?.numero],
+         complemento: [this.newUsuario?.endereco?.complemento],
+         cidade: [this.newUsuario?.endereco?.cidade],
+         uf: [this.newUsuario?.endereco?.uf]
       });
+
+
+   }
+
+   ngOnInit() {
 
       this.usuarioService.findAll().subscribe((data) => {
          this.usuarios = data;
@@ -65,17 +66,18 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
       event? this.novoUser = true: this.novoUser = false;
    }
 
-   selecionaUsuario(event: any){
-      this.newUsuario = event;
+   selecionaUsuario(user: Usuario){
+      this.newUsuario = user;
       this.emitirNovoUsuario();
    }
 
    emitirNovoUsuario() {
-      const newUser = this.formGroup2.value;
-      this.newUserEmitter.emit(newUser);
-   }
-
-   salvar(){
-
+      if(this.novoUser){
+         this.newUsuario = this.formGroup2.value;
+      }
+      if(this.newUsuario != null && this.newUsuario != undefined){
+         console.log("nao é nulo");
+         this.newUserEmitter.emit(this.newUsuario);
+      }
    }
 }

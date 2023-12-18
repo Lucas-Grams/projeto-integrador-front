@@ -18,10 +18,11 @@ export class UsuarioService {
    }
 
    findAll():Observable<Usuario[]>{
-      return this.http.get<Usuario[]>(`${this.urlUsuario}` + '/findAll');
+      return this.http.get<Usuario[]>(`${this.urlUsuario}` + '');
    }
 
    findRepresentantesUnidade(uuid: String):Observable<Usuario[]>{
-      return this.http.get<Usuario[]>(`${this.urlUsuario}` + '/findRepresentantesUnidade/'+uuid);
+      console.log(uuid);
+      return this.http.get<Usuario[]>(`${this.urlUsuario}` + '/findRepresentantesUnidade/'+ uuid);
    }
 }

@@ -4,6 +4,10 @@ import {Unidade} from "../../../../core/models/unidade.model";
 import {Location} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 
+
+
+
+
 @Component({
    selector: 'pnip-admin-listar-unidades',
    templateUrl: './listar-unidades.component.html',
@@ -34,10 +38,10 @@ export class ListarUnidadesComponent implements OnInit{
       })
    }
 
-   excluir(uuid: String){
-      this.unidadeService.excluirUnidade(uuid).subscribe(()=> {
-         this.el.nativeElement.ownerDocument.defaultView.location.reload();
-      })
+   inativar(uuid: String){
+
+      // this.unidadeService.inativarUnidade(uuid).subscribe(()=> {
+      //    this.el.nativeElement.ownerDocument.defaultView.location.reload();
    }
 
 }

@@ -27,8 +27,8 @@ export class UnidadeService{
       return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/getGerenciadoras/'+ tipo);
    }
 
-   excluirUnidade(uuid: String){
-      return this.http.post(`${this.urlUnidade}` + '/excluirUnidade/', uuid);
+   inativarUnidade(uuid: String){
+      return this.http.post(`${this.urlUnidade}` + '/inativarUnidade/', uuid);
    }
 
    findUnidadeByUuid(uuid: String): Observable<Unidade>{

@@ -2,7 +2,7 @@ import {Endereco} from "./endereco.model";
 import {Usuario} from "./usuario.model";
 
 export class Unidade{
-   id: number;
+   id?: number;
    nome: String;
    tipo: String;
    endereco: Endereco;
@@ -12,11 +12,11 @@ export class Unidade{
    uuid: String;
    dataCadastro?: Date;
    ultima_atualizacao?: Date;
-   usuarioResposavel?: Usuario
+   usuarioRepresentante?: Usuario;
+
 
 
    constructor() {
-      this.id = 0;
       this.nome = '';
       this.tipo = '';
       this.idUnidadeGerenciadora;
