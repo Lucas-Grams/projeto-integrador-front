@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {ResponseDTO} from "../dtos/response.dto";
 import {HabilitarTRDTO} from "../dtos/habilitar-tr.dto";
 import {SolicitacaoHabilitacaoDTO} from "../dtos/solicitacao-habilitacao.dto";
+import {EnvService} from "./env/env.service";
 
 @Injectable({
    providedIn: 'root'
@@ -10,9 +11,11 @@ import {SolicitacaoHabilitacaoDTO} from "../dtos/solicitacao-habilitacao.dto";
 export class TrService {
 
    // TODO: environment baseUrl
-   private readonly URL = `http://localhost:8089/tr`;
+   private  URL = ``;
 
-   constructor(private http: HttpClient) {}
+   constructor(private http: HttpClient, private env: EnvService) {
+      this.URL = `${this.env.url.api}/tr`
+   }
 
    public minhasSolicitacoes() {
       return this.http.get<SolicitacaoHabilitacaoDTO[]>(`${this.URL}/minhas-solicitacoes`);
