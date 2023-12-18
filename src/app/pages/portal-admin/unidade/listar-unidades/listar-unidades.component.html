@@ -27,9 +27,9 @@
             <td>{{unidade.endereco.cidade}}/{{unidade.endereco.uf}}</td>
             <td>{{unidade.dataCadastro | date: 'dd/MM/yy'}}</td>
             <td class="text-center">
-               <br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60"/>
-               <br-icon-base icon-name="pencil-alt" family-name="fas" class="mr-2 text-success"/>
-               <br-icon-base icon-name="times" family-name="fas" class="text-danger"/>
+<!--               <br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60" [routerLink]="'/portal-admin/unidades/visualizar-unidade/'+ unidade.uuid"/>-->
+               <br-icon-base icon-name="pencil-alt" family-name="fas" class="mr-2 text-success" [routerLink]="'editar/' + unidade.uuid"/>
+               <br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="excluir(unidade.uuid)"/>
             </td>
          </tr>
       </tbody>

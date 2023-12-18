@@ -5,11 +5,13 @@ export class Unidade{
    nome: String;
    tipo: String;
    endereco: Endereco;
+   unidadeGerenciadora?: Unidade;
    idUnidadeGerenciadora?: number = 0;
    ativo: boolean;
    uuid: String;
    dataCadastro?: Date;
    ultima_atualizacao?: Date;
+
 
    constructor() {
       this.id = 0;

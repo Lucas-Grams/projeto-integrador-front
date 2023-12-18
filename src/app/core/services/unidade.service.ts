@@ -14,15 +14,23 @@ export class UnidadeService{
    constructor(http: HttpClient) {
       this.http = http;
    }
-      salvar(unidade: Unidade):Observable<ResponseDto<Unidade>>{
-         return this.http.post<ResponseDto<Unidade>>(`${this.urlUnidade}` + '/salvar', unidade);
-      }
+   salvar(unidade: Unidade):Observable<ResponseDto<Unidade>>{
+      return this.http.post<ResponseDto<Unidade>>(`${this.urlUnidade}` + '/salvar', unidade);
+   }
 
-      findAll():Observable<Unidade[]>{
-         return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/findAll');
-      }
+   findAll():Observable<Unidade[]>{
+      return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/findAll');
+   }
 
-      getGerenciadoras(tipo: String):Observable<Unidade[]>{
-         return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/getGerenciadoras/'+tipo);
-      }
+   getGerenciadoras(tipo: String):Observable<Unidade[]>{
+      return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/getGerenciadoras/'+ tipo);
+   }
+
+   excluirUnidade(uuid: String){
+      return this.http.post(`${this.urlUnidade}` + '/excluirUnidade/', uuid);
+   }
+
+   findUnidadeByUuid(uuid: String): Observable<Unidade>{
+      return this.http.get<Unidade>(`${this.urlUnidade}` + '/findUnidadeByUuid/'+ uuid);
+   }
 }

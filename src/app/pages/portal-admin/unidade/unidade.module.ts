@@ -9,12 +9,14 @@ import {UnidadeService} from "../../../core/services/unidade.service";
 import {HttpClient, HttpClientModule, HttpHandler} from "@angular/common/http";
 import {NgSelectModule} from "@ng-select/ng-select";
 import {ToastrModule, ToastrService} from "ngx-toastr";
+import {FormEditarUnidadeComponent} from "./form-unidade/form-editar-unidade/form-editar-unidade.component";
 
 
 @NgModule({
    declarations: [
       ListarUnidadesComponent,
-      FormUnidadeComponent
+      FormUnidadeComponent,
+      FormEditarUnidadeComponent
    ],
    imports: [
       SharedModule,

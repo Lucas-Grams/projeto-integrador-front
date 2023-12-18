@@ -54,7 +54,7 @@
             <br-input density="small" name="rua" label="Rua" formControlName="rua" [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
          </div>
          <div class="col-2">
-            <br-input density="small" name="numero" label="Número" formControlName="numero" type="number" [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
+            <br-input density="small" name="numero" label="Número" formControlName="numero" type="text" [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
          </div>
          <div class="col-4">
             <br-input density="small" name="bairro" label="Bairro" formControlName="bairro"/>
@@ -100,5 +100,8 @@
          <br-button label="Salvar" type="primary" (click)="salvar()"/>
       </div>
    </form>
+
+   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Cadastrar Representante da unidade</h2>
+
 
 </div>

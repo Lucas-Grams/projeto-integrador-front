@@ -148,7 +148,7 @@ export class FormUnidadeComponent implements OnInit{
       this.unidade = this.formGroup.value;
       console.log(this.unidade);
       this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
-         swal.fire(mensagem.msg).then();
+        // swal.fire(mensagem.msg).then();
       });
       setTimeout(() => {
          this.loadingService.show = false;
