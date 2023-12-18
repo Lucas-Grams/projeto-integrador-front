@@ -1,19 +1,42 @@
 import {Component, OnInit} from '@angular/core';
-import {LoadingService} from "../../../core/services/loading.service";
-import {Router} from "@angular/router";
 
 @Component({
    selector: 'pnip-tr-primeiro-acesso',
-   template: '',
+   templateUrl: './primeiro-acesso.component.html',
    styleUrls: []
 })
 export class PrimeiroAcessoComponent implements OnInit {
 
-   constructor(private loadingService: LoadingService, private router: Router) {}
+   public breadcrumb = [
+      {
+         label: 'Home',
+         url: '/portal-tr',
+         home: true
+      },
+      {
+         label: 'Primeiro acesso',
+         active: true
+      }
+   ];
+
+   public menuItems = [
+      {
+         label: 'SOLICITAR HABILITAÇÃO',
+         icon: 'ship',
+         url: '/solicitar'
+      },
+      {
+         label: 'MINHAS SOLICITAÇÕES',
+         icon: 'list',
+         url: '/minhas-solicitacoes'
+      },
+   ];
+
+   constructor() {}
 
    ngOnInit() {
       // TODO: se houver solicitação, redirecionar para 'minhas-solicitacoes'
-      this.router.navigate(['/portal-tr/primeiro-acesso/solicitar']);
+      // this.router.navigate(['/portal-tr/primeiro-acesso/solicitar']);
    }
 
 }

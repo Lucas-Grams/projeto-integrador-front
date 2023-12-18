@@ -12,6 +12,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {SharedModule} from "../../../shared/shared.module";
 import {TrService} from "../../../core/services/tr.service";
+import {DetalhesSolicitacaoComponent} from "./detalhes-solicitacao/detalhes-solicitacao.component";
 
 @NgModule({
    declarations: [
@@ -22,7 +23,8 @@ import {TrService} from "../../../core/services/tr.service";
       DadosPessoaisComponent,
       DadosProfissionaisComponent,
       EmbarcacoesComponent,
-      RevisarSolicitacaoComponent
+      RevisarSolicitacaoComponent,
+      DetalhesSolicitacaoComponent
    ],
    imports: [
       FormsModule,

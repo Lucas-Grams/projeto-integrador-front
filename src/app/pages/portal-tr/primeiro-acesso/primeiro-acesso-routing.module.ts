@@ -3,6 +3,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {SolicitarAcessoComponent} from "./solicitar-acesso/solicitar-acesso.component";
 import {ListarSolicitacoesComponent} from "./listar-solicitacoes/listar-solicitacoes.component";
 import {PrimeiroAcessoComponent} from "./primeiro-acesso.component";
+import {DetalhesSolicitacaoComponent} from "./detalhes-solicitacao/detalhes-solicitacao.component";
 
 const routes: Routes = [
    {
@@ -16,6 +17,10 @@ const routes: Routes = [
    {
       path: 'minhas-solicitacoes',
       component: ListarSolicitacoesComponent
+   },
+   {
+      path: 'detalhes-solicitacao/:uuid',
+      component: DetalhesSolicitacaoComponent
    }
 ];
 
