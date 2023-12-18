@@ -28,11 +28,7 @@ export class LoginComponent implements OnInit{
    login() {
       this.loginService.login();
    }
-
-
-   ngAfterViewInit(): void {
-
-   }
+   
    ngOnInit() {
       this.loginService.isLogin();
       this.id = setInterval(() => {
