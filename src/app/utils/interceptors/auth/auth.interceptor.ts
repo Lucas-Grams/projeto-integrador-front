@@ -6,7 +6,6 @@ import {
    HttpInterceptor, HttpErrorResponse
 } from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
-import {AuthService} from "../../../core/services/auth/auth.service";
 import {LoginService} from "../../../core/services/login.service";
 
 
@@ -29,19 +28,5 @@ export class AuthInterceptor implements HttpInterceptor {
        })
     )
   }
-
-
-   catchExpiredToken(loginService: LoginService) {
-      return (err: HttpErrorResponse) => {
-         console.log("erro, deu erro");
-         if (err instanceof HttpErrorResponse
-            && err.status == 403 || err.status == 0 || err.status == 401 || err.status == 302) {
-            loginService.logout();
-         } else {
-            return throwError(err);
-         }
-         return throwError(err);
-      };
-   }
 
 }
