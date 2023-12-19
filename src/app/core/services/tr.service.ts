@@ -1,9 +1,11 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
+
+import {EnvService} from "./env/env.service";
+
 import {ResponseDTO} from "../dtos/response.dto";
 import {HabilitarTRDTO} from "../dtos/habilitar-tr.dto";
 import {SolicitacaoHabilitacaoDTO} from "../dtos/solicitacao-habilitacao.dto";
-import {EnvService} from "./env/env.service";
 
 @Injectable({
    providedIn: 'root'
@@ -27,6 +29,22 @@ export class TrService {
 
    public solicitarHabilitacao(dto: HabilitarTRDTO) {
       return this.http.post<ResponseDTO<string>>(`${this.URL}/solicitar-habilitacao`, dto);
+   }
+
+   public findAllSolicitacoes(): any {
+      return this.http.get<ResponseDTO<any>>(`${this.URL}/find/all/solicitacoes`);
+   }
+
+   public findSolicitacoesByStatus(status: string): any {
+      return this.http.get<ResponseDTO<any>>(`${this.URL}/find/solicitacoes/by/status/`+ status);
+   }
+
+   public findSolicitacaoByUuid(uuid: string): any {
+      return this.http.get<ResponseDTO<any>>(`${this.URL}/find/solicitacao/by/uuid/` + uuid);
+   }
+
+   public finalizarSolicitacao(dto: any) {
+      return this.http.post<ResponseDTO<string>>(`${this.URL}/finalizar-solicitacao`, dto);
    }
 
 }

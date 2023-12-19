@@ -1,0 +1,224 @@
+<br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
+<br-divider size="medium" class="mt-0 mb-0"></br-divider>
+
+<h2 class="text-bold text-blue-vivid-60 mt-4 mb-4 pb-0">Revisar solicitação</h2>
+
+<table class="table" *ngIf="solicitacao">
+   <thead class="thead-light">
+      <tr>
+         <th class="text-blue-vivid-60 text-bold" scope="col">Data</th>
+         <th class="text-blue-vivid-60 text-bold" scope="col">Tipo de Processo</th>
+         <th class="text-blue-vivid-60 text-bold" scope="col">Protocolo</th>
+         <th class="text-blue-vivid-60 text-bold" scope="col">Solicitante</th>
+         <th class="text-blue-vivid-60 text-bold" scope="col">Status</th>
+         <th class="text-blue-vivid-60 text-bold" scope="col"></th>
+      </tr>
+   </thead>
+   <tbody>
+      <ng-container>
+         <tr>
+            <td>{{solicitacao.dataSolicitacao | date :'dd/MM/yyyy'}}</td>
+            <td>Habilitação TR</td>
+            <td>{{solicitacao.protocolo}}</td>
+            <td>{{solicitacao.solicitante}}</td>
+            <td>
+               <div [ngClass]="getClass(solicitacao.status)" class="text-center pt-1 pb-1 pl-2 pr-2" style="border-radius: 4px;">
+                  <div style="color: #FBFCFD;">
+                     {{solicitacao.status ? solicitacao.status.replace("_", " ") : solicitacao.status}}
+                  </div>
+               </div>
+            </td>
+            <td>
+               <br-button icon label="Primary" type="tertiary" circle="true" [active]="statusSolicitacao === 'indeferir'? true: false"
+                          (click)="statusSolicitacao = 'indeferir';showConfirmacao('indeferir')">
+                  <br-icon-base icon-name="ban" family-name="fas" class="text-danger"/>
+               </br-button>
+               <br-button icon label="Primary" type="tertiary" circle="true" [active]="statusSolicitacao === 'deferir'? true: false"
+                          (click)="statusSolicitacao = 'deferir'; showConfirmacao('deferir')">
+                  <br-icon-base icon-name="check" family-name="fas" class="text-info"/>
+               </br-button>
+            </td>
+         </tr>
+      </ng-container>
+   </tbody>
+</table>
+
+<div class="row mt-3">
+   <div class="col-8">
+      <br-input density="small" name="nome" label="Nome completo" [value]="metadado?.habilitarTRDTO?.nome" [attr.readonly]="true"/>
+   </div>
+   <div class="col-4">
+      <br-input density="small" name="cpf" label="CPF" mask="###.###.###-##"
+                [value]="metadado?.habilitarTRDTO?.cpf" [attr.readonly]="true"/>
+   </div>
+</div>
+
+<div class="row mt-3">
+   <div class="col-7">
+      <br-input density="small" name="email" label="E-mail"
+                [value]="metadado?.habilitarTRDTO?.email" [attr.readonly]="true"/>
+   </div>
+   <div class="col-5">
+      <br-input density="small" name="telefone" label="Telefone" mask="(##) #-####-####"
+                [value]="metadado?.habilitarTRDTO?.telefone" [attr.readonly]="true"/>
+   </div>
+</div>
+
+<div class="row mt-3">
+   <div class="col-3">
+      <br-input density="small" name="cep" label="CEP" mask="#####-###" [value]="metadado?.habilitarTRDTO?.cep" [attr.readonly]="true"/>
+   </div>
+   <div class="col-7">
+      <br-input density="small" name="logradouro" label="Logradouro"
+                [value]="metadado?.habilitarTRDTO?.logradouro" [attr.readonly]="true"/>
+   </div>
+   <div class="col-2">
+      <br-input density="small" name="numero" label="Número"
+                [value]="metadado?.habilitarTRDTO?.numero" [attr.readonly]="true"/>
+   </div>
+</div>
+
+<div class="row mt-3">
+   <div class="col-5">
+      <br-input density="small" name="complemento" label="Complemento"
+                [value]="metadado?.habilitarTRDTO?.complemento" [attr.readonly]="true"/>
+   </div>
+   <div class="col-6">
+      <br-input density="small" name="municipio" label="Município"
+                [value]="metadado?.habilitarTRDTO?.municipio" [attr.readonly]="true"/>
+   </div>
+   <div class="col-1">
+      <br-input density="small" name="uf" label="UF"
+                [value]="metadado?.habilitarTRDTO?.uf" [attr.readonly]="true"/>
+   </div>
+</div>
+
+<div class="row mt-3">
+   <div class="col-6">
+      <br-input density="small" name="formacao" label="Formação"
+                [value]="metadado?.habilitarTRDTO?.formacao" [attr.readonly]="true"/>
+   </div>
+   <div class="col-2">
+      <br-input density="small" name="numHabilitacao" label="Nº da Habilitação"
+                [value]="metadado?.habilitarTRDTO?.numHabilitacao" [attr.readonly]="true"/>
+   </div>
+   <div class="col-3">
+      <br-input density="small" name="conselhoClasse" label="Conselho de classe"
+                [value]="metadado?.habilitarTRDTO?.conselhoClasse" [attr.readonly]="true"/>
+   </div>
+   <div class="col-1">
+      <br-input density="small" name="ufConselho" label="UF/Região"
+                [value]="metadado?.habilitarTRDTO?.ufConselho" [attr.readonly]="true"/>
+   </div>
+</div>
+
+<div class="row mt-3 mb-5">
+   <div class="col-6">
+      <label>Cópia da Habilitação ou Comprovante de Quitação</label>
+      <div class="upload-file mt-1 mb-1 w-100">
+         <div class="text-blue-vivid-60 pt-1 pb-1">
+            {{metadado?.habilitarTRDTO?.copiaHabilitacao}}
+         </div>
+      </div>
+   </div>
+   <div class="col-6 upload">
+      <label>Diploma/Certificado</label>
+      <div class="upload-file mt-1 mb-1 w-100">
+         <div class="text-blue-vivid-60 pt-1 pb-1">
+            {{metadado?.habilitarTRDTO?.diplomaCertificacao}}
+         </div>
+      </div>
+   </div>
+</div>
+
+<br-message *ngIf="showMessage" state="warning" closable title="Por favor, para continuar aprove ou reprove as embarcações." show-icon="true">
+</br-message>
+
+<table class="table" *ngIf="solicitacao">
+   <thead class="thead-light">
+   <tr>
+      <th class="text-blue-vivid-60 text-bold" scope="col">Data</th>
+      <th class="text-blue-vivid-60 text-bold" scope="col">Cód. Embarcação</th>
+      <th class="text-blue-vivid-60 text-bold" scope="col">Cód. Frota</th>
+      <th class="text-blue-vivid-60 text-bold" scope="col">Nome Embarcação</th>
+      <th class="text-blue-vivid-60 text-bold" scope="col">Declaração</th>
+      <th class="text-blue-vivid-60 text-bold" scope="col">Ações</th>
+   </tr>
+   </thead>
+   <tbody>
+   <ng-container *ngFor="let embarcacao of metadado?.habilitarTRDTO?.embarcacoes">
+      <tr>
+         <td>{{solicitacao.dataSolicitacao | date :'dd/MM/yyyy'}}</td>
+         <td>{{embarcacao.numMarinha}}</td>
+         <td>{{embarcacao.frota}}</td>
+         <td>{{embarcacao.nome}}</td>
+         <td>
+            <br-icon-base icon-name="file" family-name="fas" class="mr-2 text-blue-vivid-60"/>
+         </td>
+         <td>
+            <br-button icon label="Primary" [title]="'Reprovar'" type="tertiary" circle="true" [active]="embarcacao.aprovada === false"
+                       (click)="embarcacao.aprovada = false">
+               <br-icon-base icon-name="ban" family-name="fas" class="text-danger"/>
+            </br-button>
+            <br-button icon label="Primary" [title]="'Aprovar'" type="tertiary" circle="true" [active]="embarcacao.aprovada"
+                       (click)="embarcacao.aprovada = true">
+               <br-icon-base icon-name="check" family-name="fas" class="text-info"/>
+            </br-button>
+         </td>
+      </tr>
+   </ng-container>
+   </tbody>
+</table>
+
+<div class="d-flex justify-content-end mt-5">
+   <br-button label="Fechar" type="secondary" class="mr-2" (click)="router.navigate(['/portal-mpa/solicitacoes'])"/>
+   <br-button label="Enviar" type="primary" (click)="enviarSolicitacao()" [disabled]="statusSolicitacao === '' || solicitacao.status !== 'EM_ANALISE'"/>
+</div>
+
+<!-- modal confirmação deferir -->
+<br-scrim id="modal-deferir-scrim" [show]="modalDeferirAtivo" center-content="true" autofocus-content="true">
+   <div id="modal-deferir" class="div br-modal large">
+      <div class="br-modal-header">Deferir a solicitação de habilitação</div>
+      <div class="br-modal-body">
+         <p class="text-center">
+            Esta opção aprova a solicitação do habilitação de TR, para o Técnico Responsável - {{metadado?.habilitarTRDTO?.nome}}
+            <br>
+            Você pode suspender este credenciamento a qualquer momento acessando a opção Técnicos Responsáveis, na home do portal
+         </p>
+      </div>
+      <div class="br-modal-footer justify-content-center">
+         <button class="br-button secondary" type="button" (click)="cancelaConfirmacao()">Cancelar
+         </button>
+         <button class="br-button primary ml-2" type="button" (click)="statusSolicitacao = 'deferir'; cancelaConfirmacao();">Deferir
+         </button>
+      </div>
+   </div>
+</br-scrim>
+
+<!-- modal confirmação indeferir -->
+<br-scrim id="modal-indeferir-scrim" [show]="modalIndeferirAtivo" center-content="true" autofocus-content="true">
+   <div id="modal-indeferir" class="div br-modal large">
+      <div class="br-modal-header">Indeferir solicitação</div>
+      <div class="br-modal-body">
+         <p class="text-center small">
+            Esta opção encerra o processo para habilitação do TR e vínculo com as embarcações.
+            Se necessário, informe, no campo abaixo, o(s) motivo(s) do indeferimento.
+         </p>
+         <div class="col-12">
+            <div class="br-textarea">
+               <label for="textarea-id1">Motivo(s) do indeferimento</label>
+               <textarea id="textarea-id1" placeholder="informe aqui o(s) motivo(s) do indeferimento" rows="4"
+                         [(ngModel)]="msgIndeferir" [maxlength]="100">
+               </textarea>
+               <p class="text-base mt-1">Limite máximo de 100 caracteres.</p>
+            </div>
+         </div>
+      </div>
+      <div class="br-modal-footer justify-content-center">
+         <button class="br-button secondary" type="button" (click)="cancelaConfirmacao()">Cancelar
+         </button>
+         <button class="br-button primary ml-2" type="button" (click)="statusSolicitacao = 'indeferir'; cancelaConfirmacao();">Indeferir
+         </button>
+      </div>
+   </div>
+</br-scrim>
