@@ -9,7 +9,7 @@
 
    //auth2 keycloak
    window.__env.keycloak = {
-      url: "http://localhost:8099",
+      url: "http://localhost:8098",
       realm: "pnip-local",
       clientId: "pnip-web"
    };
