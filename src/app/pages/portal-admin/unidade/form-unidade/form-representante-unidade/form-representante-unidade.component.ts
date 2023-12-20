@@ -74,6 +74,7 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
    }
 
    emitirNovoUsuario() {
+      console.log("emitir novo user");
       if(this.novoUser){
          this.newUsuario = this.formGroup2.value;
       }

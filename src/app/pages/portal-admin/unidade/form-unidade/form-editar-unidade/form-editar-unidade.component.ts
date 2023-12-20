@@ -95,6 +95,7 @@ export class FormEditarUnidadeComponent implements OnInit {
       });
       this.usuarioService.findRepresentantesUnidade(this.uuid).subscribe((data) => {
          this.representantes = data;
+         console.log(this.representantes);
       })
    }
    ngOnInit() {

@@ -154,10 +154,12 @@ export class FormUnidadeComponent implements OnInit{
 
    }
    receberNovoUsuario(novoUsuario: Usuario) {
+      console.log("receber novo usuario");
       this.representante = novoUsuario;
    }
 
    receberForm(form: FormGroup){
+      console.log("receber form");
       this.formRepresentante = form;
       this.representante.endereco = new Endereco()
       this.representante.nome = this.formRepresentante.get('nome')?.value;
@@ -173,7 +175,7 @@ export class FormUnidadeComponent implements OnInit{
    }
 
    salvar() {
-      //this.loadingService.show = true;
+      this.loadingService.show = true;
       this.unidade = this.formGroup.value;
       this.unidade.usuarioRepresentante = this.representante;
 
