@@ -18,9 +18,9 @@ export class LoginService {
    public isLogin() {
       this.loadingService.show = true;
       this.authService?.asynccheckLogado().then(data => {
-         console.log(data);
          if(data == true){
-            this.username = 'Joedeson Jr';
+            this.authService?.getRealmAccess();
+            this.username = '';
             this.role = 'tr';
             this.primeiroAcesso = true;
             this.router?.navigate([`/portal-${this.role}`]);
