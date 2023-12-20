@@ -75,6 +75,7 @@ export class EmbarcacoesComponent {
       let selectedFile = event.target.files[0];
       if (selectedFile) {
          this.dto.embarcacoes[this.declaracaoProprietarioIndex].declaracaoProprietario = selectedFile.name;
+         this.declaracaoProprietarioInput.nativeElement.value = null;
          console.log(selectedFile, this.declaracaoProprietarioIndex);
       }
    }

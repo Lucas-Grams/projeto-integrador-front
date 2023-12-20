@@ -13,13 +13,28 @@
          <br-input density="small" name="numHabilitacao" label="Nº da Habilitação" formControlName="numHabilitacao"
                [attr.state]="validatorsFormsUtils.getStateOfField('numHabilitacao')"/>
       </div>
-      <div class="col-3">
-         <br-input density="small" name="conselhoClasse" label="Conselho de classe" formControlName="conselhoClasse"
-               [attr.state]="validatorsFormsUtils.getStateOfField('conselhoClasse')"/>
+      <div class="col-2">
+         <br-select-pnip
+            id="conselhoClasse"
+            label="Conselho de classe"
+            [options]="[
+               {label: 'CRMV', value: 'CRMV'},
+               {label: 'CRQ', value: 'CRQ'},
+               {label: 'CRN', value: 'CRN'},
+               {label: 'CONFEA', value: 'CONFEA'}
+            ]"
+            [optionSelected]="dto.conselhoClasse"
+            #conselhoClasseSelect>
+         </br-select-pnip>
       </div>
-      <div class="col-1">
-         <br-input density="small" name="ufConselho" label="UF/Região" formControlName="ufConselho"
-               [attr.state]="validatorsFormsUtils.getStateOfField('ufConselho')"/>
+      <div class="col-2">
+         <br-select-pnip
+            id="ufConselho"
+            label="UF/Região"
+            [options]="ufs"
+            [optionSelected]="dto.ufConselho"
+            #ufConselhoSelect>
+         </br-select-pnip>
       </div>
    </div>
 

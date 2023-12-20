@@ -22,7 +22,7 @@ export class SolicitarAcessoComponent {
          url: '/portal-tr/primeiro-acesso'
       },
       {
-         label: 'Solicitar Cadastro de Técnico Responsável',
+         label: 'Solicitar Habilitação de Técnico Responsável',
          active: true
       }
    ];
@@ -33,7 +33,7 @@ export class SolicitarAcessoComponent {
       this.loadingService.show = true;
       this.trService.solicitarHabilitacao(dto).subscribe(
          (response) => {
-            this.router.navigate(['/portal-tr/primeiro-acesso/minhas-solicitacoes']);
+            this.router.navigate(['/portal-tr/primeiro-acesso/minhas-solicitacoes'], {queryParams: {message: 'true'}});
             this.loadingService.show = false;
          },
          (error) => {

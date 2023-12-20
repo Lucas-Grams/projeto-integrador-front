@@ -51,10 +51,8 @@ export class AuthService {
       return this.oidcSecurityService.hasValidAccessToken();
    }
    asynccheckLogado(){
-     console.log("")
       return new Promise((resolve, reject) => {
          this.oidcSecurityService.loadDiscoveryDocument().then(r => {
-            console.log(this.oidcSecurityService.hasValidAccessToken());
             resolve(this.oidcSecurityService.hasValidAccessToken());
          }).catch(err => {
             resolve(this.oidcSecurityService.hasValidAccessToken());

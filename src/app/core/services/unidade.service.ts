@@ -3,17 +3,16 @@ import {Unidade} from "../models/unidade.model";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponseDto} from "../dto/response.dto";
-import {Usuario} from "../models/usuario.model";
 
-const URL= "http://localhost:8089";
 @Injectable({
    providedIn: 'root'
 })
 export class UnidadeService{
-   private readonly urlUnidade = URL+"/unidade";
+   private urlUnidade = "";
    private http: HttpClient;
-   constructor(http: HttpClient) {
+   constructor(http: HttpClient, private env: EnvService) {
       this.http = http;
+      this.urlUnidade = `${this.env.url.api}/unidade`;
    }
    salvar(unidade: Unidade):Observable<ResponseDto<Unidade>>{
       return this.http.post<ResponseDto<Unidade>>(`${this.urlUnidade}` + '/salvar', unidade);
