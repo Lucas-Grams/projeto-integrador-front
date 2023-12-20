@@ -13,6 +13,7 @@ import {UsuarioService} from "../../../../../core/services/usuario.service";
 })
 export class FormRepresentanteUnidadeComponent implements OnInit{
 
+   @Output() emitirForm = new EventEmitter<FormGroup>();
    public formGroup2: FormGroup;
 
    novoUser: boolean = false;
@@ -33,14 +34,16 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
          numero: [this.newUsuario?.endereco?.numero],
          complemento: [this.newUsuario?.endereco?.complemento],
          cidade: [this.newUsuario?.endereco?.cidade],
+         bairro: [this.newUsuario?.endereco?.bairro],
          uf: [this.newUsuario?.endereco?.uf]
       });
 
-
+      this.formGroup2.valueChanges.subscribe(() => {
+         this.emitirForm.emit(this.formGroup2);
+      });
    }
 
    ngOnInit() {
-
       this.usuarioService.findAll().subscribe((data) => {
          this.usuarios = data;
       })
@@ -48,7 +51,6 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
 
    getAddressByCep() {
       const field = this.formGroup2.get('cep');
-      console.log(field);
       if (!field?.value) return;
       const cep = field?.value[0];
       if (cep.length === 9) {
@@ -76,7 +78,6 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
          this.newUsuario = this.formGroup2.value;
       }
       if(this.newUsuario != null && this.newUsuario != undefined){
-         console.log("nao é nulo");
          this.newUserEmitter.emit(this.newUsuario);
       }
    }

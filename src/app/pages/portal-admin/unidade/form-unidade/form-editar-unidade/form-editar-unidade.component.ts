@@ -9,8 +9,8 @@ import { ValidatorsFormsUtils } from "../../../../../utils/components/validators
 import {LoadingService} from "../../../../../core/services/loading.service";
 import {Usuario} from "../../../../../core/models/usuario.model";
 import {UsuarioService} from "../../../../../core/services/usuario.service";
+import Swal from "sweetalert2";
 
-declare var swal: any;
 
 @Component({
    selector: 'pnip-admin-form-editar-unidade',
@@ -63,7 +63,7 @@ export class FormEditarUnidadeComponent implements OnInit {
       private cepService: CepService,
       private route: ActivatedRoute,
       private router: Router,
-      private usuarioService: UsuarioService
+      private usuarioService: UsuarioService,
    ) {
       this.unidade = new Unidade();
 
@@ -89,7 +89,6 @@ export class FormEditarUnidadeComponent implements OnInit {
 
       this.unidadeService.findUnidadeByUuid(this.uuid).subscribe((data) => {
          this.unidade = data;
-         console.log(this.unidade)
          this.selecionaGerenciadora()
          this.unidade.idUnidadeGerenciadora = this.unidade.unidadeGerenciadora?.id;
          this.formGroup.patchValue(this.unidade);
@@ -165,17 +164,27 @@ export class FormEditarUnidadeComponent implements OnInit {
    }
 
    salvar() {
-      //this.loadingService.show = true;
+      this.loadingService.show = true;
       this.unidade = this.formGroup.value;
       console.log(this.unidade);
       this.unidade.usuarioRepresentante = this.representantes[0];
       this.unidadeService.update(this.unidade).subscribe(mensagem => {
-         swal.fire(mensagem.msg).then();
+         if(mensagem.status == 'SUCCESS'){
+            Swal.fire('Ok', 'Unidade Atualizada com sucesso!', 'success').then(()=>{
+               this.loadingService.show = false;
+               this.router.navigate(['/portal-admin/unidades']);
+            });
+         }else{
+            Swal.fire('Ops...', 'Houve uma falha!', 'error').then(()=>{
+               this.loadingService.show = false;
+               this.router.navigate(['/portal-admin/unidades']);
+            });
+         }
       });
-      setTimeout(() => {
-         this.loadingService.show = false;
-         this.router.navigate(['/portal-admin/unidades']);
-      }, 1200);
+      // setTimeout(() => {
+      //    this.loadingService.show = false;
+      //    this.router.navigate(['/portal-admin/unidades']);
+      // }, 1200);
    }
 
 

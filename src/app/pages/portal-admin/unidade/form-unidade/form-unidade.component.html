@@ -92,7 +92,9 @@
 
    <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Representante da unidade</h2>
 
-   <pnip-admin-form-representante-unidade sdsdd (newUserEmitter)="receberNovoUsuario($event)"
+   <pnip-admin-form-representante-unidade
+      (emitirForm)="receberForm($event)"
+      (newUserEmitter)="receberNovoUsuario($event)"
     #formUser>
    </pnip-admin-form-representante-unidade>
 

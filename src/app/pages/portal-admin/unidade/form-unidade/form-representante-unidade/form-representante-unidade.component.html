@@ -72,13 +72,17 @@
 
       <!-- complemento/municipio/uf -->
       <div class="row mb-2">
-         <div class="col-5">
+         <div class="col-4">
             <br-input density="small" name="complemento" label="Complemento" formControlName="complemento"
                       [attr.state]="validatorsFormsUtils.getStateOfField('complemento')"/>
          </div>
-         <div class="col-6">
+         <div class="col-4">
             <br-input density="small" name="cidade" label="Cidade" formControlName="cidade"
                       [attr.state]="validatorsFormsUtils.getStateOfField('cidade')"/>
+         </div>
+         <div class="col-3">
+            <br-input density="small" name="bairro" label="Bairro" formControlName="bairro"
+                      [attr.state]="validatorsFormsUtils.getStateOfField('bairro')"/>
          </div>
          <div class="col-1">
             <br-input density="small" name="uf" label="UF" formControlName="uf"

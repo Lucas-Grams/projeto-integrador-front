@@ -11,6 +11,7 @@ import {cepValidator} from "../../../../utils/validators/cep.validator";
 import {ValidatorsFormsUtils} from "../../../../utils/components/validators-forms.utils";
 import {Usuario} from "../../../../core/models/usuario.model";
 import {FormRepresentanteUnidadeComponent} from "./form-representante-unidade/form-representante-unidade.component";
+import {Endereco} from "../../../../core/models/endereco.model";
 
 
 declare var swal: any;
@@ -46,6 +47,8 @@ export class FormUnidadeComponent implements OnInit{
    newUsuario: Usuario = new Usuario();
 
    @ViewChild('formUser') formUser?: FormRepresentanteUnidadeComponent;
+   formRepresentante!: FormGroup;
+   representante: Usuario = new Usuario();
 
    tipoUnidade = [
       {id: 1, value: 'Unidade Central (UC)', item: 'UC'},
@@ -81,6 +84,7 @@ export class FormUnidadeComponent implements OnInit{
          longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
          usuarioRepresentante: this.fb.control( this.unidade.usuarioRepresentante)
       });
+
 
    }
 
@@ -150,15 +154,28 @@ export class FormUnidadeComponent implements OnInit{
 
    }
    receberNovoUsuario(novoUsuario: Usuario) {
-      this.newUsuario = novoUsuario;
+      this.representante = novoUsuario;
    }
 
+   receberForm(form: FormGroup){
+      this.formRepresentante = form;
+      this.representante.endereco = new Endereco()
+      this.representante.nome = this.formRepresentante.get('nome')?.value;
+      this.representante.cpf = this.formRepresentante.get('cpf')?.value;
+      this.representante.email = this.formRepresentante.get('email')?.value;
+      this.representante.endereco.rua = this.formRepresentante.get('rua')?.value;
+      this.representante.endereco.cep = this.formRepresentante.get('cep')?.value;
+      this.representante.endereco.cidade = this.formRepresentante.get('cidade')?.value;
+      this.representante.endereco.bairro = this.formRepresentante.get('bairro')?.value;
+      this.representante.endereco.uf = this.formRepresentante.get('uf')?.value;
+      this.representante.endereco.complemento = this.formRepresentante.get('complemento')?.value;
+      this.representante.endereco.numero = this.formRepresentante.get('numero')?.value;
+   }
 
    salvar() {
       //this.loadingService.show = true;
       this.unidade = this.formGroup.value;
-      // this.formUser?.newUsuario? = this.formUser?.formGroup2.value;
-      this.unidade.usuarioRepresentante = (this.formUser?.newUsuario);
+      this.unidade.usuarioRepresentante = this.representante;
 
 console.log(this.unidade);
       this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
