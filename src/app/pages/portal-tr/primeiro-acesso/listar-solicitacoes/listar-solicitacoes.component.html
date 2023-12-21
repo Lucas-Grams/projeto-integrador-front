@@ -29,7 +29,7 @@
                   <td>{{s.uuid}}</td>
                   <td>
                      <div class="bg-secondary-06 text-center pt-1 pb-1 pl-2 pr-2" [style.border-radius]="'4px'">
-                        <div [style.color]="'#FBFCFD'">Em análise</div>
+                        <div [style.color]="'#FBFCFD'">{{s.status.replaceAll('_', ' ')}}</div>
                      </div>
                   </td>
                   <td class="text-center" [style.cursor]="'pointer'">
