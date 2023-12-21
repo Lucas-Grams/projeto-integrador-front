@@ -1,3 +1,5 @@
+declare var core: any;
+
 import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 
@@ -27,11 +29,8 @@ export class ViewSolicitacaoComponent implements OnInit {
       }
    ];
 
-   solicitacao: any;
    metadado: any;
-
-   modalDeferirAtivo = false;
-   modalIndeferirAtivo = false;
+   solicitacao: any;
    msgIndeferir = '';
    statusSolicitacao = '';
    showMessage = false;
@@ -58,24 +57,7 @@ export class ViewSolicitacaoComponent implements OnInit {
       });
    }
 
-   showConfirmacao(opcao: string) {
-      this.modalDeferirAtivo = false;
-      this.modalIndeferirAtivo = false;
-
-      if (opcao === 'deferir') {
-         this.modalDeferirAtivo = true;
-      } else {
-         this.modalIndeferirAtivo = true;
-      }
-   }
-
-   cancelaConfirmacao() {
-      this.modalDeferirAtivo = false;
-      this.modalIndeferirAtivo = false;
-   }
-
    enviarSolicitacao() {
-
       if (this.statusSolicitacao === 'deferir') {
          const numEmbaracao = this.metadado?.habilitarTRDTO?.embarcacoes.length;
          let count = 0;
@@ -101,7 +83,7 @@ export class ViewSolicitacaoComponent implements OnInit {
       const finalizarSolicitacao = {
          uuidSolicitacao: this.solicitacao.uuidSolicitacao,
          statusSolicitacao: this.statusSolicitacao,
-         msgSolicitacao: this.msgIndeferir,
+         msgSolicitacao: (this.statusSolicitacao === 'deferir'? '' : this.msgIndeferir),
          embarcacoes: embarcacoes
       }
 
@@ -120,6 +102,15 @@ export class ViewSolicitacaoComponent implements OnInit {
          const blobUrl = URL.createObjectURL(blob);
          PdfUtils.openViewer(blobUrl);
       });
+   }
+
+   showModal(modalId: string, close: string) {
+      const modal: any = document.getElementById("modal-" + modalId);
+      const scrimfoco = new core.Scrim({
+         closeElement: close,
+         trigger: modal,
+      });
+      scrimfoco.showScrim();
    }
 
 }
