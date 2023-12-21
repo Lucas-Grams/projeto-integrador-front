@@ -1,4 +1,4 @@
-FROM node:21 as BUILDER
+FROM node:16 as BUILDER
 
 WORKDIR /tmp/build/
 
