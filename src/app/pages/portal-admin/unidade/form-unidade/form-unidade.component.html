@@ -15,6 +15,23 @@
                   <select formControlName="tipo" (change)="selecionaGerenciadora()" class="select">
                      <option *ngFor="let uni of tipoUnidade" [value]="uni.item">{{uni.value}}</option>
                   </select>
+<!--                  <br-select-pnip-->
+<!--                     id="tipoUnidade"-->
+<!--                     label="Tipo de Unidade"-->
+<!--                     [options]="[-->
+<!--      { label: 'Unidade Central (UC)', value: 'UC'},-->
+<!--      { label: 'Programa/Seção (PS)', value: 'PS'},-->
+<!--      { label: 'Supeorvisão Regional (SR)', value: 'SR'},-->
+<!--      { label: 'Inspetoria Vetrinária Local (IVZ)', value: 'IVZ'},-->
+<!--      { label: 'Ministério da Pesca e Aquicultura (MPA)', value: 'MPA'},-->
+<!--      { label: 'Secretaria Nacional (SN)', value: 'SN'},-->
+<!--      { label: 'Departamento (DP)', value: 'DP'},-->
+<!--      { label: 'Superintendencia Federal da Pesca (SFP)', value: 'SFP'}-->
+<!--   ]"-->
+<!--                     [optionSelected]="unidade.tipo"-->
+<!--                     (change)="selecionaGerenciadora()"-->
+<!--                     #tipoUnidadeSelect>-->
+<!--                  </br-select-pnip>-->
                </div>
             </div>
          </div>
@@ -52,6 +69,7 @@
       <div class="row mb-2">
          <div class="col-6">
             <br-input density="small" name="rua" label="Rua" formControlName="rua" [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
+            <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'rua'}"></ng-container>
          </div>
          <div class="col-2">
             <br-input density="small" name="numero" label="Número" formControlName="numero" type="number" [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
@@ -71,6 +89,7 @@
                <div class="br-input">
                   <br-input density="small" name="uf" label="UF" formControlName="uf"
                             [attr.state]="validatorsFormsUtils.getStateOfField('uf')"/>
+                  <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'uf'}"></ng-container>
 
                </div>
             </div>
@@ -80,25 +99,25 @@
                <div class="br-input">
                   <br-input density="small" name="municipio" label="Município" formControlName="cidade"
                             [attr.state]="validatorsFormsUtils.getStateOfField('cidade')"/>
+                  <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cidade'}"></ng-container>
                </div>
          </div>
          </div>
       </div>
-
-      <!-- latitude/longitude -->
-      <div class="row mb-2">
-         <div class="col-6">
-            <br-input density="small" name="latitude" label="latitude" formControlName="latitude"/>
-         </div>
-         <div class="col-6">
-            <br-input density="small" name="longitude" label="longitude" formControlName="longitude"/>
-         </div>
-      </div>
-
-      <div class="d-flex justify-content-end mt-4">
-         <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/unidades'"/>
-         <br-button label="Salvar" type="primary" (click)="salvar()"/>
-      </div>
    </form>
+
+
+   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Representante da unidade</h2>
+
+   <pnip-admin-form-representante-unidade
+      (emitirForm)="receberForm($event)"
+      (newUserEmitter)="receberNovoUsuario($event)"
+    #formUser>
+   </pnip-admin-form-representante-unidade>
+
+   <div class="d-flex justify-content-end mt-4">
+      <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/unidades'"/>
+      <br-button label="Salvar" type="primary" (click)="salvar()"/>
+   </div>
 
 </div>

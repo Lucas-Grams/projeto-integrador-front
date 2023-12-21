@@ -18,16 +18,26 @@ export class LoginService {
    public isLogin() {
       this.loadingService.show = true;
       this.authService?.asynccheckLogado().then(data => {
-         console.log(data);
          if(data == true){
-            this.username = 'Joedeson Jr';
-            this.role = 'tr';
+            this.username = '';
+            this.role = this.checkRole(this.authService?.getRealmAccess());
             this.primeiroAcesso = true;
             this.router?.navigate([`/portal-${this.role}`]);
          }
 
          this.loadingService.show = false
       });
+   }
+
+   checkRole(roles:any[]){
+      let temp= ['tr','admin','mpa'];
+
+     for(let i =0; i < temp.length; i++){
+        if(roles.includes(temp[i])){
+           return temp[i];
+        }
+     }
+     return '';
    }
    public login(){
       this.authService?.login();

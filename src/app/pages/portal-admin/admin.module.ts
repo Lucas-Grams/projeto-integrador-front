@@ -4,6 +4,7 @@ import {AdminComponent} from "./admin.component";
 import {CommonModule} from "@angular/common";
 import {SharedModule} from "../../shared/shared.module";
 
+
 @NgModule({
    declarations: [
       AdminComponent,
@@ -14,6 +15,7 @@ import {SharedModule} from "../../shared/shared.module";
       SharedModule
 
    ],
+
    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AdminModule {}
