@@ -1,13 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ElementRef} from '@angular/core';
 import {UnidadeService} from "../../../../core/services/unidade.service";
 import {Unidade} from "../../../../core/models/unidade.model";
+import {Location} from "@angular/common";
+import {ActivatedRoute, Router} from "@angular/router";
+import Swal from "sweetalert2";
+
 
 @Component({
    selector: 'pnip-admin-listar-unidades',
    templateUrl: './listar-unidades.component.html',
    styleUrls: []
 })
-export class ListarUnidadesComponent implements OnInit{
+export class ListarUnidadesComponent implements OnInit {
 
    public breadcrumb = [
       {
@@ -23,12 +27,30 @@ export class ListarUnidadesComponent implements OnInit{
 
    unidades: Unidade[] = [];
 
-   constructor(private unidadeService: UnidadeService) {}
+   constructor(private unidadeService: UnidadeService,
+               private el: ElementRef) {
+   }
 
    ngOnInit() {
-      this.unidadeService.findAll().subscribe((data) =>{
+      this.unidadeService.findAll().subscribe((data) => {
          this.unidades = data;
       })
    }
 
+   inativar(uuid: String) {
+      Swal.fire({
+         title: 'Ops...',
+         text: 'Você tem certeza que deseja inativar essa unidade?',
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonText: 'Sim',
+         cancelButtonText: 'Não'
+      }).then((result) => {
+         if (result.value) {
+            this.unidadeService.inativarUnidade(uuid).subscribe(() => {
+               this.el.nativeElement.ownerDocument.defaultView.location.reload();
+            });
+         }
+      })
+   }
 }

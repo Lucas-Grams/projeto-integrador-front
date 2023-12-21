@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LoadingService} from "../../../../core/services/loading.service";
 import {Router} from "@angular/router";
@@ -9,6 +9,9 @@ import {CepService} from "../../../../core/services/cep.service";
 import {cpfValidator} from "../../../../utils/validators/cpf.validator";
 import {cepValidator} from "../../../../utils/validators/cep.validator";
 import {ValidatorsFormsUtils} from "../../../../utils/components/validators-forms.utils";
+import {Usuario} from "../../../../core/models/usuario.model";
+import {FormRepresentanteUnidadeComponent} from "./form-representante-unidade/form-representante-unidade.component";
+import {Endereco} from "../../../../core/models/endereco.model";
 
 
 declare var swal: any;
@@ -36,11 +39,16 @@ export class FormUnidadeComponent implements OnInit{
       }
    ];
 
-   public formGroup: FormGroup;
+   formGroup: FormGroup;
    unidade: Unidade;
    unidadesGerenciadoras: Unidade[] = [];
 
    validarUc: boolean = false;
+   newUsuario: Usuario = new Usuario();
+
+   @ViewChild('formUser') formUser?: FormRepresentanteUnidadeComponent;
+   formRepresentante!: FormGroup;
+   representante: Usuario = new Usuario();
 
    tipoUnidade = [
       {id: 1, value: 'Unidade Central (UC)', item: 'UC'},
@@ -73,8 +81,10 @@ export class FormUnidadeComponent implements OnInit{
          cidade: this.fb.control(this.unidade.endereco.cidade, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
          uf: this.fb.control(this.unidade.endereco.uf, [Validators.minLength(2), Validators.maxLength(2), Validators.required]),
          latitude: this.fb.control( this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
-         longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required])
+         longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
+         usuarioRepresentante: this.fb.control( this.unidade.usuarioRepresentante)
       });
+
 
    }
 
@@ -137,24 +147,46 @@ export class FormUnidadeComponent implements OnInit{
                this.formGroup.get('rua')?.setValue(response.logradouro);
                this.formGroup.get('cidade')?.setValue(response.localidade);
                this.formGroup.get('uf')?.setValue(response.uf);
+
             }
          });
       }
 
    }
+   receberNovoUsuario(novoUsuario: Usuario) {
+      console.log("receber novo usuario");
+      this.representante = novoUsuario;
+   }
+
+   receberForm(form: FormGroup){
+      console.log("receber form");
+      this.formRepresentante = form;
+      this.representante.endereco = new Endereco()
+      this.representante.nome = this.formRepresentante.get('nome')?.value;
+      this.representante.cpf = this.formRepresentante.get('cpf')?.value;
+      this.representante.email = this.formRepresentante.get('email')?.value;
+      this.representante.endereco.rua = this.formRepresentante.get('rua')?.value;
+      this.representante.endereco.cep = this.formRepresentante.get('cep')?.value;
+      this.representante.endereco.cidade = this.formRepresentante.get('cidade')?.value;
+      this.representante.endereco.bairro = this.formRepresentante.get('bairro')?.value;
+      this.representante.endereco.uf = this.formRepresentante.get('uf')?.value;
+      this.representante.endereco.complemento = this.formRepresentante.get('complemento')?.value;
+      this.representante.endereco.numero = this.formRepresentante.get('numero')?.value;
+   }
 
    salvar() {
       this.loadingService.show = true;
       this.unidade = this.formGroup.value;
-      console.log(this.unidade);
+      this.unidade.usuarioRepresentante = this.representante;
+
+console.log(this.unidade);
       this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
-         swal.fire(mensagem.msg).then();
+        // swal.fire(mensagem.msg).then();
       });
       setTimeout(() => {
          this.loadingService.show = false;
          this.router.navigate(['/portal-admin/unidades']);
       }, 1200);
    }
-
 
 }

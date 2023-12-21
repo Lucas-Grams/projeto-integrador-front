@@ -15,15 +15,27 @@ export class UnidadeService{
       this.http = http;
       this.urlUnidade = `${this.env.url.api}/unidade`;
    }
-      salvar(unidade: Unidade):Observable<ResponseDto<Unidade>>{
-         return this.http.post<ResponseDto<Unidade>>(`${this.urlUnidade}` + '/salvar', unidade);
-      }
+   salvar(unidade: Unidade):Observable<ResponseDto<Unidade>>{
+      return this.http.post<ResponseDto<Unidade>>(`${this.urlUnidade}` + '/salvar', unidade);
+   }
 
-      findAll():Observable<Unidade[]>{
-         return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/findAll');
-      }
+   findAll():Observable<Unidade[]>{
+      return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/findAll');
+   }
 
-      getGerenciadoras(tipo: String):Observable<Unidade[]>{
-         return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/getGerenciadoras/'+tipo);
-      }
+   getGerenciadoras(tipo: String):Observable<Unidade[]>{
+      return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/getGerenciadoras/'+ tipo);
+   }
+
+   inativarUnidade(uuid: String){
+      return this.http.post(`${this.urlUnidade}` + '/inativarUnidade/', uuid);
+   }
+
+   findUnidadeByUuid(uuid: String): Observable<Unidade>{
+      return this.http.get<Unidade>(`${this.urlUnidade}` + '/findUnidadeByUuid/'+ uuid);
+   }
+
+   update(unidade: Unidade):Observable<ResponseDto<Unidade>>{
+      return this.http.post<ResponseDto<Unidade>>(`${this.urlUnidade}` + '/update', unidade);
+   }
 }
