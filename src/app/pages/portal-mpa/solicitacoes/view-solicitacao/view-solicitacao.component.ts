@@ -2,6 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 
 import {TrService} from "../../../../core/services/tr.service";
+import {PdfUtils} from "../../../../utils/components/pdf.utils";
 
 @Component({
    selector: 'pnip-mpa-view-solicitacao',
@@ -123,6 +124,14 @@ export class ViewSolicitacaoComponent implements OnInit {
          }
       }, error => {
          console.error(error);
+      });
+   }
+
+   verPdf(filename: string) {
+      this.trService.downloadAnexo(this.solicitacao.uuidSolicitacao, filename).subscribe(response => {
+         const blob = new Blob([response], {type: 'application/pdf'});
+         const blobUrl = URL.createObjectURL(blob);
+         PdfUtils.openViewer(blobUrl);
       });
    }
 

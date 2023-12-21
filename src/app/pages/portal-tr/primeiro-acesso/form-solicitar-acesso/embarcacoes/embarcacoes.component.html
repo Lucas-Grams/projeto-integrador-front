@@ -79,10 +79,10 @@
                            <br-icon-base icon-name="upload" family-name="fas" class="ml-2"/> <i> Selecione o arquivo</i>
                         </div>
                      </div>
-                     <br-message *ngIf="isSubmit && !e?.declaracaoProprietario" feedback state="danger" show-icon="true">
+                     <br-message *ngIf="isSubmit && !e?.declaracaoProprietarioBase64" feedback state="danger" show-icon="true">
                         Envio obrigatório
                      </br-message>
-                     <br-message *ngIf="e?.declaracaoProprietario" feedback state="success" show-icon="true">
+                     <br-message *ngIf="e?.declaracaoProprietarioBase64" feedback state="success" show-icon="true">
                         Arquivo selecionado
                      </br-message>
                   </div>

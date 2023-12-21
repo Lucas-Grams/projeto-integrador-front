@@ -12,8 +12,7 @@ import {SolicitacaoHabilitacaoDTO} from "../dtos/solicitacao-habilitacao.dto";
 })
 export class TrService {
 
-   // TODO: environment baseUrl
-   private  URL = ``;
+   private URL = ``;
 
    constructor(private http: HttpClient, private env: EnvService) {
       this.URL = `${this.env.url.api}/tr`
@@ -45,6 +44,10 @@ export class TrService {
 
    public finalizarSolicitacao(dto: any) {
       return this.http.post<ResponseDTO<string>>(`${this.URL}/finalizar-solicitacao`, dto);
+   }
+
+   downloadAnexo(uuid: string, nome: string) {
+      return this.http.get(`${this.URL}/download/anexos/${uuid}/${nome}`, {responseType: 'blob'});
    }
 
 }

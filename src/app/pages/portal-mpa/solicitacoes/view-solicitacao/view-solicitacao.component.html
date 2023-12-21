@@ -116,16 +116,16 @@
    <div class="col-6">
       <label>Cópia da Habilitação ou Comprovante de Quitação</label>
       <div class="upload-file mt-1 mb-1 w-100">
-         <div class="text-blue-vivid-60 pt-1 pb-1">
-            {{metadado?.habilitarTRDTO?.copiaHabilitacao}}
+         <div class="text-blue-vivid-60 mt-2">
+            <strong (click)="verPdf(metadado?.habilitarTRDTO?.copiaHabilitacao)" [style.cursor]="'pointer'">anexo.pdf</strong>
          </div>
       </div>
    </div>
    <div class="col-6 upload">
       <label>Diploma/Certificado</label>
       <div class="upload-file mt-1 mb-1 w-100">
-         <div class="text-blue-vivid-60 pt-1 pb-1">
-            {{metadado?.habilitarTRDTO?.diplomaCertificacao}}
+         <div class="text-blue-vivid-60 mt-2">
+            <strong (click)="verPdf(metadado?.habilitarTRDTO?.diplomaCertificacao)" [style.cursor]="'pointer'">anexo.pdf</strong>
          </div>
       </div>
    </div>
@@ -153,7 +153,8 @@
          <td>{{embarcacao.frota}}</td>
          <td>{{embarcacao.nome}}</td>
          <td>
-            <br-icon-base icon-name="file" family-name="fas" class="mr-2 text-blue-vivid-60"/>
+            <br-icon-base icon-name="file" family-name="fas" class="mr-2 text-blue-vivid-60"
+                          (click)="verPdf(embarcacao.declaracaoProprietarioBase64)"/>
          </td>
          <td>
             <br-button icon label="Primary" [title]="'Reprovar'" type="tertiary" circle="true" [active]="embarcacao.aprovada === false"
