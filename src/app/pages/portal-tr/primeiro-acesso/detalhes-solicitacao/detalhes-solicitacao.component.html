@@ -69,12 +69,16 @@
       <div class="row mb-2">
          <div class="col-6">
             <label>Cópia da Habilitação ou Comprovante de Quitação</label>
-            <div class="text-blue-vivid-60 mt-2">{{solicitacao.copiaHabilitacao}}</div>
+            <div class="text-blue-vivid-60 mt-2">
+               <strong (click)="verPdf(solicitacao.copiaHabilitacao)" [style.cursor]="'pointer'">anexo.pdf</strong>
+            </div>
             <br-divider *ngIf="solicitacao.embarcacoes?.length" size="medium" class="mt-3"></br-divider>
          </div>
          <div class="col-6">
             <label>Diploma/Certificado</label>
-            <div class="text-blue-vivid-60 mt-2">{{solicitacao.diplomaCertificacao}}</div>
+            <div class="text-blue-vivid-60 mt-2">
+               <strong (click)="verPdf(solicitacao.diplomaCertificacao)" [style.cursor]="'pointer'">anexo.pdf</strong>
+            </div>
             <br-divider *ngIf="solicitacao.embarcacoes?.length" size="medium" class="mt-3"></br-divider>
          </div>
       </div>
@@ -96,8 +100,8 @@
                   <td>{{i + 1}}</td>
                   <td>{{e.numRgp}}</td>
                   <td>{{e.nome}}</td>
-                  <td class="text-center">
-                     <br-icon-base icon-name="file" family-name="fas" class="mr-2 text-blue-vivid-60"/>
+                  <td class="text-center" [style.cursor]="'pointer'">
+                     <br-icon-base icon-name="file" family-name="fas" class="mr-2 text-blue-vivid-60" (click)="verPdf(e.declaracaoProprietario)"/>
                   </td>
                </tr>
                </tbody>

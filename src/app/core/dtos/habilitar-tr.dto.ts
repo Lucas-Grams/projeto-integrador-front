@@ -19,6 +19,8 @@ export class HabilitarTRDTO {
    ufConselho!: string;
    copiaHabilitacao!: string;
    diplomaCertificacao!: string;
+   copiaHabilitacaoBase64!: string;
+   diplomaCertificacaoBase64!: string;
    embarcacoes: EmbarcacaoDTO[] = [];
 
 }
