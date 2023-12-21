@@ -12,10 +12,11 @@ export class AuthTrGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-     if(!this.auth.getRealmAccess().includes('tr')){
-        this.auth.logout();
+     if(this.auth.getRealmAccess().includes('tr') || this.auth.getRealmAccess().includes('convidado')){
+        return true
      }
-    return true;
+     this.auth.logout();
+    return false;
   }
 
 }

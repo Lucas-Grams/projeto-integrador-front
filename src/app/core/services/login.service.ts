@@ -21,7 +21,8 @@ export class LoginService {
          if(data == true){
             this.username = '';
             this.role = this.checkRole(this.authService?.getRealmAccess());
-            this.primeiroAcesso = true;
+            this.role = this.role == 'convidado' ? 'tr' : this.role;
+            this.primeiroAcesso = this.authService?.isConvidado();
             this.router?.navigate([`/portal-${this.role}`]);
          }
 
@@ -29,8 +30,9 @@ export class LoginService {
       });
    }
 
+
    checkRole(roles:any[]){
-      let temp= ['tr','admin','mpa'];
+      let temp= ['tr','admin','mpa','convidado'];
 
      for(let i =0; i < temp.length; i++){
         if(roles.includes(temp[i])){
@@ -54,6 +56,8 @@ export class LoginService {
    public isPrimeiroAcesso() {
       return this.primeiroAcesso;
    }
+
+
 
    logout() {
       this.authService?.logout();
