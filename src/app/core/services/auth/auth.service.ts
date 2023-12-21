@@ -83,6 +83,9 @@ export class AuthService {
    getRealmAccess(){
      return this.decodeJwtToken(this.oidcSecurityService.getAccessToken()).realm_access.roles;
    }
+   isConvidado(){
+     return this.getRealmAccess().includes('convidado');
+   }
 
 
 }
