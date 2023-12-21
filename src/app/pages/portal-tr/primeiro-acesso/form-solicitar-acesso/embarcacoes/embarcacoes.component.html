@@ -4,7 +4,7 @@
          <div class="br-input">
             <!-- item selecionado -->
             <ng-container *ngIf="embarcacaoSelecionada; else pesquisarEmbarcacao">
-               <br-input label="Pesquisar embarcações" readonly="readonly"
+               <br-input label="Pesquisar embarcações" [attr.disabled]="true"
                      [value]="embarcacaoSelecionada.numRgp + ' - ' + embarcacaoSelecionada.nome"/>
                <button class="br-button" type="button" (click)="limparSelecionado()">
                   <br-icon-base icon-name="times" family-name="fas"/>
@@ -57,17 +57,17 @@
                </div>
                <div class="row">
                   <div class="col-4">
-                     <br-input density="small" label="Código da embarcação" [value]="e.numRgp" [attr.readonly]="true"/>
+                     <br-input density="small" label="Código da embarcação" [value]="e.numRgp" [attr.disabled]="true"/>
                   </div>
                   <div class="col-2">
-                     <br-input density="small" label="Código de frota" [value]="e.frota" [attr.readonly]="true"/>
+                     <br-input density="small" label="Código de frota" [value]="e.frota" [attr.disabled]="true"/>
                   </div>
                   <div class="col-6">
-                     <br-input density="small" label="Nome da embarcação" [value]="e.nome" [attr.readonly]="true"/>
+                     <br-input density="small" label="Nome da embarcação" [value]="e.nome" [attr.disabled]="true"/>
                   </div>
                   <!--
                   <div class="col-3">
-                     <br-input density="small" label="Proprietário" [value]="e.proprietario" [attr.readonly]="true"/>
+                     <br-input density="small" label="Proprietário" [value]="e.proprietario" [attr.disabled]="true"/>
                   </div>
                   -->
                </div>

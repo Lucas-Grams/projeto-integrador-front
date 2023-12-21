@@ -16,7 +16,6 @@ export class LoginService {
    }
 
    public isLogin() {
-      this.loadingService.show = true;
       this.authService?.asynccheckLogado().then(data => {
          if(data == true){
             this.username = '';
@@ -24,8 +23,6 @@ export class LoginService {
             this.primeiroAcesso = true;
             this.router?.navigate([`/portal-${this.role}`]);
          }
-
-         this.loadingService.show = false
       });
    }
 

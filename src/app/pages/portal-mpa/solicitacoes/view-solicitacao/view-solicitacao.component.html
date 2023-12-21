@@ -22,11 +22,7 @@
             <td>{{solicitacao.protocolo}}</td>
             <td>{{solicitacao.solicitante}}</td>
             <td>
-               <div [ngClass]="getClass(solicitacao.status)" class="text-center pt-1 pb-1 pl-2 pr-2" style="border-radius: 4px;">
-                  <div style="color: #FBFCFD;">
-                     {{solicitacao.status ? solicitacao.status.replace("_", " ") : solicitacao.status}}
-                  </div>
-               </div>
+               <pnip-status-solicitacao-utils [status]="solicitacao.status"/>
             </td>
             <td>
                <br-button icon label="Primary" type="tertiary" circle="true" [active]="statusSolicitacao === 'indeferir'? true: false"

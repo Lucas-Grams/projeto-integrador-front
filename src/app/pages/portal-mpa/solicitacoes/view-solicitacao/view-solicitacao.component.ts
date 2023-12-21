@@ -74,19 +74,6 @@ export class ViewSolicitacaoComponent implements OnInit {
       this.modalIndeferirAtivo = false;
    }
 
-   getClass(status: string): string {
-      switch (status) {
-         case 'EM_ANALISE':
-            return 'bg-secondary-06';
-         case 'DEFERIDA':
-            return 'bg-success';
-         case 'INDEFERIDA':
-            return 'bg-danger';
-         default:
-            return 'bg-secondary-06';
-      }
-   }
-
    enviarSolicitacao() {
 
       if (this.statusSolicitacao === 'deferir') {

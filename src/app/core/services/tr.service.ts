@@ -42,6 +42,10 @@ export class TrService {
       return this.http.get<ResponseDTO<any>>(`${this.URL}/find/solicitacao/by/uuid/` + uuid);
    }
 
+   public findStatusUltimaSolicitacao() {
+      return this.http.get<ResponseDTO<string>>(`${this.URL}/find/status/ultima/solicatacao`);
+   }
+
    public finalizarSolicitacao(dto: any) {
       return this.http.post<ResponseDTO<string>>(`${this.URL}/finalizar-solicitacao`, dto);
    }

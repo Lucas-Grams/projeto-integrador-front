@@ -28,9 +28,7 @@
                   <td>Habilitação de Técnico Responsável</td>
                   <td>{{s.uuid}}</td>
                   <td>
-                     <div class="bg-secondary-06 text-center pt-1 pb-1 pl-2 pr-2" [style.border-radius]="'4px'">
-                        <div [style.color]="'#FBFCFD'">{{s.status.replaceAll('_', ' ')}}</div>
-                     </div>
+                     <pnip-status-solicitacao-utils [status]="s.status"/>
                   </td>
                   <td class="text-center" [style.cursor]="'pointer'">
                      <br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60" (click)="visualizar(s.uuid)"/>
@@ -47,9 +45,10 @@
          </ng-template>
       </tbody>
    </table>
-
-   <div class="d-flex justify-content-end mt-4">
-      <br-button label="Voltar" type="secondary" class="mr-2" (click)="voltar()"/>
+   <div class="d-flex justify-content-center mt-4">
+      <ng-container *ngIf="ultimoStatus === 'INDEFERIDA'">
+         <br-button label="Solicitar nova habilitação" type="primary" class="mr-2" (click)="novaSolicitacao()"/>
+      </ng-container>
    </div>
 
 </div>

@@ -1,8 +1,12 @@
 import {Component, OnInit} from '@angular/core';
+import {TrService} from "../../../core/services/tr.service";
+import {LoadingService} from "../../../core/services/loading.service";
+import {ResponseDTO} from "../../../core/dtos/response.dto";
+import {Router} from "@angular/router";
 
 @Component({
    selector: 'pnip-tr-primeiro-acesso',
-   templateUrl: './primeiro-acesso.component.html',
+   template: '',
    styleUrls: []
 })
 export class PrimeiroAcessoComponent implements OnInit {
@@ -32,11 +36,21 @@ export class PrimeiroAcessoComponent implements OnInit {
       },
    ];
 
-   constructor() {}
+   constructor(private trService: TrService, private loadingService: LoadingService, private router: Router) {}
 
    ngOnInit() {
-      // TODO: se houver solicitação, redirecionar para 'minhas-solicitacoes'
-      // this.router.navigate(['/portal-tr/primeiro-acesso/solicitar']);
+      this.loadingService.show = true;
+      this.trService.findStatusUltimaSolicitacao().subscribe((response: ResponseDTO<string>) => {
+         if (response) {
+            this.redirecionarPorStatus(response.msg);
+            this.loadingService.show = false;
+         }
+      });
+   }
+
+   private redirecionarPorStatus(status: string | null) {
+      const url = `/portal-tr/primeiro-acesso/${(status === null ? 'solicitar' : 'minhas-solicitacoes')}`;
+      this.router.navigate([url]);
    }
 
 }
