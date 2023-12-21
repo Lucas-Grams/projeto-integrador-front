@@ -128,7 +128,7 @@ export class ViewSolicitacaoComponent implements OnInit {
    }
 
    verPdf(filename: string) {
-      this.trService.downloadAnexo(this.uuid, filename).subscribe(response => {
+      this.trService.downloadAnexo(this.solicitacao.uuidSolicitacao, filename).subscribe(response => {
          const blob = new Blob([response], {type: 'application/pdf'});
          const blobUrl = URL.createObjectURL(blob);
          PdfUtils.openViewer(blobUrl);
