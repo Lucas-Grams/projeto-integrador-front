@@ -97,11 +97,13 @@
       <div class="col-6">
          <div class="br-select">
             <div class="br-input">
-               <label>Usuarios</label>
-               <br>
-               <select [(ngModel)]="newUsuario" class="select" (ngModelChange)="selecionaUsuario($event)">
-                  <option *ngFor="let user of usuarios" [ngValue]="user">{{user.nome}}--{{user.email}}</option>
-               </select>
+               <br-select-pnip
+                  id="idUsuario"
+                  label="Selecione o usuário"
+                  [options]="users"
+                  (change)="selecionaUsuario(users.value)"
+                  #userSelect>
+               </br-select-pnip>
 
             </div>
          </div>

@@ -12,6 +12,8 @@ import {ValidatorsFormsUtils} from "../../../../utils/components/validators-form
 import {Usuario} from "../../../../core/models/usuario.model";
 import {FormRepresentanteUnidadeComponent} from "./form-representante-unidade/form-representante-unidade.component";
 import {Endereco} from "../../../../core/models/endereco.model";
+import {BrSelectComponent} from "../../../../shared/br-select/br-select.component";
+import {Hash} from "angular-oauth2-oidc/token-validation/fast-sha256js";
 
 
 declare var swal: any;
@@ -42,6 +44,9 @@ export class FormUnidadeComponent implements OnInit{
    formGroup: FormGroup;
    unidade: Unidade;
    unidadesGerenciadoras: Unidade[] = [];
+   unidades:any = [];
+   @ViewChild('tipoUnidadeSelect', {static: false}) tipoUnidadeSelect!: BrSelectComponent;
+   @ViewChild('gerenciadoraSelect', {static: false}) gerenciadoraSelect!: BrSelectComponent;
 
    validarUc: boolean = false;
    newUsuario: Usuario = new Usuario();
@@ -93,41 +98,65 @@ export class FormUnidadeComponent implements OnInit{
 
 
    selecionaGerenciadora() {
-      switch(this.formGroup.get("tipo")?.value){
+      switch(this.tipoUnidadeSelect.getOptionSelected()){
          case 'PS':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("UC").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni)=>{
+                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               });
             })
             break;
          case 'SR':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("UC").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni)=>{
+                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               });
             })
             break;
          case 'IVZ':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("SR").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni)=>{
+                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               });
             })
             break;
          case 'SN':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("MPA").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni)=>{
+                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               });
             })
             break;
          case 'DP':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("SN").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni)=>{
+                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               });
             })
             break;
          case 'SFP':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("MPA").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni)=>{
+                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               });
             })
             break;
          default:
@@ -176,17 +205,20 @@ export class FormUnidadeComponent implements OnInit{
 
    salvar() {
       this.loadingService.show = true;
+      if(this.gerenciadoraSelect.getOptionSelected()) {
+         this.formGroup.get("idUnidadeGerenciadora")?.setValue(this.gerenciadoraSelect.getOptionSelected());
+      }
       this.unidade = this.formGroup.value;
       this.unidade.usuarioRepresentante = this.representante;
 
-console.log(this.unidade);
-      this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
-        // swal.fire(mensagem.msg).then();
-      });
-      setTimeout(() => {
-         this.loadingService.show = false;
-         this.router.navigate(['/portal-admin/unidades']);
-      }, 1200);
+      console.log(this.unidade);
+      // this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
+      //   // swal.fire(mensagem.msg).then();
+      // });
+      // setTimeout(() => {
+      //    this.loadingService.show = false;
+      //    this.router.navigate(['/portal-admin/unidades']);
+      // }, 1200);
    }
 
 }

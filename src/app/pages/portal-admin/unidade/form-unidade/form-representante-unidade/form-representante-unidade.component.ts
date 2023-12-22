@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
 import {CepService} from "../../../../../core/services/cep.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {cpfValidator} from "../../../../../utils/validators/cpf.validator";
 import {cepValidator} from "../../../../../utils/validators/cep.validator";
 import {Usuario} from "../../../../../core/models/usuario.model";
 import {UsuarioService} from "../../../../../core/services/usuario.service";
+import {BrSelectComponent} from "../../../../../shared/br-select/br-select.component";
 @Component({
    selector: 'pnip-admin-form-representante-unidade',
    templateUrl: './form-representante-unidade.component.html',
@@ -20,6 +21,8 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
    usuarios: Usuario[] = [];
    newUsuario: Usuario = new Usuario();
    @Output() newUserEmitter: EventEmitter<Usuario> = new EventEmitter<Usuario>();
+   @ViewChild('userSelect', {static: false}) userSelect!: BrSelectComponent;
+   users:any = [];
 
    constructor(private fb: FormBuilder,
                private cepService: CepService,
@@ -46,6 +49,9 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
    ngOnInit() {
       this.usuarioService.findAll().subscribe((data) => {
          this.usuarios = data;
+         this.usuarios.forEach((user) => {
+            this.users.push({label:user.nome + '-' + user.email, value: user.id})
+         })
       })
    }
 
@@ -68,8 +74,12 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
       event? this.novoUser = true: this.novoUser = false;
    }
 
-   selecionaUsuario(user: Usuario){
-      this.newUsuario = user;
+   selecionaUsuario(id: number){
+      this.usuarios.forEach((us) => {
+         if(us.id == this.userSelect.getOptionSelected()){
+            this.newUsuario = us;
+         }
+      })
       this.emitirNovoUsuario();
    }
 

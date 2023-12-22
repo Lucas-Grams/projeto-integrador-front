@@ -10,28 +10,23 @@
          <div class="col-6">
             <div class="br-select">
                <div class="br-input">
-                  <label>Tipo de Unidade</label>
-                  <br>
-                  <select formControlName="tipo" (change)="selecionaGerenciadora()" class="select">
-                     <option *ngFor="let uni of tipoUnidade" [value]="uni.item">{{uni.value}}</option>
-                  </select>
-<!--                  <br-select-pnip-->
-<!--                     id="tipoUnidade"-->
-<!--                     label="Tipo de Unidade"-->
-<!--                     [options]="[-->
-<!--      { label: 'Unidade Central (UC)', value: 'UC'},-->
-<!--      { label: 'Programa/Seção (PS)', value: 'PS'},-->
-<!--      { label: 'Supeorvisão Regional (SR)', value: 'SR'},-->
-<!--      { label: 'Inspetoria Vetrinária Local (IVZ)', value: 'IVZ'},-->
-<!--      { label: 'Ministério da Pesca e Aquicultura (MPA)', value: 'MPA'},-->
-<!--      { label: 'Secretaria Nacional (SN)', value: 'SN'},-->
-<!--      { label: 'Departamento (DP)', value: 'DP'},-->
-<!--      { label: 'Superintendencia Federal da Pesca (SFP)', value: 'SFP'}-->
-<!--   ]"-->
-<!--                     [optionSelected]="unidade.tipo"-->
-<!--                     (change)="selecionaGerenciadora()"-->
-<!--                     #tipoUnidadeSelect>-->
-<!--                  </br-select-pnip>-->
+                  <br-select-pnip
+                     id="tipoUnidade"
+                     label="Tipo de Unidade"
+                     [options]="[
+                        { label: 'Unidade Central (UC)', value: 'UC'},
+                        { label: 'Programa/Seção (PS)', value: 'PS'},
+                        { label: 'Supeorvisão Regional (SR)', value: 'SR'},
+                        { label: 'Inspetoria Vetrinária Local (IVZ)', value: 'IVZ'},
+                        { label: 'Ministério da Pesca e Aquicultura (MPA)', value: 'MPA'},
+                        { label: 'Secretaria Nacional (SN)', value: 'SN'},
+                        { label: 'Departamento (DP)', value: 'DP'},
+                        { label: 'Superintendencia Federal da Pesca (SFP)', value: 'SFP'}
+                     ]"
+                     [optionSelected]="unidade.tipo"
+                     (change)="selecionaGerenciadora()"
+                     #tipoUnidadeSelect>
+                  </br-select-pnip>
                </div>
             </div>
          </div>
@@ -39,12 +34,13 @@
             <ng-container *ngIf="!validarUc">
                <div class="br-select">
                   <div class="br-input">
-                     <label>Reporta-se</label>
-                     <br>
-                     <select formControlName="idUnidadeGerenciadora" >
-                        <option *ngFor="let unidade of unidadesGerenciadoras"
-                                [value]="unidade.id">{{unidade.nome}}</option>
-                     </select>
+                     <br-select-pnip
+                        id="idUnidadeGerenciadora"
+                        label="Tipo de Unidade"
+                        [options]="unidades"
+                        [optionSelected]="unidades.id"
+                        #gerenciadoraSelect>
+                     </br-select-pnip>
                   </div>
                </div>
             </ng-container>
