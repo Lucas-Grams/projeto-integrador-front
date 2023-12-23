@@ -1,25 +1,57 @@
 <br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
 <br-divider size="medium" class="mt-0 mb-0"></br-divider>
-<div class="row justify-content-md-center align-items-center pt-5 pb-5">
-   <div class="col-md-auto pr-4" style="width: auto;">
-      <div class="image-container">
-         <div class="d-flex justify-content-md-center align-items-center h-100">
-            <h2 class="title-container text-white text-center m-0 p-0">
-               Plataforma Nacional da Indústria do Pescado
-            </h2>
+<!--<div class="row justify-content-md-center align-items-center pt-5 pb-5">-->
+<!--   <div class="col-md-auto pr-4" style="width: auto;">-->
+<!--      <div class="image-container">-->
+<!--         <div class="d-flex justify-content-md-center align-items-center h-100">-->
+<!--            <h2 class="title-container text-white text-center m-0 p-0">-->
+<!--               Plataforma Nacional da Indústria do Pescado-->
+<!--            </h2>-->
+<!--         </div>-->
+<!--      </div>-->
+<!--   </div>-->
+<!--   <div class="col text-center">-->
+<!--      <div class="title">Acesso via gov.br</div>-->
+<!--      <div class="info mt-2">-->
+<!--         O GovBR é um serviço online de-->
+<!--         identificação e autenticação digital do-->
+<!--         cidadão em um único meio, para acesso-->
+<!--         aos diversos serviços públicos digitais.-->
+<!--      </div>-->
+<!--      <div class="mt-4">-->
+<!--         <br-button label="Entrar com gov.br" type="secondary" (click)="login()"></br-button>-->
+<!--      </div>-->
+<!--   </div>-->
+<!--</div>-->
+<form [formGroup]="formGroup">
+
+   <pnip-validators-forms-utils [formGroup]="formGroup" #validatorsFormsUtils></pnip-validators-forms-utils>
+
+   <div class="row align-items-center pt-5 pb-5">
+      <div class="col-md-auto pr-4" style="width: auto;">
+         <div class="image-container"></div>
+      </div>
+      <div class="col">
+         <div class="title mb-3 text-center">Identifique-se:</div>
+
+         <div class="col-sm-12 col-lg-12 mb-3">
+            <div class="br-input input-button">
+               <br-input density="small" name="identificacao" label="E-mail/Usuário" formControlName="identificacao" [attr.state]="validatorsFormsUtils.getStateOfField('identificacao')"/>
+               <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'identificacao'}"></ng-container>
+            </div>
+         </div>
+         <div class="col-sm-12 col-lg-12 mb-3">
+            <div class="br-input input-button">
+               <br-input density="small" type="password" name="senha" label="Senha" formControlName="senha" [attr.state]="validatorsFormsUtils.getStateOfField('senha')"/>
+               <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'senha'}"></ng-container>
+            </div>
+         </div>
+         <div class="mt-4 text-center">
+            <br-button label="Entrar na plataforma" type="secondary" (click)="submit()"></br-button>
+         </div>
+         <div class="mt-2 text-center">
+            <br-button label="Cadastro TR" type="secondary" (click)="login()"></br-button>
          </div>
       </div>
    </div>
-   <div class="col text-center">
-      <div class="title">Acesso via gov.br</div>
-      <div class="info mt-2">
-         O GovBR é um serviço online de
-         identificação e autenticação digital do
-         cidadão em um único meio, para acesso
-         aos diversos serviços públicos digitais.
-      </div>
-      <div class="mt-4">
-         <br-button label="Entrar com gov.br" type="secondary" (click)="login()"></br-button>
-      </div>
-   </div>
-</div>
+</form>
