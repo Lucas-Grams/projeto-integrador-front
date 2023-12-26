@@ -36,7 +36,7 @@
 
          <div class="col-sm-12 col-lg-12 mb-3">
             <div class="br-input input-button">
-               <br-input density="small" name="identificacao" label="E-mail/Usuário" formControlName="identificacao" [attr.state]="validatorsFormsUtils.getStateOfField('identificacao')"/>
+               <br-input density="small" name="identificacao" label="CPF/E-mail" formControlName="identificacao" [attr.state]="validatorsFormsUtils.getStateOfField('identificacao')"/>
                <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'identificacao'}"></ng-container>
             </div>
          </div>
