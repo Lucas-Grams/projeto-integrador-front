@@ -4,7 +4,8 @@ import Dropdown from "src/assets/js/dropdown/dropdown.js";
 
 import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from "@angular/router";
-import {LoginService} from "../../core/services/login.service";
+
+import {AuthService} from "../../core/services/auth/auth.service";
 
 @Component({
    selector: 'pnip-header',
@@ -38,7 +39,7 @@ export class HeaderComponent implements OnInit {
       }
    ];
 
-   constructor(protected loginService: LoginService, private router: Router) {}
+   constructor(protected auth: AuthService, private router: Router) {}
 
    ngOnInit() {
       this.router.events.subscribe((event) => {
@@ -69,7 +70,7 @@ export class HeaderComponent implements OnInit {
    }
 
    login() {
-      this.loginService.login();
+      this.auth.login();
    }
 
 }

@@ -1,7 +1,7 @@
+import {Router} from "@angular/router";
 import {Component, OnInit} from '@angular/core';
-import {LoginService} from "../../core/services/login.service";
 
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {LoginService} from "../../core/services/login.service";
 
 @Component({
    selector: 'pnip-login',
@@ -9,10 +9,6 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
    styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
-   public formGroup!: FormGroup;
-   public identificacao?: string;
-   public senha?: string;
 
    public breadcrumb = [
       {
@@ -27,16 +23,11 @@ export class LoginComponent implements OnInit {
    ];
    private id: any;
 
-   constructor(private fb: FormBuilder, private loginService: LoginService) {
+   constructor(private loginService: LoginService, private router: Router) {
 
    }
 
    ngOnInit() {
-      this.formGroup = this.fb.group({
-         identificacao: [this.identificacao, [Validators.required]],
-         senha: [this.senha, [Validators.required]],
-      });
-
       this.loginService.isLogin();
       this.id = setInterval(() => {
          this.loginService.isLogin();
@@ -47,17 +38,7 @@ export class LoginComponent implements OnInit {
       this.loginService.login();
    }
 
-   ngOnDestroy() {
-      if (this.id) {
-         clearInterval(this.id);
-      }
-   }
-
-   submit() {
-      if (this.formGroup.valid) {
-         console.log(this.formGroup.value);
-      } else {
-         this.formGroup.markAllAsTouched();
-      }
+   redirectSolicitarHabilitacaoTR() {
+      this.router.navigate(['/portal-tr/primeiro-acesso/solicitar']);
    }
 }
