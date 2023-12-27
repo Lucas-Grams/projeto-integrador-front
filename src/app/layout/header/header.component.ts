@@ -53,19 +53,21 @@ export class HeaderComponent implements OnInit {
             else if (url.includes('/portal-tr')) this.portal = [{name: 'Portal TR', href: url}];
          }
       });
+
    }
 
-   openDrop() {
-      document.querySelectorAll('[data-toggle="dropdown"]').forEach((trigger) => {
-         console.log(trigger)
-         const config = {
-            iconToHide: 'fa-chevron-up',
-            iconToShow: 'fa-chevron-down',
-            trigger,
-            useIcons: true,
-         }
+   openDrop(event: any) {
+      const trigger: Element = event.target.offsetParent;
+      const config = {
+         iconToHide: 'fa-chevron-up',
+         iconToShow: 'fa-chevron-down',
+         trigger,
+         useIcons: true,
+      }
+
+      setTimeout(() => {
          const dropdown = new Dropdown(config);
-            dropdown.setBehavior();
+         dropdown.setBehavior();
       });
    }
 
