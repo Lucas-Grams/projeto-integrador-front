@@ -40,7 +40,6 @@ export class PrimeiroAcessoComponent implements OnInit {
    constructor(private trService: TrService, private loadingService: LoadingService, private router: Router, private auth: AuthService) {}
 
    ngOnInit() {
-      console.log('aqui')
       if (this.auth.usuarioLogado()) {
          this.loadingService.show = true;
          this.trService.findStatusUltimaSolicitacao().subscribe((response: ResponseDTO<string>) => {

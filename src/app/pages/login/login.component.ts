@@ -1,5 +1,5 @@
 import {Router} from "@angular/router";
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
 import {LoginService} from "../../core/services/login.service";
 
@@ -8,7 +8,7 @@ import {LoginService} from "../../core/services/login.service";
    templateUrl: './login.component.html',
    styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
    public breadcrumb = [
       {
@@ -23,15 +23,19 @@ export class LoginComponent implements OnInit {
    ];
    private id: any;
 
-   constructor(private loginService: LoginService, private router: Router) {
-
-   }
+   constructor(private loginService: LoginService, private router: Router) {}
 
    ngOnInit() {
       this.loginService.isLogin();
       this.id = setInterval(() => {
          this.loginService.isLogin();
       }, 300);
+   }
+
+   ngOnDestroy() {
+      if (this.id) {
+         clearInterval(this.id);
+      }
    }
 
    login() {
