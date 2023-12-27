@@ -17,7 +17,7 @@ export class LoginService {
 
    public isLogin() {
       this.authService?.asynccheckLogado().then(data => {
-         if(data == true){
+         if (data == true) {
             this.username = '';
             this.role = this.checkRole(this.authService?.getRealmAccess());
             this.role = this.role == 'convidado' ? 'tr' : this.role;
@@ -27,18 +27,18 @@ export class LoginService {
       });
    }
 
+   checkRole(roles: any[]) {
+      let temp = ['tr', 'admin', 'mpa', 'convidado'];
 
-   checkRole(roles:any[]){
-      let temp= ['tr','admin','mpa','convidado'];
-
-     for(let i =0; i < temp.length; i++){
-        if(roles.includes(temp[i])){
-           return temp[i];
-        }
-     }
-     return '';
+      for (let i = 0; i < temp.length; i++) {
+         if (roles.includes(temp[i])) {
+            return temp[i];
+         }
+      }
+      return '';
    }
-   public login(){
+
+   public login() {
       this.authService?.login();
    }
 
@@ -53,8 +53,6 @@ export class LoginService {
    public isPrimeiroAcesso() {
       return this.primeiroAcesso;
    }
-
-
 
    logout() {
       this.authService?.logout();

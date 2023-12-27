@@ -1,25 +1,39 @@
 <br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
 <br-divider size="medium" class="mt-0 mb-0"></br-divider>
-<div class="row justify-content-md-center align-items-center pt-5 pb-5">
+<!--<div class="row justify-content-md-center align-items-center pt-5 pb-5">-->
+<!--   <div class="col-md-auto pr-4" style="width: auto;">-->
+<!--      <div class="image-container">-->
+<!--         <div class="d-flex justify-content-md-center align-items-center h-100">-->
+<!--            <h2 class="title-container text-white text-center m-0 p-0">-->
+<!--               Plataforma Nacional da Indústria do Pescado-->
+<!--            </h2>-->
+<!--         </div>-->
+<!--      </div>-->
+<!--   </div>-->
+<!--   <div class="col text-center">-->
+<!--      <div class="title">Acesso via gov.br</div>-->
+<!--      <div class="info mt-2">-->
+<!--         O GovBR é um serviço online de-->
+<!--         identificação e autenticação digital do-->
+<!--         cidadão em um único meio, para acesso-->
+<!--         aos diversos serviços públicos digitais.-->
+<!--      </div>-->
+<!--      <div class="mt-4">-->
+<!--         <br-button label="Entrar com gov.br" type="secondary" (click)="login()"></br-button>-->
+<!--      </div>-->
+<!--   </div>-->
+<!--</div>-->
+
+<div class="row align-items-center pt-5 pb-5">
    <div class="col-md-auto pr-4" style="width: auto;">
-      <div class="image-container">
-         <div class="d-flex justify-content-md-center align-items-center h-100">
-            <h2 class="title-container text-white text-center m-0 p-0">
-               Plataforma Nacional da Indústria do Pescado
-            </h2>
-         </div>
-      </div>
+      <div class="image-container"></div>
    </div>
-   <div class="col text-center">
-      <div class="title">Acesso via gov.br</div>
-      <div class="info mt-2">
-         O GovBR é um serviço online de
-         identificação e autenticação digital do
-         cidadão em um único meio, para acesso
-         aos diversos serviços públicos digitais.
+   <div class="col">
+      <div class="mt-4 text-center">
+         <br-button label="Entrar na plataforma" type="secondary" (click)="login()"></br-button>
       </div>
-      <div class="mt-4">
-         <br-button label="Entrar com gov.br" type="secondary" (click)="login()"></br-button>
+      <div class="mt-2 text-center">
+         <br-button label="Cadastro TR" type="secondary" (click)="redirectSolicitarHabilitacaoTR()"></br-button>
       </div>
    </div>
 </div>

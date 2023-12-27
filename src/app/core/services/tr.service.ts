@@ -43,7 +43,7 @@ export class TrService {
    }
 
    public findStatusUltimaSolicitacao() {
-      return this.http.get<ResponseDTO<string>>(`${this.URL}/find/status/ultima/solicatacao`);
+      return this.http.get<ResponseDTO<string>>(`${this.URL}/find/status/ultima/solicitacao`);
    }
 
    public finalizarSolicitacao(dto: any) {

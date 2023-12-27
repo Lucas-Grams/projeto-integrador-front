@@ -14,6 +14,8 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./utils/interceptors/auth/auth.interceptor";
 import {AuthGuard} from "./utils/guards/auth/auth.guard";
 import {AuthServiceProvider} from "./core/services/auth/auth.service.provider";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {SharedModule} from "./shared/shared.module";
 
 
 const browserWindow: any = window || {};
@@ -28,17 +30,20 @@ const browserWindow: any = window || {};
       NotFoundComponent,
       LoadingComponent
    ],
-   imports: [
-      BrowserModule,
-      PnipRoutingModule,
-      OAuthModule.forRoot({
-         resourceServer: {
-            allowedUrls: [browserWindow['__env'].url.api],
-            sendAccessToken: true
-         }
-      }),
-      HttpClientModule
-   ],
+    imports: [
+        BrowserModule,
+        PnipRoutingModule,
+        OAuthModule.forRoot({
+            resourceServer: {
+                allowedUrls: [browserWindow['__env'].url.api],
+                sendAccessToken: true
+            }
+        }),
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SharedModule
+    ],
 
    providers: [
       LoadingService,

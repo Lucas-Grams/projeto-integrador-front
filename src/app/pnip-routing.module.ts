@@ -30,7 +30,7 @@ const routes: Routes = [
    {
       path: 'portal-tr',
       loadChildren: () => import('./pages/portal-tr/tr.module').then((m) => m.TrModule),
-      canActivate: [AuthGuard, AuthTrGuard]
+      //canActivate: [AuthGuard, AuthTrGuard]
    },
    {
       path: '**',

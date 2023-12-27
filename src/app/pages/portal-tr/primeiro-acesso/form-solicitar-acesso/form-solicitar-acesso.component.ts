@@ -69,6 +69,8 @@ export class FormSolicitarAcessoComponent {
    }
 
    onSaveAll() {
+      this.dto.cpf = this.dto.cpf.toString();
+      this.dto.telefone = this.dto.telefone? this.dto.telefone.toString(): this.dto.telefone;
       this.onSaveEvent.emit(this.dto);
    }
 
