@@ -11,7 +11,7 @@
          <th class="text-blue-vivid-60 text-bold" scope="col">Protocolo</th>
          <th class="text-blue-vivid-60 text-bold" scope="col">Solicitante</th>
          <th class="text-blue-vivid-60 text-bold" scope="col">Status</th>
-         <th class="text-blue-vivid-60 text-bold" scope="col"></th>
+         <th class="text-blue-vivid-60 text-bold" scope="col">{{solicitacao.status === 'EM_ANALISE'? '': 'Motivo indeferimento'}}</th>
       </tr>
    </thead>
    <tbody>
@@ -24,7 +24,7 @@
             <td>
                <pnip-status-solicitacao-utils [status]="solicitacao.status"/>
             </td>
-            <td>
+            <td *ngIf="solicitacao.status !== 'INDEFERIDA'">
                <br-button icon label="Primary" type="tertiary" circle="true" [active]="statusSolicitacao === 'indeferir'? true: false"
                           (click)="statusSolicitacao = 'indeferir';showModal('indeferir', '#indeferirfechar_1, #indeferirfechar_2')">
                   <br-icon-base icon-name="ban" family-name="fas" class="text-danger"/>
@@ -33,6 +33,11 @@
                           (click)="statusSolicitacao = 'deferir'; showModal('deferir','#deferirfechar_1, #deferirfechar_2')">
                   <br-icon-base icon-name="check" family-name="fas" class="text-info"/>
                </br-button>
+            </td>
+            <td *ngIf="solicitacao.status === 'INDEFERIDA'">
+               <span>
+                  {{solicitacao?.observacao? solicitacao?.observacao: ''}}
+               </span>
             </td>
          </tr>
       </ng-container>
@@ -153,11 +158,11 @@
          </td>
          <td>
             <br-button icon label="Primary" [title]="'Reprovar'" type="tertiary" circle="true" [active]="embarcacao.aprovada === false"
-                       (click)="embarcacao.aprovada = false">
+                       (click)="embarcacao.aprovada = false" [disabled]="solicitacao.status !== 'EM_ANALISE'">
                <br-icon-base icon-name="ban" family-name="fas" class="text-danger"/>
             </br-button>
             <br-button icon label="Primary" [title]="'Aprovar'" type="tertiary" circle="true" [active]="embarcacao.aprovada"
-                       (click)="embarcacao.aprovada = true">
+                       (click)="embarcacao.aprovada = true" [disabled]="solicitacao.status !== 'EM_ANALISE'">
                <br-icon-base icon-name="check" family-name="fas" class="text-info"/>
             </br-button>
          </td>
@@ -189,7 +194,7 @@
             <div class="br-modal-footer justify-content-center">
                <button class="br-button secondary" type="button" id="deferirfechar_1" data-dismiss="scrimexample">Cancelar
                </button>
-               <button class="br-button primary mt-3 mt-sm-0 ml-sm-3" id="deferirfechar_2" type="button">Indeferir
+               <button class="br-button primary mt-3 mt-sm-0 ml-sm-3" id="deferirfechar_2" type="button">Deferir
                </button>
             </div>
          </div>

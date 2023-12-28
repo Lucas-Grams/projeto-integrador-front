@@ -34,7 +34,7 @@ export class TrService {
       return this.http.get<ResponseDTO<any>>(`${this.URL}/find/all/solicitacoes`);
    }
 
-   public findSolicitacoesByStatus(status: string): any {
+   public findSolicitacoesByStatus(status: []): any {
       return this.http.get<ResponseDTO<any>>(`${this.URL}/find/solicitacoes/by/status/`+ status);
    }
 

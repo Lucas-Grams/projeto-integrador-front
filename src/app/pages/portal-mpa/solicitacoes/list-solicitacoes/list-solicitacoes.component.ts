@@ -23,16 +23,10 @@ export class ListSolicitacoesComponent implements OnInit {
    }
 
    findAllSolicitacoes() {
-      console.log(this.statusSolicitacao)
-      if (this.statusSolicitacao === 'EM_ANALISE') {
-         this.trService.findSolicitacoesByStatus(this.statusSolicitacao).subscribe((response: any) => {
-            this.solicitacoes = response.data;
-         });
-      } else {
-         this.trService.findAllSolicitacoes().subscribe((response: any) => {
-            this.solicitacoes = response.data;
-         });
-      }
+      const listStatus: any = (this.statusSolicitacao === 'EM_ANALISE')? ['EM_ANALISE']: ['DEFERIDA', 'INDEFERIDA'];
+      this.trService.findSolicitacoesByStatus(listStatus).subscribe((response: any) => {
+         this.solicitacoes = response.data;
+      });
    }
 
    findSolicitacao(uuid: string) {

@@ -1,8 +1,7 @@
-
 //@ts-ignore
 import Dropdown from "src/assets/js/dropdown/dropdown.js";
 
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from "@angular/router";
 
 import {AuthService} from "../../core/services/auth/auth.service";
@@ -39,7 +38,7 @@ export class HeaderComponent implements OnInit {
       }
    ];
 
-   constructor(protected auth: AuthService, private router: Router) {}
+   constructor(protected auth: AuthService, private router: Router, private ref: ChangeDetectorRef) {}
 
    ngOnInit() {
       this.router.events.subscribe((event) => {
@@ -54,20 +53,17 @@ export class HeaderComponent implements OnInit {
          }
       });
 
-   }
-
-   openDrop(event: any) {
-      const trigger: Element = event.target.offsetParent;
-      const config = {
-         iconToHide: 'fa-chevron-up',
-         iconToShow: 'fa-chevron-down',
-         trigger,
-         useIcons: true,
-      }
-
-      setTimeout(() => {
-         const dropdown = new Dropdown(config);
-         dropdown.setBehavior();
+      window.addEventListener("DOMContentLoaded", (event) => {
+         document.querySelectorAll('[data-toggle="dropdown"]').forEach((trigger) => {
+            const config = {
+               iconToHide: 'fa-chevron-up',
+               iconToShow: 'fa-chevron-down',
+               trigger,
+               useIcons: true,
+            }
+            const dropdown = new Dropdown(config);
+            dropdown.setBehavior();
+         })
       });
    }
 
