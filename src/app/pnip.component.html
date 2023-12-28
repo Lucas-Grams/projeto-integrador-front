@@ -1,5 +1,6 @@
 <pnip-header/>
-<main class="container-lg pb-3" >
+<main class="container-lg pb-3" [hidden]="loadingService.show">
    <router-outlet></router-outlet>
 </main>
 
+<pnip-loading *ngIf="loadingService?.show"></pnip-loading>

@@ -29,7 +29,11 @@
                      "src/styles.css"
                   ],
                   "scripts": [
-                     "node_modules/@govbr-ds/webcomponents/dist/webcomponents.umd.min.js"
+                     "node_modules/@govbr-ds/webcomponents/dist/webcomponents.umd.min.js",
+                     "node_modules/@govbr-ds/core/dist/core.min.js",
+                     "node_modules/@govbr-ds/core/dist/core-init.js",
+                     "node_modules/@govbr-ds/core/dist/core-base.js",
+                     "node_modules/@govbr-ds/core/dist/core-lite.js"
                   ]
                },
                "configurations": {

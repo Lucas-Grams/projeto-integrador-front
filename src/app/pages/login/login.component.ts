@@ -1,4 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Router} from "@angular/router";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+
 import {LoginService} from "../../core/services/login.service";
 
 @Component({
@@ -6,7 +8,7 @@ import {LoginService} from "../../core/services/login.service";
    templateUrl: './login.component.html',
    styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit, OnDestroy {
 
    public breadcrumb = [
       {
@@ -21,14 +23,8 @@ export class LoginComponent implements OnInit{
    ];
    private id: any;
 
-   constructor(private loginService: LoginService) {
+   constructor(private loginService: LoginService, private router: Router) {}
 
-   }
-
-   login() {
-      this.loginService.login();
-   }
-   
    ngOnInit() {
       this.loginService.isLogin();
       this.id = setInterval(() => {
@@ -40,5 +36,13 @@ export class LoginComponent implements OnInit{
       if (this.id) {
          clearInterval(this.id);
       }
+   }
+
+   login() {
+      this.loginService.login();
+   }
+
+   redirectSolicitarHabilitacaoTR() {
+      this.router.navigate(['/portal-tr/primeiro-acesso/solicitar']);
    }
 }

@@ -3,7 +3,7 @@ import {TrService} from "../../../../core/services/tr.service";
 import {SolicitacaoHabilitacaoDTO} from "../../../../core/dtos/solicitacao-habilitacao.dto";
 import {LoadingService} from "../../../../core/services/loading.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Location} from '@angular/common';
+import {ResponseDTO} from "../../../../core/dtos/response.dto";
 
 @Component({
    selector: 'pnip-tr-listar-solicitacoes',
@@ -29,11 +29,11 @@ export class ListarSolicitacoesComponent implements OnInit {
          active: true
       }
    ];
-
+   public ultimoStatus: string | null = null;
    public solicitacoes: SolicitacaoHabilitacaoDTO[] = [];
 
    constructor(private trService: TrService, private loadingService: LoadingService,
-               private route: ActivatedRoute, private router: Router, private location: Location) {
+               private route: ActivatedRoute, private router: Router) {
       this.loadingService.show = true;
       this.trService.minhasSolicitacoes().subscribe((solicitacoes: SolicitacaoHabilitacaoDTO[]) => {
          this.solicitacoes = solicitacoes;
@@ -47,14 +47,23 @@ export class ListarSolicitacoesComponent implements OnInit {
             this.showMessage = true;
          }
       });
+      this.findUltimoStatus();
+   }
+
+   findUltimoStatus() {
+      this.trService.findStatusUltimaSolicitacao().subscribe((response: ResponseDTO<string>) => {
+         if (response) {
+            this.ultimoStatus = response.msg;
+         }
+      });
    }
 
    visualizar(uuid: string) {
       this.router.navigate(['/portal-tr/primeiro-acesso/detalhes-solicitacao', uuid]);
    }
 
-   voltar() {
-      this.router.navigate(['/portal-tr/primeiro-acesso']);
+   novaSolicitacao() {
+      this.router.navigate(['/portal-tr/primeiro-acesso/solicitar']);
    }
 
 }

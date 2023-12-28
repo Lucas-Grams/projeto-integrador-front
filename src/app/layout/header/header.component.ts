@@ -1,11 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+//@ts-ignore
+import Dropdown from "src/assets/js/dropdown/dropdown.js";
+
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from "@angular/router";
-import {LoginService} from "../../core/services/login.service";
+
+import {AuthService} from "../../core/services/auth/auth.service";
 
 @Component({
    selector: 'pnip-header',
    templateUrl: './header.component.html',
-   styleUrls: []
+   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
 
@@ -34,7 +38,7 @@ export class HeaderComponent implements OnInit {
       }
    ];
 
-   constructor(protected loginService: LoginService, private router: Router) {}
+   constructor(protected auth: AuthService, private router: Router, private ref: ChangeDetectorRef) {}
 
    ngOnInit() {
       this.router.events.subscribe((event) => {
@@ -43,16 +47,28 @@ export class HeaderComponent implements OnInit {
             const url = event.url;
             if (!url) {
                return;
-            }
-            else if (url.includes('/portal-admin')) this.portal = [{name: 'Portal ADMIN', href: url}];
-            else if (url.includes('/portal-mpa'))   this.portal = [{name: 'Portal MPA', href: url}];
-            else if (url.includes('/portal-tr'))    this.portal = [{name: 'Portal TR', href: url}];
+            } else if (url.includes('/portal-admin')) this.portal = [{name: 'Portal ADMIN', href: url}];
+            else if (url.includes('/portal-mpa')) this.portal = [{name: 'Portal MPA', href: url}];
+            else if (url.includes('/portal-tr')) this.portal = [{name: 'Portal TR', href: url}];
          }
+      });
+
+      window.addEventListener("DOMContentLoaded", (event) => {
+         document.querySelectorAll('[data-toggle="dropdown"]').forEach((trigger) => {
+            const config = {
+               iconToHide: 'fa-chevron-up',
+               iconToShow: 'fa-chevron-down',
+               trigger,
+               useIcons: true,
+            }
+            const dropdown = new Dropdown(config);
+            dropdown.setBehavior();
+         })
       });
    }
 
    login() {
-      this.loginService.login();
+      this.auth.login();
    }
 
 }

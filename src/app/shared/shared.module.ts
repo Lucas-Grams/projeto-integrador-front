@@ -5,11 +5,13 @@ import {CustomValueAccessorDirective} from "../utils/directives/CustomValueAcces
 import {ValidatorsFormsUtils} from "../utils/components/validators-forms.utils";
 import {BrSelectComponent} from "./br-select/br-select.component";
 import {DataFormsService} from "../core/services/data-forms.service";
+import {StatusSolicitacaoUtils} from "../utils/components/status-solicitacao.utils";
 
 @NgModule({
    declarations: [
       BrSelectComponent,
       ValidatorsFormsUtils,
+      StatusSolicitacaoUtils,
       CustomValueAccessorDirective
    ],
    imports: [
@@ -19,7 +21,8 @@ import {DataFormsService} from "../core/services/data-forms.service";
    exports: [
       BrSelectComponent,
       ValidatorsFormsUtils,
-      CustomValueAccessorDirective
+      CustomValueAccessorDirective,
+      StatusSolicitacaoUtils
    ],
    providers: [
       DataFormsService
