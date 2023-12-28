@@ -53,7 +53,6 @@ export class HeaderComponent implements OnInit {
          }
       });
 
-      window.addEventListener("DOMContentLoaded", (event) => {
          document.querySelectorAll('[data-toggle="dropdown"]').forEach((trigger) => {
             const config = {
                iconToHide: 'fa-chevron-up',
@@ -64,7 +63,6 @@ export class HeaderComponent implements OnInit {
             const dropdown = new Dropdown(config);
             dropdown.setBehavior();
          })
-      });
    }
 
    login() {
