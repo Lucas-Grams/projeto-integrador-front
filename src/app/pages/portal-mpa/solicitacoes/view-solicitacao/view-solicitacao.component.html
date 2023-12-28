@@ -11,7 +11,7 @@
          <th class="text-blue-vivid-60 text-bold" scope="col">Protocolo</th>
          <th class="text-blue-vivid-60 text-bold" scope="col">Solicitante</th>
          <th class="text-blue-vivid-60 text-bold" scope="col">Status</th>
-         <th class="text-blue-vivid-60 text-bold" scope="col">{{solicitacao.status === 'EM_ANALISE'? '': 'Motivo indeferimento'}}</th>
+         <th class="text-blue-vivid-60 text-bold" scope="col">{{solicitacao.status === 'INDEFERIDA'? 'Motivo indeferimento': ''}}</th>
       </tr>
    </thead>
    <tbody>
@@ -24,7 +24,7 @@
             <td>
                <pnip-status-solicitacao-utils [status]="solicitacao.status"/>
             </td>
-            <td *ngIf="solicitacao.status !== 'INDEFERIDA'">
+            <td *ngIf="solicitacao.status === 'EM_ANALISE'">
                <br-button icon label="Primary" type="tertiary" circle="true" [active]="statusSolicitacao === 'indeferir'? true: false"
                           (click)="statusSolicitacao = 'indeferir';showModal('indeferir', '#indeferirfechar_1, #indeferirfechar_2')">
                   <br-icon-base icon-name="ban" family-name="fas" class="text-danger"/>
@@ -38,6 +38,11 @@
                <span>
                   {{solicitacao?.observacao? solicitacao?.observacao: ''}}
                </span>
+            </td>
+            <td *ngIf="solicitacao.status === 'DEFERIDA'">
+               <br-button icon label="Primary" type="tertiary" circle="true" [active]="true" disabled="true">
+                  <br-icon-base icon-name="check" family-name="fas" class="text-info"/>
+               </br-button>
             </td>
          </tr>
       </ng-container>
