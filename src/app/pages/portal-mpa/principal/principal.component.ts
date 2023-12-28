@@ -13,16 +13,16 @@ export class PrincipalComponent {
          icon: 'list',
          url: '/portal-mpa/solicitacoes'
       },
-      {
-         label: 'EMBARCAÇÔES',
-         icon: 'ship',
-         url: ''
-      },
-      {
-         label: 'RESPONSÁVEIS TÉCNICOS',
-         icon: 'users',
-         url: ''
-      },
+      // {
+      //    label: 'EMBARCAÇÔES',
+      //    icon: 'ship',
+      //    url: ''
+      // },
+      // {
+      //    label: 'RESPONSÁVEIS TÉCNICOS',
+      //    icon: 'users',
+      //    url: ''
+      // },
    ];
 
    public breadcrumb = [
