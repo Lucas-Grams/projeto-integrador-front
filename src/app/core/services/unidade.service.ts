@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponseDto} from "../dto/response.dto";
 import {EnvService} from "./env/env.service";
+import {TipoUnidade} from "../models/tipo-unidade.model";
 
 @Injectable({
    providedIn: 'root'
@@ -37,5 +38,9 @@ export class UnidadeService{
 
    update(unidade: Unidade):Observable<ResponseDto<Unidade>>{
       return this.http.post<ResponseDto<Unidade>>(`${this.urlUnidade}` + '/update', unidade);
+   }
+
+   findTiposUnidades():Observable<ResponseDto<TipoUnidade[]>>{
+      return this.http.get<ResponseDto<TipoUnidade[]>>(`${this.urlUnidade}` + '/findAllTipos')
    }
 }

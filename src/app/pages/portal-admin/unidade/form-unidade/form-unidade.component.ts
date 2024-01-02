@@ -14,6 +14,7 @@ import {FormRepresentanteUnidadeComponent} from "./form-representante-unidade/fo
 import {Endereco} from "../../../../core/models/endereco.model";
 import {BrSelectComponent} from "../../../../shared/br-select/br-select.component";
 import {Hash} from "angular-oauth2-oidc/token-validation/fast-sha256js";
+import {TipoUnidade} from "../../../../core/models/tipo-unidade.model";
 
 
 declare var swal: any;
@@ -55,16 +56,7 @@ export class FormUnidadeComponent implements OnInit{
    formRepresentante!: FormGroup;
    representante: Usuario = new Usuario();
 
-   tipoUnidade = [
-      {id: 1, value: 'Unidade Central (UC)', item: 'UC'},
-      {id: 2, value: 'Programa/Seção (PS)', item: 'PS'},
-      {id: 3, value: 'Supeorvisão Regional (SR)', item: 'SR'},
-      {id: 4, value: 'Inspetoria Vetrinária Local (IVZ)', item: 'IVZ'},
-      {id: 5, value: 'Ministério da Pesca e Aquicultura (MPA)', item: 'MPA'},
-      {id: 6, value: 'Secretaria Nacional (SN)', item: 'SN'},
-      {id: 7, value: 'Departamento (DP)', item: 'DP'},
-      {id: 8, value: 'Superintendencia Federal da Pesca (SFP)', item: 'SFP'}
-   ]
+   tipoUnidade:any = [];
 
 
    constructor(private loadingService: LoadingService,
@@ -94,6 +86,12 @@ export class FormUnidadeComponent implements OnInit{
    }
 
    ngOnInit() {
+      this.unidadeService.findTiposUnidades().subscribe((data)=>{
+         data.data?.forEach((tipo)=>{
+            this.tipoUnidade.push({label:tipo.nome?.toString() , value:tipo.tipo});
+         })
+      })
+      console.log(this.tipoUnidade);
    }
 
 
