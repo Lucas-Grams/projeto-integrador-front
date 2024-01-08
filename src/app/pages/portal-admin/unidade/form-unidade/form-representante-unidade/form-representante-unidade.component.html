@@ -1,18 +1,32 @@
 <div class="row">
-   <div class="br-item" data-toggle="selection">
-      <div class="br-radio">
-         <input id="radio-01" type="radio" name="radio" [checked]="!novoUser" (click)="verificaNovoUser(false)"/>
-         <label for="radio-01">Usuario existente</label>
-      </div>
-   </div>
-   <div class="br-item" data-toggle="selection">
-      <div class="br-radio">
-         <input id="radio-02" type="radio" name="radio" [checked]="novoUser" (click)="verificaNovoUser(true)"/>
-         <label for="radio-02">Novo Usuario</label>
-      </div>
+
+   <div class="br-tab">
+      <nav class="tab-nav">
+         <ul>
+            <li class="tab-item">
+               <button type="button" data-panel="panel-1-icon"><span class="name">
+                  <span class="d-flex flex-column flex-sm-row"><span class="icon mb-1 mb-sm-0 mr-sm-1"></span>
+                     <span class="name" (click)="verificaNovoUser(false)" >Usuario existente</span></span></span></button>
+            </li>
+            <li class="tab-item">
+               <button type="button" data-panel="panel-2-icon"><span class="name">
+                  <span class="d-flex flex-column flex-sm-row"><span class="icon mb-1 mb-sm-0 mr-sm-1"></span>
+                     <span class="name" (click)="verificaNovoUser(true)">Cadastrar Usuario</span></span></span></button>
+            </li>
+         </ul>
+      </nav>
    </div>
 
+
+
+
+
+
+
+
+
 </div>
+
 
 <ng-container *ngIf="novoUser; else usuarioExistente">
    <form [formGroup]="formGroup2">

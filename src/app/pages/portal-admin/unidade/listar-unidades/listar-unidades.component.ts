@@ -37,20 +37,23 @@ export class ListarUnidadesComponent implements OnInit {
       })
    }
 
-   inativar(uuid: String) {
+   inativar(unidade: Unidade) {
+      console.log(unidade);
       Swal.fire({
          title: 'Ops...',
-         text: 'Você tem certeza que deseja inativar essa unidade?',
+         text: `Você tem certeza que deseja  ${unidade.ativo? 'inativar' : 'ativar'} essa unidade?`,
          icon: 'warning',
          showCancelButton: true,
          confirmButtonText: 'Sim',
          cancelButtonText: 'Não'
       }).then((result) => {
          if (result.value) {
-            this.unidadeService.inativarUnidade(uuid).subscribe(() => {
+            this.unidadeService.inativarUnidade(unidade.uuid).subscribe(() => {
                this.el.nativeElement.ownerDocument.defaultView.location.reload();
             });
          }
       })
    }
+
+
 }
