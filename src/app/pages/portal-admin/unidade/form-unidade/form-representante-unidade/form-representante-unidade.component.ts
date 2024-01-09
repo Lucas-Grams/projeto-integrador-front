@@ -31,19 +31,11 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
          nome: [this.newUsuario?.nome, [Validators.required, Validators.maxLength(100)]],
          cpf: [this.newUsuario?.cpf, [Validators.required, cpfValidator()]],
          email: [this.newUsuario?.email, [Validators.required, Validators.email, Validators.maxLength(70)]],
-         senha: [this.newUsuario?.senha, [Validators.required, Validators.minLength(8), Validators.maxLength(70)]],
-         cep: [this.newUsuario?.endereco?.cep, [Validators.required, cepValidator()]],
-         rua: [this.newUsuario?.endereco?.rua],
-         numero: [this.newUsuario?.endereco?.numero],
-         complemento: [this.newUsuario?.endereco?.complemento],
-         cidade: [this.newUsuario?.endereco?.cidade],
-         bairro: [this.newUsuario?.endereco?.bairro],
-         uf: [this.newUsuario?.endereco?.uf]
       });
 
-      this.formGroup2.valueChanges.subscribe(() => {
-         this.emitirForm.emit(this.formGroup2);
-      });
+      // this.formGroup2.valueChanges.subscribe(() => {
+      //    this.emitirForm.emit(this.formGroup2);
+      // });
    }
 
    ngOnInit() {
@@ -55,20 +47,20 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
       })
    }
 
-   getAddressByCep() {
-      const field = this.formGroup2.get('cep');
-      if (!field?.value) return;
-      const cep = field?.value[0];
-      if (cep.length === 9) {
-         this.cepService.getAddrress(cep).subscribe(response => {
-            if (response && !response.erro) {
-               this.formGroup2.get('rua')?.setValue(response.logradouro);
-               this.formGroup2.get('cidade')?.setValue(response.localidade);
-               this.formGroup2.get('uf')?.setValue(response.uf);
-            }
-         });
-      }
-   }
+   // getAddressByCep() {
+   //    const field = this.formGroup2.get('cep');
+   //    if (!field?.value) return;
+   //    const cep = field?.value[0];
+   //    if (cep.length === 9) {
+   //       this.cepService.getAddrress(cep).subscribe(response => {
+   //          if (response && !response.erro) {
+   //             this.formGroup2.get('rua')?.setValue(response.logradouro);
+   //             this.formGroup2.get('cidade')?.setValue(response.localidade);
+   //             this.formGroup2.get('uf')?.setValue(response.uf);
+   //          }
+   //       });
+   //    }
+   // }
 
    verificaNovoUser(event: boolean){
       event? this.novoUser = true: this.novoUser = false;
@@ -80,11 +72,19 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
             this.newUsuario = us;
          }
       })
+      //this.emitirNovoUsuario();
+   }
+
+   adicionarNovoUsuario(){
+      let user = new Usuario();
+      user.nome = this.formGroup2.get("nome")?.value;
+      user.email = this.formGroup2.get("email")?.value;
+      user.cpf = this.formGroup2.get("cpf")?.value;
+      this.newUsuario = user;
       this.emitirNovoUsuario();
    }
 
    emitirNovoUsuario() {
-      console.log("emitir novo user");
       if(this.novoUser){
          this.newUsuario = this.formGroup2.value;
       }

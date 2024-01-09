@@ -36,6 +36,7 @@ export class FormEditarUnidadeComponent implements OnInit {
       }
    ];
 
+   isEdit: boolean = false;
    public formGroup: FormGroup;
    unidade: Unidade;
    unidadesGerenciadoras: Unidade[] = [];
@@ -95,6 +96,7 @@ export class FormEditarUnidadeComponent implements OnInit {
       });
       this.usuarioService.findRepresentantesUnidade(this.uuid).subscribe((data) => {
          this.representantes = data;
+         this.unidade.usuarios = data;
          console.log(this.representantes);
       })
    }
@@ -164,11 +166,17 @@ export class FormEditarUnidadeComponent implements OnInit {
 
    }
 
+   editar(){
+      console.log(this.isEdit)
+      !this.isEdit? this.isEdit = true: this.isEdit = false;
+      console.log(this.isEdit)
+   }
+
    salvar() {
       this.loadingService.show = true;
       this.unidade = this.formGroup.value;
       console.log(this.unidade);
-      this.unidade.usuarioRepresentante = this.representantes[0];
+      this.unidade.usuarios = this.representantes;
       this.unidadeService.update(this.unidade).subscribe(mensagem => {
          if(mensagem.status == 'SUCCESS'){
             Swal.fire('Ok', 'Unidade Atualizada com sucesso!', 'success').then(()=>{

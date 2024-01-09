@@ -61,12 +61,12 @@
          </div>
          <div class="col-2">
             <br-input density="small" name="numero" label="Número" formControlName="numero" type="text"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
+                      [attr.state]="validatorsFormsUtils.getStateOfField('numero')"/>
          </div>
       </div>
 
       <!-- rua/numero/bairro -->
-      <div class="row mb-2">
+      <div class="row mb-3">
          <div class="col-4">
             <br-input density="small" name="complemento" label="Complemento" formControlName="complemento"/>
          </div>
@@ -82,7 +82,7 @@
             </div>
          </div>
 
-         <div class="col-1">
+         <div class="col-2">
             <div class="br-select">
                <div class="br-input">
                   <br-input density="small" name="uf" label="UF" formControlName="uf"
@@ -93,8 +93,12 @@
             </div>
          </div>
 
-         <div class="col-3">
-            <br-input density="small" name="coodenadas" label="Coordenadas" formControlName="cordendas" type="number"/>
+         <div class="col-2">
+            <div class="br-select">
+               <div class="br-input">
+                  <br-input density="small" name="coordenadas" label="Coordenadas"  type="number"/>
+               </div>
+            </div>
          </div>
 
 
@@ -102,6 +106,53 @@
          <!--            <br-input density="small" name="bairro" label="Bairro" formControlName="bairro"/>-->
          <!--         </div>-->
       </div>
+<!--      <div class="form-row">-->
+         <!-- MAPA -->
+<!--         <ng-container *ngIf="this.unidade.endereco.latitude && this.unidade.endereco.longitude">-->
+<!--            <div class="form-group ">-->
+<!--               &lt;!&ndash; INFO &ndash;&gt;-->
+<!--               <div class="alert alert-secondary alert-bold" role="alert">-->
+<!--                  <div class="alert-icon">-->
+<!--                     <i class="flaticon-questions-circular-button"></i>-->
+<!--                  </div>-->
+<!--                  <div class="alert-text">-->
+<!--                     <strong>Atenção!</strong>&nbsp;Mova o marcador do-->
+<!--                     mapa para&nbsp;<strong>travar</strong>&nbsp; os-->
+<!--                     pontos de latitude e longitude da &nbsp;<strong-->
+<!--                  >localização da unidade</strong-->
+<!--                  >.-->
+<!--                  </div>-->
+<!--               </div>-->
+<!--               <ngui-map class="gmap"-->
+<!--                         zoom="14"-->
+<!--                         center="{{unidade.endereco.latitude }},{{-->
+<!--                                  unidade.endereco.longitude-->
+<!--                               }}"-->
+<!--                         [fullscreenControl]="true"-->
+<!--                         [fullscreenControlOptions]="{ position: 'TOP_RIGHT' }"-->
+<!--               >-->
+<!--                  <marker-->
+<!--                     position="{{ unidade.endereco.latitude }}, {{-->
+<!--                                     unidade.endereco.longitude-->
+<!--                                  }}"-->
+<!--                     draggable="true"-->
+<!--                     (dragend)="moveuPontoMaps($event)"-->
+<!--                  >-->
+<!--                  </marker>-->
+<!--               </ngui-map>-->
+<!--            </div>-->
+<!--            <div class="col-12 text-center">-->
+<!--               <p>-->
+<!--                  <label>Latitude:</label>-->
+<!--                  {{ endereco.latitude }}-->
+<!--                  <span class="ml-3"></span>-->
+<!--                  <label>Longitude:</label>-->
+<!--                  {{ endereco.longitude }}-->
+<!--               </p>-->
+<!--            </div>-->
+
+<!--         </ng-container>-->
+<!--      </div>-->
 
 </form>
 <!-- aqui vai o mapa ainda-->
@@ -113,6 +164,42 @@
    (newUserEmitter)="receberNovoUsuario($event)"
    #formUser>
 </pnip-admin-form-representante-unidade>
+
+   <ng-container *ngIf="unidade.usuarios.length > 0; else semUsuarios">
+      <table class="table">
+         <thead class="thead-light">
+         <tr>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Representante</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Nome</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">CPF</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">E-mail</th>
+            <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
+         </tr>
+         </thead>
+         <tbody *ngFor="let usuario of unidade.usuarios">
+         <tr>
+            <td><br-switch icon></br-switch></td>
+            <td>{{usuario.nome}}</td>
+            <td>{{usuario.cpf}}</td>
+            <td>{{usuario.email}}</td>
+            <td class="text-center">
+               <button class="br-button"><br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="cancelarUsuario(usuario)"/></button>
+            </td>
+         </tr>
+         </tbody>
+      </table>
+   </ng-container>
+   <ng-template #semUsuarios>
+      <div class="br-message info" role="alert">
+         <div class="icon"><i class="fas fa-info-circle fa-lg" aria-hidden="true"></i>
+         </div>
+         <div class="content"><span class="message-title">Atenção.</span><span class="message-body"> Não há representantes cadastrados para essa unidade.</span></div>
+         <div class="close">
+            <button class="br-button circle small" type="button" aria-label="Fechar"><i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+         </div>
+      </div>
+   </ng-template>
 
 <div class="d-flex justify-content-end mt-4">
    <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/unidades'"/>

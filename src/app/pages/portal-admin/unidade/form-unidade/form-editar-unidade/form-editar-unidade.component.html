@@ -1,8 +1,12 @@
 <br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
 <br-divider size="medium" class="mt-0"></br-divider>
 <div class="p-5">
-   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Visualizar dados da unidade</h2>
-
+   <div class="row">
+      <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Visualizar dados da unidade</h2>
+      <div class="ml-auto">
+         <br-button icon="edit" label="Editar" type="block" (click)="editar()"/>
+      </div>
+   </div>
    <ng-container *ngIf="formGroup">
 
       <form [formGroup]="formGroup" (ngSubmit)="salvar()">
@@ -15,7 +19,7 @@
                      <label>Tipo de Unidade</label>
                      <br>
                      <select formControlName="tipo" (change)="selecionaGerenciadora()" class="select">
-                        <option *ngFor="let uni of tipoUnidade" [value]="uni.item" >{{uni.value}}</option>
+                        <option *ngFor="let uni of tipoUnidade" [value]="uni.item">{{uni.value}}</option>
                      </select>
                   </div>
                </div>
@@ -29,7 +33,7 @@
                            <br>
                            <select formControlName="idUnidadeGerenciadora">
                               <option *ngFor="let unidade of unidadesGerenciadoras"
-                                      [value]="unidade.id" >{{unidade.nome}}</option>
+                                      [value]="unidade.id">{{unidade.nome}}</option>
                            </select>
                         </div>
                      </div>
@@ -41,7 +45,8 @@
          <!-- nome/cep -->
          <div class="row mb-2">
             <div class="col-8">
-               <br-input density="small" name="nome" label="Nome da unidade" formControlName="nome" [(ngModel)]="unidade.nome"
+               <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="nome" label="Nome da unidade" formControlName="nome"
+                         [(ngModel)]="unidade.nome"
                          [attr.state]="validatorsFormsUtils.getStateOfField('nome')"/>
             </div>
             <div class="col-4">
@@ -62,23 +67,27 @@
             </div>
             <div class="col-2">
                <br-input density="small" name="numero" label="Número" formControlName="numero" type="text"
-                         [attr.state]="validatorsFormsUtils.getStateOfField('numero')" [(ngModel)]="unidade.endereco.numero"/>
+                         [attr.state]="validatorsFormsUtils.getStateOfField('numero')"
+                         [(ngModel)]="unidade.endereco.numero"/>
             </div>
             <div class="col-4">
-               <br-input density="small" name="bairro" label="Bairro" formControlName="bairro" [(ngModel)]="unidade.endereco.bairro"/>
+               <br-input density="small" name="bairro" label="Bairro" formControlName="bairro"
+                         [(ngModel)]="unidade.endereco.bairro"/>
             </div>
          </div>
 
          <!-- complemento/uf/cidade -->
          <div class="row mb-2">
             <div class="col-4">
-               <br-input density="small" name="complemento" label="Complemento" formControlName="complemento" [(ngModel)]="unidade.endereco.complemento"/>
+               <br-input density="small" name="complemento" label="Complemento" formControlName="complemento"
+                         [(ngModel)]="unidade.endereco.complemento"/>
             </div>
             <div class="col-4">
                <div class="br-select">
                   <div class="br-input">
                      <br-input density="small" name="uf" label="UF" formControlName="uf"
-                               [attr.state]="validatorsFormsUtils.getStateOfField('uf')" [(ngModel)]="unidade.endereco.uf"/>
+                               [attr.state]="validatorsFormsUtils.getStateOfField('uf')"
+                               [(ngModel)]="unidade.endereco.uf"/>
 
                   </div>
                </div>
@@ -87,7 +96,8 @@
                <div class="br-select">
                   <div class="br-input">
                      <br-input density="small" name="municipio" label="Município" formControlName="cidade"
-                               [attr.state]="validatorsFormsUtils.getStateOfField('cidade')" [(ngModel)]="unidade.endereco.cidade"/>
+                               [attr.state]="validatorsFormsUtils.getStateOfField('cidade')"
+                               [(ngModel)]="unidade.endereco.cidade"/>
                   </div>
                </div>
             </div>
@@ -97,30 +107,32 @@
 
    <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Representante da unidade</h2>
    <ng-container *ngIf="representantes.length > 0; else semRepresentantes">
-   <table class="table">
-      <thead class="thead-light">
-      <tr>
-         <th class="text-blue-vivid-60 text-bold" scope="col">Nome</th>
-         <th class="text-blue-vivid-60 text-bold" scope="col">CPF</th>
-         <th class="text-blue-vivid-60 text-bold" scope="col">E-mail</th>
-      </tr>
-      </thead>
-      <tbody *ngFor="let usuario of representantes">
-      <tr>
-         <td>{{usuario.nome}}</td>
-         <td>{{usuario.cpf}}</td>
-         <td>{{usuario.email}}</td>
-      </tr>
-      </tbody>
-   </table>
+      <table class="table">
+         <thead class="thead-light">
+         <tr>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Nome</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">CPF</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">E-mail</th>
+         </tr>
+         </thead>
+         <tbody *ngFor="let usuario of unidade.usuarios">
+         <tr>
+            <td>{{usuario.nome}}</td>
+            <td>{{usuario.cpf}}</td>
+            <td>{{usuario.email}}</td>
+         </tr>
+         </tbody>
+      </table>
    </ng-container>
    <ng-template #semRepresentantes>
       <div class="br-message info" role="alert">
          <div class="icon"><i class="fas fa-info-circle fa-lg" aria-hidden="true"></i>
          </div>
-         <div class="content"><span class="message-title">Atenção.</span><span class="message-body"> Não há representantes cadastrados para essa unidade.</span></div>
+         <div class="content"><span class="message-title">Atenção.</span><span class="message-body"> Não há representantes cadastrados para essa unidade.</span>
+         </div>
          <div class="close">
-            <button class="br-button circle small" type="button" aria-label="Fechar"><i class="fas fa-times" aria-hidden="true"></i>
+            <button class="br-button circle small" type="button" aria-label="Fechar"><i class="fas fa-times"
+                                                                                        aria-hidden="true"></i>
             </button>
          </div>
       </div>

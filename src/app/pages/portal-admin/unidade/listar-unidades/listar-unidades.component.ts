@@ -34,6 +34,7 @@ export class ListarUnidadesComponent implements OnInit {
    ngOnInit() {
       this.unidadeService.findAll().subscribe((data) => {
          this.unidades = data;
+         console.log(this.unidades)
       })
    }
 
@@ -48,9 +49,27 @@ export class ListarUnidadesComponent implements OnInit {
          cancelButtonText: 'Não'
       }).then((result) => {
          if (result.value) {
-            this.unidadeService.inativarUnidade(unidade.uuid).subscribe(() => {
-               this.el.nativeElement.ownerDocument.defaultView.location.reload();
-            });
+            if(unidade.tipo == 'UC' || unidade.tipo == 'MPA'){
+               Swal.fire({
+                  title: 'Erro!',
+                  text: `Esta unidade não pode ser desativada por ser uma ${unidade.tipo}.`,
+                  icon: 'error',
+                  showCancelButton: true,
+                  confirmButtonText: 'OK'
+               }).then(()=>this.el.nativeElement.ownerDocument.defaultView.location.reload());
+            }else if(unidade.usuarios != null){
+               Swal.fire({
+                  title: 'Erro!',
+                  text: `Esta unidade não pode ser desativada por existirem usuários vinculados.`,
+                  icon: 'error',
+                  showCancelButton: true,
+                  confirmButtonText: 'OK'
+               }).then(()=>this.el.nativeElement.ownerDocument.defaultView.location.reload());
+            }else {
+               this.unidadeService.inativarUnidade(unidade.uuid).subscribe(() => {
+                  this.el.nativeElement.ownerDocument.defaultView.location.reload();
+               });
+            }
          }
       })
    }

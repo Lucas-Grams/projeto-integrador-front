@@ -18,12 +18,19 @@ import {TipoUnidade} from "../../../../core/models/tipo-unidade.model";
 
 
 declare var swal: any;
+
+// interface Marker {
+//    object: google.maps.Marker,
+//    estabelecimento: any,
+// }
 @Component({
    selector: 'pnip-admin-form-unidade',
    templateUrl: './form-unidade.component.html',
    styleUrls: [],
    providers:[CepService]
+
 })
+
 export class FormUnidadeComponent implements OnInit{
 
    public breadcrumb = [
@@ -41,6 +48,29 @@ export class FormUnidadeComponent implements OnInit{
          active: true
       }
    ];
+
+   // markers: Marker[];
+   // markerMapa: string;
+   // markerSda: string;
+   // @ViewChild('infoWindow') infoWindow: InfoWindow;
+   // usuarioLogado = this.loginService.getUsuarioLogado();
+   // maskLat: '00º00\'00.00"S' | '-00.000000' = '00º00\'00.00"S';
+   // maskLng: '00º00\'00.00"W' | '-00.000000' = '00º00\'00.00"W';
+   // special = ['º', '\'', '.', '"', '-', 'S', 'W'];
+   // formato = FormatoGeo.DMS;
+   // readonly formatos: string[] = Object.values(FormatoGeo);
+   // @ViewChildren(InputComponent) inputs: QueryList<InputComponent>;
+   // searchCoord: boolean;
+   // pos: google.maps.LatLng;
+   // mapZoom: number;
+   // mapMarkerVisible: boolean;
+   // map: google.maps.Map | null = null;
+   // cidSubscription: Subscription | null = null;
+   // coordSearch = {
+   //    lat: '',
+   //    long: ''
+   // };
+   // marker = {lat: null, lng: null};
 
    formGroup: FormGroup;
    unidade: Unidade;
@@ -64,7 +94,8 @@ export class FormUnidadeComponent implements OnInit{
                private fb: FormBuilder,
                private unidadeService: UnidadeService,
                private cepService: CepService,
-               private toast: ToastrService) {
+               // public location: Location
+   ) {
       this.unidade = new Unidade();
       this.formGroup = this.fb.group({
          nome: this.fb.control(this.unidade.nome, [Validators.minLength(2), Validators.maxLength(100), Validators.required]),
@@ -79,10 +110,12 @@ export class FormUnidadeComponent implements OnInit{
          uf: this.fb.control(this.unidade.endereco.uf, [Validators.minLength(2), Validators.maxLength(2), Validators.required]),
          latitude: this.fb.control( this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
          longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
-         usuarioRepresentante: this.fb.control( this.unidade.usuarioRepresentante)
+         usuarios: this.fb.control( this.unidade.usuarios)
       });
 
-
+      // this.mapZoom = 6;
+      // this.mapMarkerVisible = false;
+      // this.searchCoord = false;
    }
 
    ngOnInit() {
@@ -91,7 +124,6 @@ export class FormUnidadeComponent implements OnInit{
             this.tipoUnidade.push({label:tipo.nome?.toString() , value:tipo.tipo});
          })
       })
-      console.log(this.tipoUnidade);
    }
 
 
@@ -174,31 +206,46 @@ export class FormUnidadeComponent implements OnInit{
                this.formGroup.get('rua')?.setValue(response.logradouro);
                this.formGroup.get('cidade')?.setValue(response.localidade);
                this.formGroup.get('uf')?.setValue(response.uf);
+               // this.cepService.findAddress(this.unidade.endereco, () => {
+               //    this.marker.lat = this.unidade.endereco.latitude;
+               //    this.marker.lng = this.unidade.endereco.longitude;
+               //    this.formGroup.get('latitude')?.setValue(this.marker.lat);
+               //    this.formGroup.get('longitude')?.setValue(this.marker.lng);
+               // });
 
             }
          });
       }
 
    }
+
+   // moveuPontoMaps({target: marker}) {
+   //    this.marker.lat = parseFloat(marker.getPosition().lat());
+   //    this.marker.lng = parseFloat(marker.getPosition().lng());
+   //    this.unidade.endereco.latitude = this.marker.lat;
+   //    this.unidade.endereco.longitude = this.marker.lng;
+   //    this.formGroup.get('latitude')?.setValue(this.marker.lat);
+   //    this.formGroup.get('longitude')?.setValue(this.marker.lng);
+   // }
    receberNovoUsuario(novoUsuario: Usuario) {
-      console.log("receber novo usuario");
       this.representante = novoUsuario;
+      this.unidade.usuarios?.push(this.representante);
+
    }
 
    receberForm(form: FormGroup){
-      console.log("receber form");
       this.formRepresentante = form;
-      this.representante.endereco = new Endereco()
       this.representante.nome = this.formRepresentante.get('nome')?.value;
       this.representante.cpf = this.formRepresentante.get('cpf')?.value;
       this.representante.email = this.formRepresentante.get('email')?.value;
-      this.representante.endereco.rua = this.formRepresentante.get('rua')?.value;
-      this.representante.endereco.cep = this.formRepresentante.get('cep')?.value;
-      this.representante.endereco.cidade = this.formRepresentante.get('cidade')?.value;
-      this.representante.endereco.bairro = this.formRepresentante.get('bairro')?.value;
-      this.representante.endereco.uf = this.formRepresentante.get('uf')?.value;
-      this.representante.endereco.complemento = this.formRepresentante.get('complemento')?.value;
-      this.representante.endereco.numero = this.formRepresentante.get('numero')?.value;
+      this.unidade.usuarios.push(this.representante);
+   }
+
+   cancelarUsuario(user: Usuario){
+      const index = this.unidade.usuarios.findIndex(u => u.nome === user.nome);
+      if (index !== -1) {
+         this.unidade.usuarios.splice(index, 1);
+      }
    }
 
    salvar() {
@@ -207,16 +254,14 @@ export class FormUnidadeComponent implements OnInit{
          this.formGroup.get("idUnidadeGerenciadora")?.setValue(this.gerenciadoraSelect.getOptionSelected());
       }
       this.unidade = this.formGroup.value;
-      this.unidade.usuarioRepresentante = this.representante;
-
       console.log(this.unidade);
-      // this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
-      //   // swal.fire(mensagem.msg).then();
-      // });
-      // setTimeout(() => {
-      //    this.loadingService.show = false;
-      //    this.router.navigate(['/portal-admin/unidades']);
-      // }, 1200);
+      this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
+        // swal.fire(mensagem.msg).then();
+      });
+      setTimeout(() => {
+         this.loadingService.show = false;
+         this.router.navigate(['/portal-admin/unidades']);
+      }, 1200);
    }
 
 }

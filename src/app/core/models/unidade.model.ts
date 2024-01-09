@@ -12,7 +12,7 @@ export class Unidade{
    uuid: String;
    dataCadastro?: Date;
    ultimaAtualizacao?: Date;
-   usuarioRepresentante?: Usuario;
+   usuarios: Usuario[] = [];
 
 
 
