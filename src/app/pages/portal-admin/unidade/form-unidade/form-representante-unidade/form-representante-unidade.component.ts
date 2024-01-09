@@ -67,20 +67,27 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
    }
 
    selecionaUsuario(id: number){
+      console.log("parte 3")
+      console.log(this.newUsuario)
+      this.newUsuario = new Usuario();
       this.usuarios.forEach((us) => {
          if(us.id == this.userSelect.getOptionSelected()){
             this.newUsuario = us;
          }
       })
+      console.log(this.newUsuario)
       //this.emitirNovoUsuario();
    }
 
    adicionarNovoUsuario(){
+      console.log("parte 4")
+      console.log(this.newUsuario)
       let user = new Usuario();
       user.nome = this.formGroup2.get("nome")?.value;
       user.email = this.formGroup2.get("email")?.value;
       user.cpf = this.formGroup2.get("cpf")?.value;
       this.newUsuario = user;
+      console.log(this.newUsuario)
       this.emitirNovoUsuario();
    }
 

@@ -15,6 +15,7 @@ import {Endereco} from "../../../../core/models/endereco.model";
 import {BrSelectComponent} from "../../../../shared/br-select/br-select.component";
 import {Hash} from "angular-oauth2-oidc/token-validation/fast-sha256js";
 import {TipoUnidade} from "../../../../core/models/tipo-unidade.model";
+import {Location} from "@angular/common";
 
 
 declare var swal: any;
@@ -94,7 +95,7 @@ export class FormUnidadeComponent implements OnInit{
                private fb: FormBuilder,
                private unidadeService: UnidadeService,
                private cepService: CepService,
-               // public location: Location
+                public location: Location
    ) {
       this.unidade = new Unidade();
       this.formGroup = this.fb.group({
@@ -122,12 +123,13 @@ export class FormUnidadeComponent implements OnInit{
       this.unidadeService.findTiposUnidades().subscribe((data)=>{
          data.data?.forEach((tipo)=>{
             this.tipoUnidade.push({label:tipo.nome?.toString() , value:tipo.tipo});
-         })
-      })
+         });
+      });
    }
 
 
    selecionaGerenciadora() {
+      this.unidades = [];
       switch(this.tipoUnidadeSelect.getOptionSelected()){
          case 'PS':
             this.validarUc = false;
@@ -193,6 +195,7 @@ export class FormUnidadeComponent implements OnInit{
             this.validarUc = true;
             break;
       }
+      console.log(this.unidades);
    }
 
 
@@ -228,18 +231,30 @@ export class FormUnidadeComponent implements OnInit{
    //    this.formGroup.get('longitude')?.setValue(this.marker.lng);
    // }
    receberNovoUsuario(novoUsuario: Usuario) {
+      console.log(novoUsuario);
       this.representante = novoUsuario;
-      this.unidade.usuarios?.push(this.representante);
-
+      const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, novoUsuario));
+      if(!jaExiste){
+         this.unidade.usuarios.push(this.representante);
+      }
    }
 
    receberForm(form: FormGroup){
+      console.log(form);
       this.formRepresentante = form;
       this.representante.nome = this.formRepresentante.get('nome')?.value;
       this.representante.cpf = this.formRepresentante.get('cpf')?.value;
       this.representante.email = this.formRepresentante.get('email')?.value;
-      this.unidade.usuarios.push(this.representante);
+      const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, this.representante));
+      if(!jaExiste){
+         this.unidade.usuarios.push(this.representante);
+      }
+      this.representante = new Usuario();
    }
+   comparaUsuarios(user1: Usuario, user2: Usuario){
+      return user1.cpf == user2.cpf && user1.email == user2.email;
+   }
+
 
    cancelarUsuario(user: Usuario){
       const index = this.unidade.usuarios.findIndex(u => u.nome === user.nome);

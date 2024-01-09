@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Unidade } from "../../../../../core/models/unidade.model";
@@ -10,6 +10,8 @@ import {LoadingService} from "../../../../../core/services/loading.service";
 import {Usuario} from "../../../../../core/models/usuario.model";
 import {UsuarioService} from "../../../../../core/services/usuario.service";
 import Swal from "sweetalert2";
+import {BrSelectComponent} from "../../../../../shared/br-select/br-select.component";
+import {FormRepresentanteUnidadeComponent} from "../form-representante-unidade/form-representante-unidade.component";
 
 
 @Component({
@@ -46,16 +48,15 @@ export class FormEditarUnidadeComponent implements OnInit {
 
    representantes: Usuario[] = [];
 
-   tipoUnidade = [
-      { id: 1, value: 'Unidade Central (UC)', item: 'UC' },
-      { id: 2, value: 'Programa/Seção (PS)', item: 'PS' },
-      { id: 3, value: 'Supervisão Regional (SR)', item: 'SR' },
-      { id: 4, value: 'Inspetoria Veterinária Local (IVZ)', item: 'IVZ' },
-      { id: 5, value: 'Ministério da Pesca e Aquicultura (MPA)', item: 'MPA' },
-      { id: 6, value: 'Secretaria Nacional (SN)', item: 'SN' },
-      { id: 7, value: 'Departamento (DP)', item: 'DP' },
-      { id: 8, value: 'Superintendência Federal da Pesca (SFP)', item: 'SFP' }
-   ];
+   tipoUnidade: any = [];
+   unidades: any = [];
+   @ViewChild('tipoUnidadeSelect', {static: false}) tipoUnidadeSelect!: BrSelectComponent;
+   @ViewChild('gerenciadoraSelect', {static: false}) gerenciadoraSelect!: BrSelectComponent;
+
+
+   @ViewChild('formUser') formUser?: FormRepresentanteUnidadeComponent;
+   formRepresentante!: FormGroup;
+   representante: Usuario = new Usuario();
 
    constructor(
       private loadingService: LoadingService,
@@ -67,7 +68,6 @@ export class FormEditarUnidadeComponent implements OnInit {
       private usuarioService: UsuarioService,
    ) {
       this.unidade = new Unidade();
-
       this.route.params.subscribe((param) => {
          this.uuid = param['uuid'];
       });
@@ -97,56 +97,86 @@ export class FormEditarUnidadeComponent implements OnInit {
       this.usuarioService.findRepresentantesUnidade(this.uuid).subscribe((data) => {
          this.representantes = data;
          this.unidade.usuarios = data;
-         console.log(this.representantes);
       })
    }
    ngOnInit() {
+      this.unidadeService.findTiposUnidades().subscribe((data)=>{
+         data.data?.forEach((tipo)=>{
+            this.tipoUnidade.push({label:tipo.nome?.toString() , value:tipo.tipo});
+         });
+      });
 
    }
 
 
    selecionaGerenciadora() {
-      switch(this.unidade.tipo){
+      this.unidades = [];
+      switch(this.tipoUnidadeSelect.getOptionSelected()){
          case 'PS':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("UC").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni)=>{
+                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               });
             })
             break;
          case 'SR':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("UC").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni)=>{
+                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               });
             })
             break;
          case 'IVZ':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("SR").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni)=>{
+                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               });
             })
             break;
          case 'SN':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("MPA").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni)=>{
+                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               });
             })
             break;
          case 'DP':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("SN").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni)=>{
+                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               });
             })
             break;
          case 'SFP':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("MPA").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni)=>{
+                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               });
             })
             break;
          default:
             this.validarUc = true;
             break;
       }
+      console.log(this.unidades);
    }
 
 
@@ -170,6 +200,41 @@ export class FormEditarUnidadeComponent implements OnInit {
       console.log(this.isEdit)
       !this.isEdit? this.isEdit = true: this.isEdit = false;
       console.log(this.isEdit)
+   }
+
+   receberNovoUsuario(novoUsuario: Usuario) {
+      console.log("parte 1")
+      console.log(novoUsuario);
+      this.representante = novoUsuario;
+      const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, novoUsuario));
+      if(!jaExiste){
+         this.unidade.usuarios.push(this.representante);
+      }
+
+   }
+
+   receberForm(form: FormGroup){
+      console.log("parte 2")
+      console.log(form);
+      this.formRepresentante = form;
+      this.representante.nome = this.formRepresentante.get('nome')?.value;
+      this.representante.cpf = this.formRepresentante.get('cpf')?.value;
+      this.representante.email = this.formRepresentante.get('email')?.value;
+      const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, this.representante));
+      if(!jaExiste){
+         this.unidade.usuarios.push(this.representante);
+      }
+      this.representante = new Usuario();
+   }
+   comparaUsuarios(user1: Usuario, user2: Usuario){
+      return user1.cpf == user2.cpf && user1.email == user2.email;
+   }
+
+   cancelarUsuario(user: Usuario){
+      const index = this.unidade.usuarios.findIndex(u => u.nome === user.nome);
+      if (index !== -1) {
+         this.unidade.usuarios.splice(index, 1);
+      }
    }
 
    salvar() {
