@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild, ViewChildren} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LoadingService} from "../../../../core/services/loading.service";
 import {Router} from "@angular/router";
@@ -16,14 +16,16 @@ import {BrSelectComponent} from "../../../../shared/br-select/br-select.componen
 import {Hash} from "angular-oauth2-oidc/token-validation/fast-sha256js";
 import {TipoUnidade} from "../../../../core/models/tipo-unidade.model";
 import {Location} from "@angular/common";
+import {InfoWindow} from "@ngui/map";
+import {Subscription} from "rxjs";
 
 
 declare var swal: any;
 
-// interface Marker {
-//    object: google.maps.Marker,
-//    estabelecimento: any,
-// }
+interface Marker {
+   object?: google.maps.Marker,
+   estabelecimento: any,
+}
 @Component({
    selector: 'pnip-admin-form-unidade',
    templateUrl: './form-unidade.component.html',
@@ -50,28 +52,28 @@ export class FormUnidadeComponent implements OnInit{
       }
    ];
 
-   // markers: Marker[];
-   // markerMapa: string;
-   // markerSda: string;
-   // @ViewChild('infoWindow') infoWindow: InfoWindow;
-   // usuarioLogado = this.loginService.getUsuarioLogado();
-   // maskLat: '00º00\'00.00"S' | '-00.000000' = '00º00\'00.00"S';
-   // maskLng: '00º00\'00.00"W' | '-00.000000' = '00º00\'00.00"W';
-   // special = ['º', '\'', '.', '"', '-', 'S', 'W'];
-   // formato = FormatoGeo.DMS;
-   // readonly formatos: string[] = Object.values(FormatoGeo);
-   // @ViewChildren(InputComponent) inputs: QueryList<InputComponent>;
-   // searchCoord: boolean;
-   // pos: google.maps.LatLng;
-   // mapZoom: number;
-   // mapMarkerVisible: boolean;
-   // map: google.maps.Map | null = null;
-   // cidSubscription: Subscription | null = null;
-   // coordSearch = {
-   //    lat: '',
-   //    long: ''
-   // };
-   // marker = {lat: null, lng: null};
+   markers?: Marker[];
+   markerMapa?: string;
+   markerSda?: string;
+   @ViewChild('infoWindow') infoWindow?: InfoWindow;
+   maskLat: '00º00\'00.00"S' | '-00.000000' = '00º00\'00.00"S';
+   maskLng: '00º00\'00.00"W' | '-00.000000' = '00º00\'00.00"W';
+   special = ['º', '\'', '.', '"', '-', 'S', 'W'];
+   //formato = FormatoGeo.DMS;
+   //readonly formatos: string[] = Object.values(FormatoGeo);
+   //@ViewChildren(InputComponent) inputs: QueryList<InputComponent>;
+   searchCoord: boolean = false;
+   pos?: google.maps.LatLng;
+   mapZoom: number = 16;
+   mapMarkerVisible?: boolean;
+   map: google.maps.Map | null = null;
+   cidSubscription: Subscription | null = null;
+   coordSearch = {
+      lat: '',
+      long: ''
+   };
+   marker: { lat: any, lng: any } = { lat: '', lng: '' };
+
 
    formGroup: FormGroup;
    unidade: Unidade;
@@ -114,9 +116,9 @@ export class FormUnidadeComponent implements OnInit{
          usuarios: this.fb.control( this.unidade.usuarios)
       });
 
-      // this.mapZoom = 6;
-      // this.mapMarkerVisible = false;
-      // this.searchCoord = false;
+      this.mapZoom = 6;
+      this.mapMarkerVisible = false;
+      this.searchCoord = false;
    }
 
    ngOnInit() {
@@ -209,12 +211,12 @@ export class FormUnidadeComponent implements OnInit{
                this.formGroup.get('rua')?.setValue(response.logradouro);
                this.formGroup.get('cidade')?.setValue(response.localidade);
                this.formGroup.get('uf')?.setValue(response.uf);
-               // this.cepService.findAddress(this.unidade.endereco, () => {
-               //    this.marker.lat = this.unidade.endereco.latitude;
-               //    this.marker.lng = this.unidade.endereco.longitude;
-               //    this.formGroup.get('latitude')?.setValue(this.marker.lat);
-               //    this.formGroup.get('longitude')?.setValue(this.marker.lng);
-               // });
+               this.cepService.findAddress(this.unidade.endereco, () => {
+                  this.marker.lat = this.unidade.endereco.latitude.toString();
+                  this.marker.lng = this.unidade.endereco.longitude.toString();
+                  this.formGroup.get('latitude')?.setValue(this.marker.lat);
+                  this.formGroup.get('longitude')?.setValue(this.marker.lng);
+               });
 
             }
          });
@@ -222,14 +224,14 @@ export class FormUnidadeComponent implements OnInit{
 
    }
 
-   // moveuPontoMaps({target: marker}) {
-   //    this.marker.lat = parseFloat(marker.getPosition().lat());
-   //    this.marker.lng = parseFloat(marker.getPosition().lng());
-   //    this.unidade.endereco.latitude = this.marker.lat;
-   //    this.unidade.endereco.longitude = this.marker.lng;
-   //    this.formGroup.get('latitude')?.setValue(this.marker.lat);
-   //    this.formGroup.get('longitude')?.setValue(this.marker.lng);
-   // }
+   moveuPontoMaps({target: marker}) {
+      this.marker.lat = parseFloat(marker.getPosition().lat());
+      this.marker.lng = parseFloat(marker.getPosition().lng());
+      this.unidade.endereco.latitude = this.marker.lat;
+      this.unidade.endereco.longitude = this.marker.lng;
+      this.formGroup.get('latitude')?.setValue(this.marker.lat);
+      this.formGroup.get('longitude')?.setValue(this.marker.lng);
+   }
    receberNovoUsuario(novoUsuario: Usuario) {
       console.log(novoUsuario);
       this.representante = novoUsuario;

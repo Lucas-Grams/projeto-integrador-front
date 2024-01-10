@@ -43,6 +43,7 @@ export class FormEditarUnidadeComponent implements OnInit {
    unidade: Unidade;
    unidadesGerenciadoras: Unidade[] = [];
    uuid: string = '';
+   unidadeId?:number;
 
    validarUc: boolean = false;
 
@@ -72,32 +73,32 @@ export class FormEditarUnidadeComponent implements OnInit {
          this.uuid = param['uuid'];
       });
 
-      this.formGroup = this.fb.group({
-         id:[this.unidade.id],
-            nome: this.fb.control(this.unidade.nome, [Validators.minLength(2), Validators.maxLength(100), Validators.required]),
-            tipo: this.fb.control(this.unidade.tipo, [Validators.minLength(2), Validators.required]),
-            idUnidadeGerenciadora: this.fb.control(this.unidade.idUnidadeGerenciadora, [Validators.required]),
-            cep: this.fb.control(this.unidade.endereco.cep, [ Validators.required, Validators.minLength(8), Validators.maxLength(10) ]),
-            rua: this.fb.control( this.unidade.endereco.rua, [Validators.minLength(2),Validators.maxLength(70), Validators.required]),
-            numero: this.fb.control(this.unidade.endereco.numero, [ Validators.minLength(1), Validators.required]),
-            bairro: this.fb.control(this.unidade.endereco.bairro, [Validators.minLength(2), Validators.maxLength(50)]),
-            complemento: this.fb.control(this.unidade.endereco.complemento, [Validators.minLength(2), Validators.maxLength(50)]),
-            cidade: this.fb.control(this.unidade.endereco.cidade, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
-            uf: this.fb.control(this.unidade.endereco.uf, [Validators.minLength(2), Validators.maxLength(2), Validators.required]),
-            latitude: this.fb.control( this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
-            longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required])
-         });
-
       this.unidadeService.findUnidadeByUuid(this.uuid).subscribe((data) => {
          this.unidade = data;
+         this.unidadeId = data.id;
+         console.log(this.unidade)
+         this.unidade.idUnidadeGerenciadora = data.unidadeGerenciadora?.id;
          this.selecionaGerenciadora()
-         this.unidade.idUnidadeGerenciadora = this.unidade.unidadeGerenciadora?.id;
-         this.formGroup.patchValue(this.unidade);
       });
       this.usuarioService.findRepresentantesUnidade(this.uuid).subscribe((data) => {
          this.representantes = data;
          this.unidade.usuarios = data;
-      })
+      });
+      this.formGroup = this.fb.group({
+         id:[this.unidade.id],
+         nome: this.fb.control(this.unidade.nome, [Validators.minLength(2), Validators.maxLength(100), Validators.required]),
+         tipo: this.fb.control(this.unidade.tipo, [Validators.minLength(2), Validators.required]),
+         idUnidadeGerenciadora: this.fb.control(this.unidade.idUnidadeGerenciadora, [Validators.required]),
+         cep: this.fb.control(this.unidade.endereco.cep, [ Validators.required, Validators.minLength(8), Validators.maxLength(10) ]),
+         rua: this.fb.control( this.unidade.endereco.rua, [Validators.minLength(2),Validators.maxLength(70), Validators.required]),
+         numero: this.fb.control(this.unidade.endereco.numero, [ Validators.minLength(1), Validators.required]),
+         bairro: this.fb.control(this.unidade.endereco.bairro, [Validators.minLength(2), Validators.maxLength(50)]),
+         complemento: this.fb.control(this.unidade.endereco.complemento, [Validators.minLength(2), Validators.maxLength(50)]),
+         cidade: this.fb.control(this.unidade.endereco.cidade, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
+         uf: this.fb.control(this.unidade.endereco.uf, [Validators.minLength(2), Validators.maxLength(2), Validators.required]),
+         latitude: this.fb.control( this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
+         longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required])
+      });
    }
    ngOnInit() {
       this.unidadeService.findTiposUnidades().subscribe((data)=>{
@@ -105,16 +106,18 @@ export class FormEditarUnidadeComponent implements OnInit {
             this.tipoUnidade.push({label:tipo.nome?.toString() , value:tipo.tipo});
          });
       });
-
+      this.selecionaGerenciadora();
    }
 
 
    selecionaGerenciadora() {
       this.unidades = [];
-      switch(this.tipoUnidadeSelect.getOptionSelected()){
+      let tipo;
+      this.tipoUnidadeSelect.getOptionSelected().length > 0?tipo = this.tipoUnidadeSelect.getOptionSelected(): tipo = this.unidade.tipo;
+      switch(tipo){
          case 'PS':
             this.validarUc = false;
-            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
+            this.formGroup.get("tipo")?.setValue(tipo);
             this.unidadeService.getGerenciadoras("UC").subscribe((data) => {
                this.unidadesGerenciadoras = data;
                this.unidadesGerenciadoras.forEach((uni)=>{
@@ -124,7 +127,7 @@ export class FormEditarUnidadeComponent implements OnInit {
             break;
          case 'SR':
             this.validarUc = false;
-            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
+            this.formGroup.get("tipo")?.setValue(tipo);
             this.unidadeService.getGerenciadoras("UC").subscribe((data) => {
                this.unidadesGerenciadoras = data;
                this.unidadesGerenciadoras.forEach((uni)=>{
@@ -134,7 +137,7 @@ export class FormEditarUnidadeComponent implements OnInit {
             break;
          case 'IVZ':
             this.validarUc = false;
-            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
+            this.formGroup.get("tipo")?.setValue(tipo);
             this.unidadeService.getGerenciadoras("SR").subscribe((data) => {
                this.unidadesGerenciadoras = data;
                this.unidadesGerenciadoras.forEach((uni)=>{
@@ -144,7 +147,7 @@ export class FormEditarUnidadeComponent implements OnInit {
             break;
          case 'SN':
             this.validarUc = false;
-            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
+            this.formGroup.get("tipo")?.setValue(tipo);
             this.unidadeService.getGerenciadoras("MPA").subscribe((data) => {
                this.unidadesGerenciadoras = data;
                this.unidadesGerenciadoras.forEach((uni)=>{
@@ -154,7 +157,7 @@ export class FormEditarUnidadeComponent implements OnInit {
             break;
          case 'DP':
             this.validarUc = false;
-            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
+            this.formGroup.get("tipo")?.setValue(tipo);
             this.unidadeService.getGerenciadoras("SN").subscribe((data) => {
                this.unidadesGerenciadoras = data;
                this.unidadesGerenciadoras.forEach((uni)=>{
@@ -164,7 +167,7 @@ export class FormEditarUnidadeComponent implements OnInit {
             break;
          case 'SFP':
             this.validarUc = false;
-            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
+            this.formGroup.get("tipo")?.setValue(tipo);
             this.unidadeService.getGerenciadoras("MPA").subscribe((data) => {
                this.unidadesGerenciadoras = data;
                this.unidadesGerenciadoras.forEach((uni)=>{
@@ -176,7 +179,6 @@ export class FormEditarUnidadeComponent implements OnInit {
             this.validarUc = true;
             break;
       }
-      console.log(this.unidades);
    }
 
 
@@ -203,8 +205,6 @@ export class FormEditarUnidadeComponent implements OnInit {
    }
 
    receberNovoUsuario(novoUsuario: Usuario) {
-      console.log("parte 1")
-      console.log(novoUsuario);
       this.representante = novoUsuario;
       const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, novoUsuario));
       if(!jaExiste){
@@ -214,8 +214,6 @@ export class FormEditarUnidadeComponent implements OnInit {
    }
 
    receberForm(form: FormGroup){
-      console.log("parte 2")
-      console.log(form);
       this.formRepresentante = form;
       this.representante.nome = this.formRepresentante.get('nome')?.value;
       this.representante.cpf = this.formRepresentante.get('cpf')?.value;
@@ -240,21 +238,22 @@ export class FormEditarUnidadeComponent implements OnInit {
    salvar() {
       this.loadingService.show = true;
       this.unidade = this.formGroup.value;
-      console.log(this.unidade);
+      this.unidade.id = this.unidadeId;
+      this.unidade.idUnidadeGerenciadora = this.gerenciadoraSelect.getOptionSelected();
       this.unidade.usuarios = this.representantes;
-      this.unidadeService.update(this.unidade).subscribe(mensagem => {
-         if(mensagem.status == 'SUCCESS'){
-            Swal.fire('Ok', 'Unidade Atualizada com sucesso!', 'success').then(()=>{
-               this.loadingService.show = false;
-               this.router.navigate(['/portal-admin/unidades']);
-            });
-         }else{
-            Swal.fire('Ops...', 'Houve uma falha!', 'error').then(()=>{
-               this.loadingService.show = false;
-               this.router.navigate(['/portal-admin/unidades']);
-            });
-         }
-      });
+         this.unidadeService.update(this.unidade).subscribe(mensagem => {
+            if(mensagem.status == 'SUCCESS'){
+               Swal.fire('Ok', 'Unidade Atualizada com sucesso!', 'success').then(()=>{
+                  this.loadingService.show = false;
+                  this.router.navigate(['/portal-admin/unidades']);
+               });
+            }else{
+               Swal.fire('Ops...', 'Houve uma falha!', 'error').then(()=>{
+                  this.loadingService.show = false;
+                  this.router.navigate(['/portal-admin/unidades']);
+               });
+            }
+         });
       // setTimeout(() => {
       //    this.loadingService.show = false;
       //    this.router.navigate(['/portal-admin/unidades']);

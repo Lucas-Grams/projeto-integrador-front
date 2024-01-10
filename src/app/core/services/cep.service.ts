@@ -29,22 +29,22 @@ export class CepService {
       return this.http.get<ViaCEPResponse>(this.URL.replace('${CEP}', cep));
    }
 
-   // findAddress(end: Endereco, onComplete?: () => void): Endereco {
-   //    // quase sempre o número será undefined, pois o usuário preenche o cep antes dele
-   //    const address = [end.rua, end.numero || '', end.bairro, end.cidade, end.uf].join(' ');
-   //    new google.maps.Geocoder().geocode({'address': address}, (results, status) => {
-   //       if (status === google.maps.GeocoderStatus.OK) {
-   //          end.latitude = results[0].geometry.location.lat().toString();
-   //          end.longitude = results[0].geometry.location.lng().toString();
-   //       } else {
-   //          end.longitude = '-29.722893161784278';
-   //          end.latitude = '-53.718200838623034';
-   //       }
-   //       if (onComplete) {
-   //          onComplete();
-   //       }
-   //    });
-   //    return end;
-   // }
+   findAddress(end: Endereco, onComplete?: () => void): Endereco {
+      // quase sempre o número será undefined, pois o usuário preenche o cep antes dele
+      const address = [end.rua, end.numero || '', end.bairro, end.cidade, end.uf].join(' ');
+      new google.maps.Geocoder().geocode({'address': address}, (results, status) => {
+         if (status === google.maps.GeocoderStatus.OK) {
+            end.latitude = results[0].geometry.location.lat().toString();
+            end.longitude = results[0].geometry.location.lng().toString();
+         } else {
+            end.longitude = '-29.722893161784278';
+            end.latitude = '-53.718200838623034';
+         }
+         if (onComplete) {
+            onComplete();
+         }
+      });
+      return end;
+   }
 
 }

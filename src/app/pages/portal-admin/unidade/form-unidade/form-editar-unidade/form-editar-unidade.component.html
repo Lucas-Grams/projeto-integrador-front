@@ -17,6 +17,7 @@
                <div class="br-select">
                   <div class="br-input">
                      <br-select-pnip
+                        [disabled]="!isEdit"
                         id="tipoUnidade"
                         label="Tipo de Unidade"
                         [options]="tipoUnidade"
@@ -37,10 +38,11 @@
                         <div class="br-select">
                            <div class="br-input">
                               <br-select-pnip
+                                 [disabled]="!isEdit"
                                  id="idUnidadeGerenciadora"
                                  label="Unidade Gerenciadora"
                                  [options]="unidades"
-                                 [optionSelected]="unidades.id"
+                                 [optionSelected]="unidade.idUnidadeGerenciadora"
                                  #gerenciadoraSelect>
                               </br-select-pnip>
                            </div>
@@ -53,58 +55,51 @@
          <!-- nome/cep -->
          <div class="row mb-2">
 
-            <div class="col-4">
-               <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"
+            <div class="col-2">
+               <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"
                          [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (change)="validaCEP()"
                          (ngModelChange)="validaCEP()" [(ngModel)]="unidade.endereco.cep"/>
                <ng-container
                   *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
-
             </div>
-         </div>
-
-         <!-- rua/numero/bairro -->
-         <div class="row mb-2">
-            <div class="col-6">
-               <br-input density="small" name="rua" label="Rua" formControlName="rua"
+            <div class="col-8">
+               <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="rua" label="Rua" formControlName="rua"
                          [attr.state]="validatorsFormsUtils.getStateOfField('rua')" [(ngModel)]="unidade.endereco.rua"/>
             </div>
             <div class="col-2">
-               <br-input density="small" name="numero" label="Número" formControlName="numero" type="text"
+               <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="numero" label="Número" formControlName="numero" type="text"
                          [attr.state]="validatorsFormsUtils.getStateOfField('numero')"
                          [(ngModel)]="unidade.endereco.numero"/>
-            </div>
-            <div class="col-4">
-               <br-input density="small" name="bairro" label="Bairro" formControlName="bairro"
-                         [(ngModel)]="unidade.endereco.bairro"/>
             </div>
          </div>
 
          <!-- complemento/uf/cidade -->
          <div class="row mb-2">
             <div class="col-4">
-               <br-input density="small" name="complemento" label="Complemento" formControlName="complemento"
+               <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="complemento" label="Complemento" formControlName="complemento"
                          [(ngModel)]="unidade.endereco.complemento"/>
             </div>
             <div class="col-4">
-               <div class="br-select">
+               <div class="br-input">
+                  <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="municipio" label="Município" formControlName="cidade"
+                            [attr.state]="validatorsFormsUtils.getStateOfField('cidade')"
+                            [(ngModel)]="unidade.endereco.cidade"/>
+               </div>
+            </div>
+            <div class="col-1">
                   <div class="br-input">
-                     <br-input density="small" name="uf" label="UF" formControlName="uf"
+                     <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="uf" label="UF" formControlName="uf"
                                [attr.state]="validatorsFormsUtils.getStateOfField('uf')"
                                [(ngModel)]="unidade.endereco.uf"/>
+                  </div>
+            </div>
+            <div class="col-3">
+               <div class="br-input">
+                  <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="coordenadas" label="Coordenadas"
+                            />
+               </div>
+            </div>
 
-                  </div>
-               </div>
-            </div>
-            <div class="col-4">
-               <div class="br-select">
-                  <div class="br-input">
-                     <br-input density="small" name="municipio" label="Município" formControlName="cidade"
-                               [attr.state]="validatorsFormsUtils.getStateOfField('cidade')"
-                               [(ngModel)]="unidade.endereco.cidade"/>
-                  </div>
-               </div>
-            </div>
          </div>
       </form>
    </ng-container>
