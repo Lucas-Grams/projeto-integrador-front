@@ -12,8 +12,11 @@ import {UsuarioService} from "../../../../../core/services/usuario.service";
 import Swal from "sweetalert2";
 import {BrSelectComponent} from "../../../../../shared/br-select/br-select.component";
 import {FormRepresentanteUnidadeComponent} from "../form-representante-unidade/form-representante-unidade.component";
+import {InfoWindow} from "@ngui/map";
 
-
+interface Marker {
+   object: google.maps.Marker,
+}
 @Component({
    selector: 'pnip-admin-form-editar-unidade',
    templateUrl: './form-editar-unidade.component.html',
@@ -38,12 +41,21 @@ export class FormEditarUnidadeComponent implements OnInit {
       }
    ];
 
+   @ViewChild('infoWindow') infoWindow?: InfoWindow;
+   searchCoord: boolean = false;
+   mapZoom: number;
+   mapMarkerVisible?: boolean;
+   map: google.maps.Map | null = null;
+   marker: { lat: any, lng: any } = { lat: '', lng: '' };
+   latLng: string = '';
+
    isEdit: boolean = false;
    public formGroup: FormGroup;
    unidade: Unidade;
    unidadesGerenciadoras: Unidade[] = [];
    uuid: string = '';
    unidadeId?:number;
+   unidadeGerenciadoraId?:number;
 
    validarUc: boolean = false;
 
@@ -73,17 +85,6 @@ export class FormEditarUnidadeComponent implements OnInit {
          this.uuid = param['uuid'];
       });
 
-      this.unidadeService.findUnidadeByUuid(this.uuid).subscribe((data) => {
-         this.unidade = data;
-         this.unidadeId = data.id;
-         console.log(this.unidade)
-         this.unidade.idUnidadeGerenciadora = data.unidadeGerenciadora?.id;
-         this.selecionaGerenciadora()
-      });
-      this.usuarioService.findRepresentantesUnidade(this.uuid).subscribe((data) => {
-         this.representantes = data;
-         this.unidade.usuarios = data;
-      });
       this.formGroup = this.fb.group({
          id:[this.unidade.id],
          nome: this.fb.control(this.unidade.nome, [Validators.minLength(2), Validators.maxLength(100), Validators.required]),
@@ -99,6 +100,26 @@ export class FormEditarUnidadeComponent implements OnInit {
          latitude: this.fb.control( this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
          longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required])
       });
+      this.unidadeService.findUnidadeByUuid(this.uuid).subscribe((data) => {
+         this.unidade = data;
+         this.unidadeId = data.id;
+         console.log(this.unidade)
+         this.marker.lat = this.unidade.endereco.latitude.toString();
+         this.marker.lng = this.unidade.endereco.longitude.toString();
+         this.formGroup.get('latitude')?.setValue(this.marker.lat);
+         this.formGroup.get('longitude')?.setValue(this.marker.lng);
+         this.latLng = this.marker.lat + ', ' + this.marker.lng;
+         this.unidade.idUnidadeGerenciadora = data.unidadeGerenciadora?.id;
+         this.unidadeGerenciadoraId =  data.unidadeGerenciadora?.id;
+         this.selecionaGerenciadora()
+      });
+      this.usuarioService.findRepresentantesUnidade(this.uuid).subscribe((data) => {
+         this.representantes = data;
+         this.unidade.usuarios = data;
+      });
+      this.mapZoom = 6;
+      this.mapMarkerVisible = false;
+      this.searchCoord = false;
    }
    ngOnInit() {
       this.unidadeService.findTiposUnidades().subscribe((data)=>{
@@ -177,6 +198,7 @@ export class FormEditarUnidadeComponent implements OnInit {
             break;
          default:
             this.validarUc = true;
+            this.formGroup.get("tipo")?.setValue(tipo);
             break;
       }
    }
@@ -192,16 +214,36 @@ export class FormEditarUnidadeComponent implements OnInit {
                this.formGroup.get('rua')?.setValue(response.logradouro);
                this.formGroup.get('cidade')?.setValue(response.localidade);
                this.formGroup.get('uf')?.setValue(response.uf);
+               this.formGroup.get('bairro')?.setValue(response.bairro);
+               this.unidade.endereco.rua = response.logradouro;
+               this.unidade.endereco.cidade = response.localidade;
+               this.unidade.endereco.uf = response.uf;
+               this.unidade.endereco.bairro = response.bairro;
+               this.cepService.findAddress(this.unidade.endereco, () => {
+                  this.marker.lat = this.unidade.endereco.latitude.toString();
+                  this.marker.lng = this.unidade.endereco.longitude.toString();
+                  this.formGroup.get('latitude')?.setValue(this.marker.lat);
+                  this.formGroup.get('longitude')?.setValue(this.marker.lng);
+                  this.latLng = this.marker.lat + ', ' + this.marker.lng;
+               });
             }
          });
       }
+   }
 
+   moveuPontoMaps(event:any) {
+      this.latLng = event.latLng.toString().replace(/[()]/g, '');
+      const [lat, lng] = this.latLng.split(',').map(coord => coord.trim());
+      this.marker.lat = lat;
+      this.marker.lng = lng;
+      this.unidade.endereco.latitude = this.marker.lat;
+      this.unidade.endereco.longitude = this.marker.lng;
+      this.formGroup.get('latitude')?.setValue(this.marker.lat);
+      this.formGroup.get('longitude')?.setValue(this.marker.lng);
    }
 
    editar(){
-      console.log(this.isEdit)
       !this.isEdit? this.isEdit = true: this.isEdit = false;
-      console.log(this.isEdit)
    }
 
    receberNovoUsuario(novoUsuario: Usuario) {
@@ -239,8 +281,12 @@ export class FormEditarUnidadeComponent implements OnInit {
       this.loadingService.show = true;
       this.unidade = this.formGroup.value;
       this.unidade.id = this.unidadeId;
-      this.unidade.idUnidadeGerenciadora = this.gerenciadoraSelect.getOptionSelected();
+      this.unidade.idUnidadeGerenciadora = this.unidadeGerenciadoraId;
+      if(this.gerenciadoraSelect) {
+         this.formGroup.get("idUnidadeGerenciadora")?.setValue(this.gerenciadoraSelect.getOptionSelected());
+      }
       this.unidade.usuarios = this.representantes;
+      console.log(this.unidade)
          this.unidadeService.update(this.unidade).subscribe(mensagem => {
             if(mensagem.status == 'SUCCESS'){
                Swal.fire('Ok', 'Unidade Atualizada com sucesso!', 'success').then(()=>{

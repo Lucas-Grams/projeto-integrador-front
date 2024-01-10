@@ -23,8 +23,7 @@ import {Subscription} from "rxjs";
 declare var swal: any;
 
 interface Marker {
-   object?: google.maps.Marker,
-   estabelecimento: any,
+   object: google.maps.Marker,
 }
 @Component({
    selector: 'pnip-admin-form-unidade',
@@ -52,27 +51,13 @@ export class FormUnidadeComponent implements OnInit{
       }
    ];
 
-   markers?: Marker[];
-   markerMapa?: string;
-   markerSda?: string;
    @ViewChild('infoWindow') infoWindow?: InfoWindow;
-   maskLat: '00º00\'00.00"S' | '-00.000000' = '00º00\'00.00"S';
-   maskLng: '00º00\'00.00"W' | '-00.000000' = '00º00\'00.00"W';
-   special = ['º', '\'', '.', '"', '-', 'S', 'W'];
-   //formato = FormatoGeo.DMS;
-   //readonly formatos: string[] = Object.values(FormatoGeo);
-   //@ViewChildren(InputComponent) inputs: QueryList<InputComponent>;
    searchCoord: boolean = false;
-   pos?: google.maps.LatLng;
    mapZoom: number = 16;
    mapMarkerVisible?: boolean;
    map: google.maps.Map | null = null;
-   cidSubscription: Subscription | null = null;
-   coordSearch = {
-      lat: '',
-      long: ''
-   };
    marker: { lat: any, lng: any } = { lat: '', lng: '' };
+   latLng: string = '';
 
 
    formGroup: FormGroup;
@@ -132,7 +117,9 @@ export class FormUnidadeComponent implements OnInit{
 
    selecionaGerenciadora() {
       this.unidades = [];
-      switch(this.tipoUnidadeSelect.getOptionSelected()){
+      let tipo;
+      this.tipoUnidadeSelect.getOptionSelected().length > 0?tipo = this.tipoUnidadeSelect.getOptionSelected(): tipo = this.unidade.tipo;
+      switch(tipo){
          case 'PS':
             this.validarUc = false;
             this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
@@ -195,9 +182,9 @@ export class FormUnidadeComponent implements OnInit{
             break;
          default:
             this.validarUc = true;
+            this.formGroup.get("tipo")?.setValue(tipo);
             break;
       }
-      console.log(this.unidades);
    }
 
 
@@ -211,22 +198,30 @@ export class FormUnidadeComponent implements OnInit{
                this.formGroup.get('rua')?.setValue(response.logradouro);
                this.formGroup.get('cidade')?.setValue(response.localidade);
                this.formGroup.get('uf')?.setValue(response.uf);
+               this.formGroup.get('bairro')?.setValue(response.bairro);
+               this.unidade.endereco.rua = response.logradouro;
+               this.unidade.endereco.cidade = response.localidade;
+               this.unidade.endereco.uf = response.uf;
+               this.unidade.endereco.bairro = response.bairro;
                this.cepService.findAddress(this.unidade.endereco, () => {
                   this.marker.lat = this.unidade.endereco.latitude.toString();
                   this.marker.lng = this.unidade.endereco.longitude.toString();
                   this.formGroup.get('latitude')?.setValue(this.marker.lat);
                   this.formGroup.get('longitude')?.setValue(this.marker.lng);
+                  this.latLng = this.marker.lat + ', ' + this.marker.lng;
                });
-
             }
          });
       }
 
    }
 
-   moveuPontoMaps({target: marker}) {
-      this.marker.lat = parseFloat(marker.getPosition().lat());
-      this.marker.lng = parseFloat(marker.getPosition().lng());
+   moveuPontoMaps(event:any) {
+      this.latLng = event.latLng.toString().replace(/[()]/g, '');
+      const [lat, lng] = this.latLng.split(',').map(coord => coord.trim());
+
+      this.marker.lat = lat;
+      this.marker.lng = lng;
       this.unidade.endereco.latitude = this.marker.lat;
       this.unidade.endereco.longitude = this.marker.lng;
       this.formGroup.get('latitude')?.setValue(this.marker.lat);
@@ -267,13 +262,13 @@ export class FormUnidadeComponent implements OnInit{
 
    salvar() {
       this.loadingService.show = true;
-      if(this.gerenciadoraSelect.getOptionSelected()) {
+      if(this.gerenciadoraSelect) {
          this.formGroup.get("idUnidadeGerenciadora")?.setValue(this.gerenciadoraSelect.getOptionSelected());
       }
       this.unidade = this.formGroup.value;
       console.log(this.unidade);
       this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
-        // swal.fire(mensagem.msg).then();
+         swal.fire(mensagem.msg).then();
       });
       setTimeout(() => {
          this.loadingService.show = false;

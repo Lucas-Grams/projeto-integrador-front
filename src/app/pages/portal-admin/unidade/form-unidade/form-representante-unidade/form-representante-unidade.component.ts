@@ -23,6 +23,8 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
    @Output() newUserEmitter: EventEmitter<Usuario> = new EventEmitter<Usuario>();
    @ViewChild('userSelect', {static: false}) userSelect!: BrSelectComponent;
    users:any = [];
+   @Input() isEdit?:boolean;
+   @Input() uuid?:String;
 
    constructor(private fb: FormBuilder,
                private cepService: CepService,
@@ -39,12 +41,14 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
    }
 
    ngOnInit() {
-      this.usuarioService.findAll().subscribe((data) => {
-         this.usuarios = data;
-         this.usuarios.forEach((user) => {
-            this.users.push({label:user.nome + '-' + user.email, value: user.id})
-         })
-      })
+      if(this.isEdit) {
+         this.usuarioService.findRepresentantesUnidade(this.uuid).subscribe((data) => {
+            this.usuarios = data;
+            this.usuarios.forEach((user) => {
+               this.users.push({label: user.nome + '-' + user.email, value: user.id})
+            });
+         });
+      }
    }
 
    // getAddressByCep() {

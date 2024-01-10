@@ -96,11 +96,47 @@
             <div class="col-3">
                <div class="br-input">
                   <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="coordenadas" label="Coordenadas"
-                            />
+                           [value]="latLng" />
                </div>
             </div>
 
          </div>
+
+         <div class="form-row">
+            <!-- MAPA -->
+            <ng-container *ngIf="this.unidade.endereco.latitude && this.unidade.endereco.longitude">
+               <div class="form-group ">
+                  <ngui-map class="gmap"
+                            zoom="14"
+                            center="{{unidade.endereco.latitude }},{{
+                                  unidade.endereco.longitude
+                               }}"
+                            [fullscreenControl]="true"
+                            [fullscreenControlOptions]="{ position: 'TOP_RIGHT' }"
+                  >
+                     <marker
+                        position="{{ unidade.endereco.latitude }}, {{
+                                     unidade.endereco.longitude
+                                  }}"
+                        draggable="true"
+                        (dragend)="moveuPontoMaps($event)"
+                     >
+                     </marker>
+                  </ngui-map>
+               </div>
+               <div class="col-12 text-center">
+                  <p>
+                     <label>Latitude:</label>
+                     {{ unidade.endereco.latitude }}
+                     <span class="ml-3"></span>
+                     <label>Longitude:</label>
+                     {{ unidade.endereco.longitude }}
+                  </p>
+               </div>
+
+            </ng-container>
+         </div>
+
       </form>
    </ng-container>
 
@@ -109,6 +145,8 @@
    <pnip-admin-form-representante-unidade
       (emitirForm)="receberForm($event)"
       (newUserEmitter)="receberNovoUsuario($event)"
+      (isEdit) = "false"
+      (uuid) = "unidade.uuid"
       #formUser>
    </pnip-admin-form-representante-unidade>
 

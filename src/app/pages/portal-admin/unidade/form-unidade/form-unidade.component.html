@@ -82,23 +82,19 @@
             </div>
          </div>
 
-         <div class="col-2">
-            <div class="br-select">
+         <div class="col-1">
                <div class="br-input">
                   <br-input density="small" name="uf" label="UF" formControlName="uf"
                             [attr.state]="validatorsFormsUtils.getStateOfField('uf')"/>
                   <ng-container
                      *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'uf'}"></ng-container>
                </div>
-            </div>
          </div>
 
-         <div class="col-2">
-            <div class="br-select">
+         <div class="col-3">
                <div class="br-input">
-                  <br-input density="small" name="coordenadas" label="Coordenadas"  type="number"/>
+                  <br-input density="small" name="coordenadas" label="Coordenadas"  type="text" [value]="latLng"/>
                </div>
-            </div>
          </div>
 
 
@@ -110,19 +106,6 @@
          <!-- MAPA -->
          <ng-container *ngIf="this.unidade.endereco.latitude && this.unidade.endereco.longitude">
             <div class="form-group ">
-               <!-- INFO -->
-               <div class="alert alert-secondary alert-bold" role="alert">
-                  <div class="alert-icon">
-                     <i class="flaticon-questions-circular-button"></i>
-                  </div>
-                  <div class="alert-text">
-                     <strong>Atenção!</strong>&nbsp;Mova o marcador do
-                     mapa para&nbsp;<strong>travar</strong>&nbsp; os
-                     pontos de latitude e longitude da &nbsp;<strong
-                  >localização da unidade</strong
-                  >.
-                  </div>
-               </div>
                <ngui-map class="gmap"
                          zoom="14"
                          center="{{unidade.endereco.latitude }},{{
@@ -155,13 +138,14 @@
       </div>
 
 </form>
-<!-- aqui vai o mapa ainda-->
 
 <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Adicionar Usuários</h2>
 
 <pnip-admin-form-representante-unidade
    (emitirForm)="receberForm($event)"
    (newUserEmitter)="receberNovoUsuario($event)"
+   (isEdit) = "false"
+   (uuid) = "unidade.uuid"
    #formUser>
 </pnip-admin-form-representante-unidade>
 
