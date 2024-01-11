@@ -114,6 +114,7 @@ export class FormUnidadeComponent implements OnInit{
             this.tipoUnidade.push({label:tipo.nome?.toString() , value:tipo.tipo});
          });
       });
+      this.representante = new Usuario();
    }
 
 
@@ -221,7 +222,6 @@ export class FormUnidadeComponent implements OnInit{
    moveuPontoMaps(event:any) {
       this.latLng = event.latLng.toString().replace(/[()]/g, '');
       const [lat, lng] = this.latLng.split(',').map(coord => coord.trim());
-
       this.marker.lat = lat;
       this.marker.lng = lng;
       this.unidade.endereco.latitude = this.marker.lat;
@@ -230,46 +230,49 @@ export class FormUnidadeComponent implements OnInit{
       this.formGroup.get('longitude')?.setValue(this.marker.lng);
    }
    receberNovoUsuario(novoUsuario: Usuario) {
-
       this.representante = novoUsuario;
-      this.representante.permissao?.push('so');
-      console.log(novoUsuario);
+      console.log(this.representante.permissao)
       const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, novoUsuario));
       if(!jaExiste){
          this.unidade.usuarios.push(this.representante);
       }
    }
 
-   receberForm(form: FormGroup){
-      this.formRepresentante = form;
-      this.representante.nome = this.formRepresentante.get('nome')?.value;
-      this.representante.cpf = this.formRepresentante.get('cpf')?.value;
-      this.representante.email = this.formRepresentante.get('email')?.value;
-      this.representante.permissao?.push('so');
-      console.log(this.representante);
-      const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, this.representante));
-      if(!jaExiste){
-         this.unidade.usuarios.push(this.representante);
-         console.log(this.unidade.usuarios)
-      }
-      this.representante = new Usuario();
-   }
+   // receberForm(form: FormGroup){
+   //    this.formRepresentante = form;
+   //    this.representante.nome = this.formRepresentante.get('nome')?.value;
+   //    this.representante.cpf = this.formRepresentante.get('cpf')?.value;
+   //    this.representante.email = this.formRepresentante.get('email')?.value;
+   //    this.representante.permissao?.push('so');
+   //    console.log(this.representante);
+   //    const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, this.representante));
+   //    if(!jaExiste){
+   //       this.unidade.usuarios.push(this.representante);
+   //       console.log(this.unidade.usuarios)
+   //    }
+   //    this.representante = new Usuario();
+   // }
    comparaUsuarios(user1: Usuario, user2: Usuario){
       return user1.cpf == user2.cpf && user1.email == user2.email;
    }
    usuarioIsRepresentante(user: Usuario){
-      console.log("testou");
-      let position: number = 0;
-      user.permissao?.includes('representante')? position = user.permissao?.indexOf('representante'):  user.permissao?.push('representante');
-      if(position > 0){
-         user.permissao?.splice(position, 1);
-      }
+         if(!user.permissao?.includes('representante')){
+            user.permissao.push('representante');
+            console.log(user.permissao);
+            return;
+         }else{
+            let position: number = 0;
+               position = user.permissao?.indexOf('representante');
+            if(position){
+               user.permissao?.splice(position, 1);
+               console.log(user.permissao);
+            }
+            return;
+         }
    }
 
    isRepresentante(user: Usuario){
-      console.log("testou1");
-      console.log(user.permissao?.includes('representante')?  true:  false)
-      return user.permissao?.includes('representante')?  true:  false;
+      return user.permissao?.includes('representante') ? true : false;
    }
 
 
@@ -288,17 +291,17 @@ export class FormUnidadeComponent implements OnInit{
       }
       this.unidade = this.formGroup.value;
       console.log(this.unidade);
-      //if (this.formGroup.valid) {
-         // this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
-         //    swal.fire(mensagem.msg).then();
-         // });
-         // setTimeout(() => {
-         //    this.loadingService.show = false;
-         //    this.router.navigate(['/portal-admin/unidades']);
-         // }, 1200);
-      //}else{
-         //Swal.fire('Ops...', 'Formulário incompleto!', 'error').then();
-      //}
+      if (this.formGroup.valid) {
+         this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
+            swal.fire(mensagem.msg).then();
+         });
+         setTimeout(() => {
+            this.loadingService.show = false;
+            this.router.navigate(['/portal-admin/unidades']);
+         }, 1200);
+      }else{
+         Swal.fire('Ops...', 'Formulário incompleto!', 'error').then();
+      }
    }
 
 }

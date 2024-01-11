@@ -38,7 +38,7 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
 
       // this.formGroup2.valueChanges.subscribe(() => {
       //    this.emitirForm.emit(this.formGroup2);
-      // });
+      //       // });
    }
 
    ngOnInit() {
@@ -87,15 +87,14 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
       user.nome = this.formGroup2.get("nome")?.value;
       user.email = this.formGroup2.get("email")?.value;
       user.cpf = this.formGroup2.get("cpf")?.value;
-      this.newUsuario = user;
+      user.permissao.push('so');
+      this.newUsuario = Object.assign({}, user);
       this.emitirNovoUsuario();
    }
 
    emitirNovoUsuario() {
       if(this.novoUser){
-         if(this.formGroup2.valid) {
-            this.newUsuario = this.formGroup2.value;
-         }else{
+         if(!this.formGroup2.valid) {
             Swal.fire('Ops...', 'Dados do usuário incompletos!', 'error').then();
             return;
          }

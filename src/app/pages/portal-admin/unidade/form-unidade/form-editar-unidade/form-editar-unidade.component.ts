@@ -278,6 +278,28 @@ export class FormEditarUnidadeComponent implements OnInit {
       }
       this.representante = new Usuario();
    }
+
+   usuarioIsRepresentante(user: Usuario){
+      if(!user.permissao?.includes('representante')){
+         user.permissao.push('representante');
+         console.log(user.permissao);
+         return;
+      }else{
+         let position: number = 0;
+         position = user.permissao?.indexOf('representante');
+         if(position){
+            user.permissao?.splice(position, 1);
+            console.log(user.permissao);
+         }
+         return;
+      }
+   }
+
+   isRepresentante(user: Usuario){
+      return user.permissao?.includes('representante') ? true : false;
+   }
+
+
    comparaUsuarios(user1: Usuario, user2: Usuario){
       return user1.cpf == user2.cpf && user1.email == user2.email;
    }
