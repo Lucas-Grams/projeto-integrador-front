@@ -6,6 +6,7 @@ import {cepValidator} from "../../../../../utils/validators/cep.validator";
 import {Usuario} from "../../../../../core/models/usuario.model";
 import {UsuarioService} from "../../../../../core/services/usuario.service";
 import {BrSelectComponent} from "../../../../../shared/br-select/br-select.component";
+import Swal from "sweetalert2";
 @Component({
    selector: 'pnip-admin-form-representante-unidade',
    templateUrl: './form-representante-unidade.component.html',
@@ -71,8 +72,6 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
    }
 
    selecionaUsuario(id: number){
-      console.log("parte 3")
-      console.log(this.newUsuario)
       this.newUsuario = new Usuario();
       this.usuarios.forEach((us) => {
          if(us.id == this.userSelect.getOptionSelected()){
@@ -84,20 +83,22 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
    }
 
    adicionarNovoUsuario(){
-      console.log("parte 4")
-      console.log(this.newUsuario)
       let user = new Usuario();
       user.nome = this.formGroup2.get("nome")?.value;
       user.email = this.formGroup2.get("email")?.value;
       user.cpf = this.formGroup2.get("cpf")?.value;
       this.newUsuario = user;
-      console.log(this.newUsuario)
       this.emitirNovoUsuario();
    }
 
    emitirNovoUsuario() {
       if(this.novoUser){
-         this.newUsuario = this.formGroup2.value;
+         if(this.formGroup2.valid) {
+            this.newUsuario = this.formGroup2.value;
+         }else{
+            Swal.fire('Ops...', 'Dados do usuário incompletos!', 'error').then();
+            return;
+         }
       }
       if(this.newUsuario != null && this.newUsuario != undefined){
          this.newUserEmitter.emit(this.newUsuario);

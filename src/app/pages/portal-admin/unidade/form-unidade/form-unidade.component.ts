@@ -18,6 +18,8 @@ import {TipoUnidade} from "../../../../core/models/tipo-unidade.model";
 import {Location} from "@angular/common";
 import {InfoWindow} from "@ngui/map";
 import {Subscription} from "rxjs";
+import Swal from "sweetalert2";
+import {getTokenAtPosition} from "@angular/compiler-cli/src/ngtsc/util/src/typescript";
 
 
 declare var swal: any;
@@ -228,8 +230,10 @@ export class FormUnidadeComponent implements OnInit{
       this.formGroup.get('longitude')?.setValue(this.marker.lng);
    }
    receberNovoUsuario(novoUsuario: Usuario) {
-      console.log(novoUsuario);
+
       this.representante = novoUsuario;
+      this.representante.permissao?.push('so');
+      console.log(novoUsuario);
       const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, novoUsuario));
       if(!jaExiste){
          this.unidade.usuarios.push(this.representante);
@@ -237,20 +241,37 @@ export class FormUnidadeComponent implements OnInit{
    }
 
    receberForm(form: FormGroup){
-      console.log(form);
       this.formRepresentante = form;
       this.representante.nome = this.formRepresentante.get('nome')?.value;
       this.representante.cpf = this.formRepresentante.get('cpf')?.value;
       this.representante.email = this.formRepresentante.get('email')?.value;
+      this.representante.permissao?.push('so');
+      console.log(this.representante);
       const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, this.representante));
       if(!jaExiste){
          this.unidade.usuarios.push(this.representante);
+         console.log(this.unidade.usuarios)
       }
       this.representante = new Usuario();
    }
    comparaUsuarios(user1: Usuario, user2: Usuario){
       return user1.cpf == user2.cpf && user1.email == user2.email;
    }
+   usuarioIsRepresentante(user: Usuario){
+      console.log("testou");
+      let position: number = 0;
+      user.permissao?.includes('representante')? position = user.permissao?.indexOf('representante'):  user.permissao?.push('representante');
+      if(position > 0){
+         user.permissao?.splice(position, 1);
+      }
+   }
+
+   isRepresentante(user: Usuario){
+      console.log("testou1");
+      console.log(user.permissao?.includes('representante')?  true:  false)
+      return user.permissao?.includes('representante')?  true:  false;
+   }
+
 
 
    cancelarUsuario(user: Usuario){
@@ -262,18 +283,22 @@ export class FormUnidadeComponent implements OnInit{
 
    salvar() {
       this.loadingService.show = true;
-      if(this.gerenciadoraSelect) {
+      if (this.gerenciadoraSelect) {
          this.formGroup.get("idUnidadeGerenciadora")?.setValue(this.gerenciadoraSelect.getOptionSelected());
       }
       this.unidade = this.formGroup.value;
       console.log(this.unidade);
-      this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
-         swal.fire(mensagem.msg).then();
-      });
-      setTimeout(() => {
-         this.loadingService.show = false;
-         this.router.navigate(['/portal-admin/unidades']);
-      }, 1200);
+      //if (this.formGroup.valid) {
+         // this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
+         //    swal.fire(mensagem.msg).then();
+         // });
+         // setTimeout(() => {
+         //    this.loadingService.show = false;
+         //    this.router.navigate(['/portal-admin/unidades']);
+         // }, 1200);
+      //}else{
+         //Swal.fire('Ops...', 'Formulário incompleto!', 'error').then();
+      //}
    }
 
 }

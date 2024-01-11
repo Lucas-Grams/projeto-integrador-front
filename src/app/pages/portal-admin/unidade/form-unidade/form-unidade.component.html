@@ -162,7 +162,7 @@
          </thead>
          <tbody *ngFor="let usuario of unidade.usuarios">
          <tr>
-            <td><br-switch icon></br-switch></td>
+            <td><br-switch icon (click)="usuarioIsRepresentante(usuario)"  [checked]="isRepresentante(usuario)" ></br-switch></td>
             <td>{{usuario.nome}}</td>
             <td>{{usuario.cpf}}</td>
             <td>{{usuario.email}}</td>

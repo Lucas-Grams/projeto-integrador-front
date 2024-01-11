@@ -103,14 +103,9 @@ export class FormEditarUnidadeComponent implements OnInit {
       this.unidadeService.findUnidadeByUuid(this.uuid).subscribe((data) => {
          this.unidade = data;
          this.unidadeId = data.id;
-         console.log(this.unidade)
-         this.marker.lat = this.unidade.endereco.latitude.toString();
-         this.marker.lng = this.unidade.endereco.longitude.toString();
-         this.formGroup.get('latitude')?.setValue(this.marker.lat);
-         this.formGroup.get('longitude')?.setValue(this.marker.lng);
-         this.latLng = this.marker.lat + ', ' + this.marker.lng;
          this.unidade.idUnidadeGerenciadora = data.unidadeGerenciadora?.id;
          this.unidadeGerenciadoraId =  data.unidadeGerenciadora?.id;
+         this.validaCoordenadas();
          this.selecionaGerenciadora()
       });
       this.usuarioService.findRepresentantesUnidade(this.uuid).subscribe((data) => {
@@ -204,10 +199,15 @@ export class FormEditarUnidadeComponent implements OnInit {
    }
 
 
-   validaCEP() {
+   validaCEP(cepUnidade?: String) {
       const field = this.formGroup.get('cep');
-      if (!field?.value) return;
-      const cep = field?.value[0];
+      let cep;
+      if(cepUnidade){
+         cep = cepUnidade;
+      }else {
+         if (!field?.value) return;
+         cep = field?.value[0];
+      }
       if (cep.length === 9) {
          this.cepService.getAddrress(cep).subscribe(response => {
             if (response && !response.erro) {
@@ -228,6 +228,18 @@ export class FormEditarUnidadeComponent implements OnInit {
                });
             }
          });
+      }
+   }
+
+   validaCoordenadas(){
+      if(!this.unidade.endereco.latitude && !this.unidade.endereco.longitude){
+         this.validaCEP(this.unidade.endereco.cep);
+      }else{
+         this.marker.lat = this.unidade.endereco.latitude.toString();
+         this.marker.lng = this.unidade.endereco.longitude.toString();
+         this.formGroup.get('latitude')?.setValue(this.marker.lat);
+         this.formGroup.get('longitude')?.setValue(this.marker.lng);
+         this.latLng = this.marker.lat + ', ' + this.marker.lng;
       }
    }
 
@@ -286,20 +298,23 @@ export class FormEditarUnidadeComponent implements OnInit {
          this.formGroup.get("idUnidadeGerenciadora")?.setValue(this.gerenciadoraSelect.getOptionSelected());
       }
       this.unidade.usuarios = this.representantes;
-      console.log(this.unidade)
+      if(this.formGroup.valid) {
          this.unidadeService.update(this.unidade).subscribe(mensagem => {
-            if(mensagem.status == 'SUCCESS'){
-               Swal.fire('Ok', 'Unidade Atualizada com sucesso!', 'success').then(()=>{
+            if (mensagem.status == 'SUCCESS') {
+               Swal.fire('Ok', 'Unidade Atualizada com sucesso!', 'success').then(() => {
                   this.loadingService.show = false;
                   this.router.navigate(['/portal-admin/unidades']);
                });
-            }else{
-               Swal.fire('Ops...', 'Houve uma falha!', 'error').then(()=>{
+            } else {
+               Swal.fire('Ops...', 'Houve uma falha!', 'error').then(() => {
                   this.loadingService.show = false;
                   this.router.navigate(['/portal-admin/unidades']);
                });
             }
          });
+      }else{
+         Swal.fire('Ops...', 'Formulário incompleto!', 'error').then();
+      }
       // setTimeout(() => {
       //    this.loadingService.show = false;
       //    this.router.navigate(['/portal-admin/unidades']);
