@@ -75,9 +75,9 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
       this.newUsuario = new Usuario();
       this.usuarios.forEach((us) => {
          if(us.id == this.userSelect.getOptionSelected()){
-            if(!us.permissao){
-               us.permissao = [];
-               us.permissao.push('so');
+            if(!us.permissoes){
+               us.permissoes = [];
+               us.permissoes.push('so');
             }
             this.newUsuario = us;
          }
@@ -91,7 +91,7 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
       user.nome = this.formGroup2.get("nome")?.value;
       user.email = this.formGroup2.get("email")?.value;
       user.cpf = this.formGroup2.get("cpf")?.value;
-      user.permissao.push('so');
+      user.permissoes.push('so');
       this.newUsuario = Object.assign({}, user);
       this.emitirNovoUsuario();
    }

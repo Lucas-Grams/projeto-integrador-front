@@ -280,23 +280,23 @@ export class FormEditarUnidadeComponent implements OnInit {
    }
 
    usuarioIsRepresentante(user: Usuario){
-      if(!user.permissao?.includes('representante')){
-         user.permissao.push('representante');
-         console.log(user.permissao);
+      if(!user.permissoes?.includes('representante')){
+         user.permissoes.push('representante');
+         console.log(user.permissoes);
          return;
       }else{
          let position: number = 0;
-         position = user.permissao?.indexOf('representante');
+         position = user.permissoes?.indexOf('representante');
          if(position){
-            user.permissao?.splice(position, 1);
-            console.log(user.permissao);
+            user.permissoes?.splice(position, 1);
+            console.log(user.permissoes);
          }
          return;
       }
    }
 
    isRepresentante(user: Usuario){
-      return user.permissao?.includes('representante') ? true : false;
+      return user.permissoes?.includes('representante') ? true : false;
    }
 
 

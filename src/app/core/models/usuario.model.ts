@@ -10,5 +10,5 @@ export class Usuario{
    endereco?: Endereco;
    ativo?: boolean;
    uuid?: String;
-   permissao:String[] = [];
+   permissoes:String[] = [];
 }
