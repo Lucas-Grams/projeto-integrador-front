@@ -42,14 +42,14 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
    }
 
    ngOnInit() {
-      if(this.isEdit) {
-         this.usuarioService.findRepresentantesUnidade(this.uuid).subscribe((data) => {
+      //if(this.isEdit) {
+         this.usuarioService.findAll().subscribe((data) => {
             this.usuarios = data;
             this.usuarios.forEach((user) => {
                this.users.push({label: user.nome + '-' + user.email, value: user.id})
             });
          });
-      }
+      //}
    }
 
    // getAddressByCep() {
@@ -75,6 +75,10 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
       this.newUsuario = new Usuario();
       this.usuarios.forEach((us) => {
          if(us.id == this.userSelect.getOptionSelected()){
+            if(!us.permissao){
+               us.permissao = [];
+               us.permissao.push('so');
+            }
             this.newUsuario = us;
          }
       })
