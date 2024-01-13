@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {HabilitarTRDTO} from "../../../../../core/dtos/habilitar-tr.dto";
+import {PdfUtils} from "../../../../../utils/components/pdf.utils";
 
 @Component({
    selector: 'pnip-tr-form-revisar-solicitacao',
@@ -17,6 +18,10 @@ export class RevisarSolicitacaoComponent {
 
    removerEmbarcacao(index: number) {
       this.dto.embarcacoes = this.dto.embarcacoes.filter((e, i) => i !== index);
+   }
+
+   verPdf(base64: string) {
+      PdfUtils.openViewer(base64)
    }
 
    submit() {

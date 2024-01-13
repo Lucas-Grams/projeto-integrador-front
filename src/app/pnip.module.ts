@@ -14,7 +14,6 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./utils/interceptors/auth/auth.interceptor";
 import {AuthGuard} from "./utils/guards/auth/auth.guard";
 import {AuthServiceProvider} from "./core/services/auth/auth.service.provider";
-// import { AgmCoreModule } from '@agm/core';
 
 
 const browserWindow: any = window || {};
@@ -38,9 +37,6 @@ const browserWindow: any = window || {};
             sendAccessToken: true
          }
       }),
-      // AgmCoreModule.forRoot({
-      //    apiKey: 'AIzaSyCMyG1h3lMnkv9fYUelTjDe9IXwpxpa0-U'
-      // })
       HttpClientModule
    ],
 

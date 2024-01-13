@@ -70,7 +70,13 @@ export class DadosProfissionaisComponent implements OnInit {
       let selectedFile = event.target.files[0];
       if (selectedFile) {
          this.formGroup.get(attr)?.setValue(selectedFile.name);
-         console.log(selectedFile);
+         const fileReader = new FileReader();
+         fileReader.readAsDataURL(selectedFile);
+         fileReader.onload = () => {
+            const base64 = fileReader.result as string;
+            // @ts-ignore
+            this.dto[attr + 'Base64'] = base64;
+         };
       }
    }
 

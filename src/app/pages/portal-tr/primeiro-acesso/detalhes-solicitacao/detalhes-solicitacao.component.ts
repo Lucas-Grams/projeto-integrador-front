@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {LoadingService} from "../../../../core/services/loading.service";
 import {TrService} from "../../../../core/services/tr.service";
 import {HabilitarTRDTO} from "../../../../core/dtos/habilitar-tr.dto";
+import {PdfUtils} from "../../../../utils/components/pdf.utils";
 
 @Component({
    selector: 'pnip-tr-detalhes-solicitacao',
@@ -31,6 +32,7 @@ export class DetalhesSolicitacaoComponent implements OnInit {
       }
    ];
 
+   public uuid!: string;
    public solicitacao!: HabilitarTRDTO;
 
    constructor(private trService: TrService, private loadingService: LoadingService,
@@ -40,6 +42,7 @@ export class DetalhesSolicitacaoComponent implements OnInit {
       this.route.params.subscribe((params) => {
          const uuid = params['uuid'];
          if (uuid) {
+            this.uuid = uuid;
             this.getDetalhesSolicitacao(uuid);
          } else {
             this.voltar();
@@ -55,6 +58,14 @@ export class DetalhesSolicitacaoComponent implements OnInit {
          if (!solicitacao) {
             this.voltar();
          }
+      });
+   }
+
+   verPdf(filename: string) {
+      this.trService.downloadAnexo(this.uuid, filename).subscribe(response => {
+         const blob = new Blob([response], {type: 'application/pdf'});
+         const blobUrl = URL.createObjectURL(blob);
+         PdfUtils.openViewer(blobUrl);
       });
    }
 

@@ -1,0 +1,62 @@
+<div class="tab-panel">
+   <div class="col">
+      <div class="br-table" title="Solicitações em análise">
+         <div class="table-header">
+            <div class="top-bar">
+               <div class="table-title"></div>
+               <div class="actions-trigger text-nowrap">
+                  <button class="br-button circle" type="button" title="Ver mais opções" data-toggle="dropdown"
+                          data-target="target01-63583" aria-label="Ver mais opções">
+                     <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
+                  </button>
+                  <div class="br-list" id="target01-63583" hidden="hidden">
+                     <button class="br-item" type="button" data-density="small">Densidade alta
+                     </button>
+                     <span class="br-divider"></span>
+                     <button class="br-item" type="button" data-density="medium">Densidade média
+                     </button>
+                     <span class="br-divider"></span>
+                     <button class="br-item" type="button" data-density="large">Densidade baixa
+                     </button>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <table class="table" *ngIf="solicitacoes.length">
+            <thead class="thead-light">
+               <tr>
+                  <th class="text-blue-vivid-60 text-bold" scope="col">Data</th>
+                  <th class="text-blue-vivid-60 text-bold" scope="col">Tipo de Processo</th>
+                  <th class="text-blue-vivid-60 text-bold" scope="col">Protocolo</th>
+                  <th class="text-blue-vivid-60 text-bold" scope="col">Solicitante</th>
+                  <th class="text-blue-vivid-60 text-bold" scope="col">Status</th>
+                  <th class="text-blue-vivid-60 text-bold" scope="col"></th>
+               </tr>
+            </thead>
+            <tbody>
+               <ng-container *ngFor="let solicitacao of solicitacoes; let i = index;">
+                  <tr>
+                     <td>{{solicitacao.dataSolicitacao | date :'dd/MM/yyyy'}}</td>
+                     <td>Habilitação TR</td>
+                     <td>{{solicitacao.protocolo}}</td>
+                     <td>{{solicitacao.solicitante}}</td>
+                     <td>
+                        <pnip-status-solicitacao-utils [status]="solicitacao.status"/>
+                     </td>
+                     <td (click)="findSolicitacao(solicitacao.uuidSolicitacao)">
+                        <br-button icon label="Primary" type="tertiary" circle="true">
+                           <br-icon-base icon-name="eye" family-name="fas" class="text-info"/>
+                        </br-button>
+                     </td>
+                  </tr>
+               </ng-container>
+            </tbody>
+         </table>
+
+         <div *ngIf="solicitacoes.length === 0">
+            <p>Nenhum resultado encontrado.</p>
+         </div>
+
+      </div>
+   </div>
+</div>

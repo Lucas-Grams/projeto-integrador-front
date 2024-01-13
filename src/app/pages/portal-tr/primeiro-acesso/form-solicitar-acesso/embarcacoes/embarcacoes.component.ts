@@ -74,15 +74,20 @@ export class EmbarcacoesComponent {
    onDeclaracaoProprietarioSelected(event: any) {
       let selectedFile = event.target.files[0];
       if (selectedFile) {
-         this.dto.embarcacoes[this.declaracaoProprietarioIndex].declaracaoProprietario = selectedFile.name;
-         this.declaracaoProprietarioInput.nativeElement.value = null;
-         console.log(selectedFile, this.declaracaoProprietarioIndex);
+         const fileReader = new FileReader();
+         fileReader.readAsDataURL(selectedFile);
+         fileReader.onload = () => {
+            const base64 = fileReader.result as string;
+            this.dto.embarcacoes[this.declaracaoProprietarioIndex].declaracaoProprietario = selectedFile.name;
+            this.dto.embarcacoes[this.declaracaoProprietarioIndex].declaracaoProprietarioBase64 = base64;
+            this.declaracaoProprietarioInput.nativeElement.value = null;
+         };
       }
    }
 
    submit(goToStep = false) {
       this.isSubmit = true;
-      const isValid = this.dto.embarcacoes.filter(e => !e.declaracaoProprietario).length === 0;
+      const isValid = this.dto.embarcacoes.filter(e => !e.declaracaoProprietarioBase64).length === 0;
       if (isValid) {
          if (!goToStep) this.onSaveStep.emit();
       }
