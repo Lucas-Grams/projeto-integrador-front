@@ -4,12 +4,12 @@ import {LoadingService} from "../../../../core/services/loading.service";
 import {Router} from "@angular/router";
 import {Unidade} from "../../../../core/models/unidade.model";
 import {UnidadeService} from "../../../../core/services/unidade.service";
-import { ToastrService } from "ngx-toastr";
+import {ToastrService} from "ngx-toastr";
 import {CepService} from "../../../../core/services/cep.service";
 import {cpfValidator} from "../../../../utils/validators/cpf.validator";
 import {cepValidator} from "../../../../utils/validators/cep.validator";
 import {ValidatorsFormsUtils} from "../../../../utils/components/validators-forms.utils";
-import {Usuario} from "../../../../core/models/usuario.model";
+import {Permissao, Usuario} from "../../../../core/models/usuario.model";
 import {FormRepresentanteUnidadeComponent} from "./form-representante-unidade/form-representante-unidade.component";
 import {Endereco} from "../../../../core/models/endereco.model";
 import {BrSelectComponent} from "../../../../shared/br-select/br-select.component";
@@ -27,15 +27,16 @@ declare var swal: any;
 interface Marker {
    object: google.maps.Marker,
 }
+
 @Component({
    selector: 'pnip-admin-form-unidade',
    templateUrl: './form-unidade.component.html',
    styleUrls: [],
-   providers:[CepService]
+   providers: [CepService]
 
 })
 
-export class FormUnidadeComponent implements OnInit{
+export class FormUnidadeComponent implements OnInit {
 
    public breadcrumb = [
       {
@@ -58,14 +59,14 @@ export class FormUnidadeComponent implements OnInit{
    mapZoom: number = 16;
    mapMarkerVisible?: boolean;
    map: google.maps.Map | null = null;
-   marker: { lat: any, lng: any } = { lat: '', lng: '' };
+   marker: { lat: any, lng: any } = {lat: '', lng: ''};
    latLng: string = '';
 
 
    formGroup: FormGroup;
    unidade: Unidade;
    unidadesGerenciadoras: Unidade[] = [];
-   unidades:any = [];
+   unidades: any = [];
    @ViewChild('tipoUnidadeSelect', {static: false}) tipoUnidadeSelect!: BrSelectComponent;
    @ViewChild('gerenciadoraSelect', {static: false}) gerenciadoraSelect!: BrSelectComponent;
 
@@ -76,7 +77,7 @@ export class FormUnidadeComponent implements OnInit{
    formRepresentante!: FormGroup;
    representante: Usuario = new Usuario();
 
-   tipoUnidade:any = [];
+   tipoUnidade: any = [];
 
 
    constructor(private loadingService: LoadingService,
@@ -84,23 +85,23 @@ export class FormUnidadeComponent implements OnInit{
                private fb: FormBuilder,
                private unidadeService: UnidadeService,
                private cepService: CepService,
-                public location: Location
+               public location: Location
    ) {
       this.unidade = new Unidade();
       this.formGroup = this.fb.group({
          nome: this.fb.control(this.unidade.nome, [Validators.minLength(2), Validators.maxLength(100), Validators.required]),
          tipo: this.fb.control(this.unidade.tipo, [Validators.minLength(2), Validators.required]),
          idUnidadeGerenciadora: this.fb.control(this.unidade.idUnidadeGerenciadora, [Validators.required]),
-         cep: this.fb.control(this.unidade.endereco.cep, [ Validators.required, Validators.minLength(8), Validators.maxLength(10) ]),
-         rua: this.fb.control( this.unidade.endereco.rua, [Validators.minLength(2),Validators.maxLength(70), Validators.required]),
-         numero: this.fb.control(this.unidade.endereco.numero, [ Validators.minLength(1), Validators.required]),
+         cep: this.fb.control(this.unidade.endereco.cep, [Validators.required, Validators.minLength(8), Validators.maxLength(10)]),
+         rua: this.fb.control(this.unidade.endereco.rua, [Validators.minLength(2), Validators.maxLength(70), Validators.required]),
+         numero: this.fb.control(this.unidade.endereco.numero, [Validators.minLength(1), Validators.required]),
          bairro: this.fb.control(this.unidade.endereco.bairro, [Validators.minLength(2), Validators.maxLength(50)]),
          complemento: this.fb.control(this.unidade.endereco.complemento, [Validators.minLength(2), Validators.maxLength(50)]),
          cidade: this.fb.control(this.unidade.endereco.cidade, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
          uf: this.fb.control(this.unidade.endereco.uf, [Validators.minLength(2), Validators.maxLength(2), Validators.required]),
-         latitude: this.fb.control( this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
-         longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
-         usuarios: this.fb.control( this.unidade.usuarios)
+         latitude: this.fb.control(this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
+         longitude: this.fb.control(this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
+         usuarios: this.fb.control(this.unidade.usuarios)
       });
 
       this.mapZoom = 6;
@@ -109,9 +110,9 @@ export class FormUnidadeComponent implements OnInit{
    }
 
    ngOnInit() {
-      this.unidadeService.findTiposUnidades().subscribe((data)=>{
-         data.data?.forEach((tipo)=>{
-            this.tipoUnidade.push({label:tipo.nome?.toString() , value:tipo.tipo});
+      this.unidadeService.findTiposUnidades().subscribe((data) => {
+         data.data?.forEach((tipo) => {
+            this.tipoUnidade.push({label: tipo.nome?.toString(), value: tipo.tipo});
          });
       });
       this.representante = new Usuario();
@@ -121,15 +122,15 @@ export class FormUnidadeComponent implements OnInit{
    selecionaGerenciadora() {
       this.unidades = [];
       let tipo;
-      this.tipoUnidadeSelect.getOptionSelected().length > 0?tipo = this.tipoUnidadeSelect.getOptionSelected(): tipo = this.unidade.tipo;
-      switch(tipo){
+      this.tipoUnidadeSelect.getOptionSelected().length > 0 ? tipo = this.tipoUnidadeSelect.getOptionSelected() : tipo = this.unidade.tipo;
+      switch (tipo) {
          case 'PS':
             this.validarUc = false;
             this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("UC").subscribe((data) => {
                this.unidadesGerenciadoras = data;
-               this.unidadesGerenciadoras.forEach((uni)=>{
-                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               this.unidadesGerenciadoras.forEach((uni) => {
+                  this.unidades.push({label: uni.nome.toString(), value: uni.id});
                });
             })
             break;
@@ -138,8 +139,8 @@ export class FormUnidadeComponent implements OnInit{
             this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("UC").subscribe((data) => {
                this.unidadesGerenciadoras = data;
-               this.unidadesGerenciadoras.forEach((uni)=>{
-                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               this.unidadesGerenciadoras.forEach((uni) => {
+                  this.unidades.push({label: uni.nome.toString(), value: uni.id});
                });
             })
             break;
@@ -148,8 +149,8 @@ export class FormUnidadeComponent implements OnInit{
             this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("SR").subscribe((data) => {
                this.unidadesGerenciadoras = data;
-               this.unidadesGerenciadoras.forEach((uni)=>{
-                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               this.unidadesGerenciadoras.forEach((uni) => {
+                  this.unidades.push({label: uni.nome.toString(), value: uni.id});
                });
             })
             break;
@@ -158,8 +159,8 @@ export class FormUnidadeComponent implements OnInit{
             this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("MPA").subscribe((data) => {
                this.unidadesGerenciadoras = data;
-               this.unidadesGerenciadoras.forEach((uni)=>{
-                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               this.unidadesGerenciadoras.forEach((uni) => {
+                  this.unidades.push({label: uni.nome.toString(), value: uni.id});
                });
             })
             break;
@@ -168,8 +169,8 @@ export class FormUnidadeComponent implements OnInit{
             this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("SN").subscribe((data) => {
                this.unidadesGerenciadoras = data;
-               this.unidadesGerenciadoras.forEach((uni)=>{
-                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               this.unidadesGerenciadoras.forEach((uni) => {
+                  this.unidades.push({label: uni.nome.toString(), value: uni.id});
                });
             })
             break;
@@ -178,8 +179,8 @@ export class FormUnidadeComponent implements OnInit{
             this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("MPA").subscribe((data) => {
                this.unidadesGerenciadoras = data;
-               this.unidadesGerenciadoras.forEach((uni)=>{
-                  this.unidades.push({label:uni.nome.toString(), value:uni.id});
+               this.unidadesGerenciadoras.forEach((uni) => {
+                  this.unidades.push({label: uni.nome.toString(), value: uni.id});
                });
             })
             break;
@@ -219,7 +220,7 @@ export class FormUnidadeComponent implements OnInit{
 
    }
 
-   moveuPontoMaps(event:any) {
+   moveuPontoMaps(event: any) {
       this.latLng = event.latLng.toString().replace(/[()]/g, '');
       const [lat, lng] = this.latLng.split(',').map(coord => coord.trim());
       this.marker.lat = lat;
@@ -229,11 +230,12 @@ export class FormUnidadeComponent implements OnInit{
       this.formGroup.get('latitude')?.setValue(this.marker.lat);
       this.formGroup.get('longitude')?.setValue(this.marker.lng);
    }
+
    receberNovoUsuario(novoUsuario: Usuario) {
       this.representante = novoUsuario;
       console.log(this.representante.permissoes)
       const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, novoUsuario));
-      if(!jaExiste){
+      if (!jaExiste) {
          this.unidade.usuarios.push(this.representante);
       }
    }
@@ -252,32 +254,38 @@ export class FormUnidadeComponent implements OnInit{
    //    }
    //    this.representante = new Usuario();
    // }
-   comparaUsuarios(user1: Usuario, user2: Usuario){
+   comparaUsuarios(user1: Usuario, user2: Usuario) {
       return user1.cpf == user2.cpf && user1.email == user2.email;
    }
-   usuarioIsRepresentante(user: Usuario){
-         if(!user.permissoes?.includes('representante')){
-            user.permissoes.push('representante');
-            console.log(user.permissoes);
-            return;
-         }else{
-            let position: number = 0;
-               position = user.permissoes?.indexOf('representante');
-            if(position){
-               user.permissoes?.splice(position, 1);
-               console.log(user.permissoes);
+
+   usuarioIsRepresentante(user: Usuario): void {
+      const permissao: Permissao = {id: null, descricao: 'representante'};
+      if (!user.permissoes) {
+         user.permissoes = [];
+      }
+      const permissaoIndex: number = user.permissoes.findIndex((perm) => perm.descricao === 'representante');
+      if (permissaoIndex === -1) {
+         // Se o usuário não tem a permissão, adiciona
+         user.permissoes.push(permissao);
+      } else {
+         // Se o usuário já tem a permissão, remove
+         user.permissoes.splice(permissaoIndex, 1);
+      }
+   }
+
+   isRepresentante(user: Usuario): boolean {
+      if (user.permissoes && user.permissoes.length > 0) {
+         for (const perm of user.permissoes) {
+            if (perm.descricao === 'representante') {
+               return true;
             }
-            return;
          }
+      }
+      return false;
    }
 
-   isRepresentante(user: Usuario){
-      return user.permissoes?.includes('representante') ? true : false;
-   }
 
-
-
-   cancelarUsuario(user: Usuario){
+   cancelarUsuario(user: Usuario) {
       const index = this.unidade.usuarios.findIndex(u => u.nome === user.nome);
       if (index !== -1) {
          this.unidade.usuarios.splice(index, 1);
@@ -293,13 +301,17 @@ export class FormUnidadeComponent implements OnInit{
       console.log(this.unidade);
       if (this.formGroup.valid) {
          this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
-            swal.fire(mensagem.msg).then();
+            if (mensagem.status === "SUCCESS" ) {
+               swal.fire(mensagem.msg).then();
+               setTimeout(() => {
+                  this.loadingService.show = false;
+                  this.router.navigate(['/portal-admin/unidades']);
+               }, 1200);
+            }else{
+               swal.fire("Ocorreu um erro ao salvar a unidade, tente novamente mais tarde.").then();
+            }
          });
-         setTimeout(() => {
-            this.loadingService.show = false;
-            this.router.navigate(['/portal-admin/unidades']);
-         }, 1200);
-      }else{
+      } else {
          Swal.fire('Ops...', 'Formulário incompleto!', 'error').then();
       }
    }

@@ -3,17 +3,18 @@ import {CepService} from "../../../../../core/services/cep.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {cpfValidator} from "../../../../../utils/validators/cpf.validator";
 import {cepValidator} from "../../../../../utils/validators/cep.validator";
-import {Usuario} from "../../../../../core/models/usuario.model";
+import {Permissao, Usuario} from "../../../../../core/models/usuario.model";
 import {UsuarioService} from "../../../../../core/services/usuario.service";
 import {BrSelectComponent} from "../../../../../shared/br-select/br-select.component";
 import Swal from "sweetalert2";
+
 @Component({
    selector: 'pnip-admin-form-representante-unidade',
    templateUrl: './form-representante-unidade.component.html',
    styleUrls: [],
-   providers:[CepService]
+   providers: [CepService]
 })
-export class FormRepresentanteUnidadeComponent implements OnInit{
+export class FormRepresentanteUnidadeComponent implements OnInit {
 
    @Output() emitirForm = new EventEmitter<FormGroup>();
    public formGroup2: FormGroup;
@@ -23,9 +24,9 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
    newUsuario: Usuario = new Usuario();
    @Output() newUserEmitter: EventEmitter<Usuario> = new EventEmitter<Usuario>();
    @ViewChild('userSelect', {static: false}) userSelect!: BrSelectComponent;
-   users:any = [];
-   @Input() isEdit?:boolean;
-   @Input() uuid?:String;
+   users: any = [];
+   @Input() isEdit?: boolean;
+   @Input() uuid?: String;
 
    constructor(private fb: FormBuilder,
                private cepService: CepService,
@@ -43,12 +44,12 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
 
    ngOnInit() {
       //if(this.isEdit) {
-         this.usuarioService.findAll().subscribe((data) => {
-            this.usuarios = data;
-            this.usuarios.forEach((user) => {
-               this.users.push({label: user.nome + '-' + user.email, value: user.id})
-            });
+      this.usuarioService.findAll().subscribe((data) => {
+         this.usuarios = data;
+         this.usuarios.forEach((user) => {
+            this.users.push({label: user.nome + '-' + user.email, value: user.id})
          });
+      });
       //}
    }
 
@@ -67,43 +68,47 @@ export class FormRepresentanteUnidadeComponent implements OnInit{
    //    }
    // }
 
-   verificaNovoUser(event: boolean){
-      event? this.novoUser = true: this.novoUser = false;
+   verificaNovoUser(event: boolean) {
+      event ? this.novoUser = true : this.novoUser = false;
    }
 
-   selecionaUsuario(id: number){
+   selecionaUsuario(id: number) {
       this.newUsuario = new Usuario();
       this.usuarios.forEach((us) => {
-         if(us.id == this.userSelect.getOptionSelected()){
-            if(!us.permissoes){
+         if (us.id == this.userSelect.getOptionSelected()) {
+            if(us.permissoes == null){
                us.permissoes = [];
-               us.permissoes.push('so');
             }
-            this.newUsuario = us;
+            if (us.permissoes.length == 0) {
+               const permissao: Permissao = { descricao: 'so'};
+               us.permissoes.push(permissao);
+            }
+            this.newUsuario = Object.assign(us);
          }
       })
       console.log(this.newUsuario)
       //this.emitirNovoUsuario();
    }
 
-   adicionarNovoUsuario(){
+   adicionarNovoUsuario() {
       let user = new Usuario();
       user.nome = this.formGroup2.get("nome")?.value;
       user.email = this.formGroup2.get("email")?.value;
       user.cpf = this.formGroup2.get("cpf")?.value;
-      user.permissoes.push('so');
+      const permissao: Permissao = { descricao: 'so'};
+      user.permissoes.push(permissao);
       this.newUsuario = Object.assign({}, user);
       this.emitirNovoUsuario();
    }
 
    emitirNovoUsuario() {
-      if(this.novoUser){
-         if(!this.formGroup2.valid) {
+      if (this.novoUser) {
+         if (!this.formGroup2.valid) {
             Swal.fire('Ops...', 'Dados do usuário incompletos!', 'error').then();
             return;
          }
       }
-      if(this.newUsuario != null && this.newUsuario != undefined){
+      if (this.newUsuario != null && this.newUsuario != undefined) {
          this.newUserEmitter.emit(this.newUsuario);
       }
    }

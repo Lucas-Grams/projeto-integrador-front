@@ -7,7 +7,7 @@ import { ToastrService } from "ngx-toastr";
 import { CepService } from "../../../../../core/services/cep.service";
 import { ValidatorsFormsUtils } from "../../../../../utils/components/validators-forms.utils";
 import {LoadingService} from "../../../../../core/services/loading.service";
-import {Usuario} from "../../../../../core/models/usuario.model";
+import {Permissao, Usuario} from "../../../../../core/models/usuario.model";
 import {UsuarioService} from "../../../../../core/services/usuario.service";
 import Swal from "sweetalert2";
 import {BrSelectComponent} from "../../../../../shared/br-select/br-select.component";
@@ -101,6 +101,7 @@ export class FormEditarUnidadeComponent implements OnInit {
          longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required])
       });
       this.unidadeService.findUnidadeByUuid(this.uuid).subscribe((data) => {
+         console.log(data);
          this.unidade = data;
          this.unidadeId = data.id;
          this.unidade.idUnidadeGerenciadora = data.unidadeGerenciadora?.id;
@@ -108,7 +109,7 @@ export class FormEditarUnidadeComponent implements OnInit {
          this.validaCoordenadas();
          this.selecionaGerenciadora()
       });
-      this.usuarioService.findRepresentantesUnidade(this.uuid).subscribe((data) => {
+      this.usuarioService.findUsuariosUnidade(this.uuid).subscribe((data) => {
          this.representantes = data;
          this.unidade.usuarios = data;
       });
@@ -279,24 +280,30 @@ export class FormEditarUnidadeComponent implements OnInit {
       this.representante = new Usuario();
    }
 
-   usuarioIsRepresentante(user: Usuario){
-      if(!user.permissoes?.includes('representante')){
-         user.permissoes.push('representante');
-         console.log(user.permissoes);
-         return;
-      }else{
-         let position: number = 0;
-         position = user.permissoes?.indexOf('representante');
-         if(position){
-            user.permissoes?.splice(position, 1);
-            console.log(user.permissoes);
-         }
-         return;
+   usuarioIsRepresentante(user: Usuario): void {
+      const permissao: Permissao = { id: null ,descricao: 'representante' };
+      if (!user.permissoes) {
+         user.permissoes = [];
+      }
+      const permissaoIndex: number = user.permissoes.findIndex((perm) => perm.descricao === 'representante');
+      if (permissaoIndex === -1) {
+         // Se o usuário não tem a permissão, adiciona
+         user.permissoes.push(permissao);
+      } else {
+         // Se o usuário já tem a permissão, remove
+         user.permissoes.splice(permissaoIndex, 1);
       }
    }
 
-   isRepresentante(user: Usuario){
-      return user.permissoes?.includes('representante') ? true : false;
+   isRepresentante(user: Usuario): boolean {
+      if (user.permissoes && user.permissoes.length > 0) {
+         for (const perm of user.permissoes) {
+            if (perm.descricao === 'representante') {
+               return true;
+            }
+         }
+      }
+      return false;
    }
 
 
