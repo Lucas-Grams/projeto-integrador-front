@@ -50,6 +50,7 @@ export class FormEditarUnidadeComponent implements OnInit {
    latLng: string = '';
 
    isEdit: boolean = false;
+   isEditRep: boolean = true;
    public formGroup: FormGroup;
    unidade: Unidade;
    unidadesGerenciadoras: Unidade[] = [];
@@ -101,7 +102,7 @@ export class FormEditarUnidadeComponent implements OnInit {
          longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required])
       });
       this.unidadeService.findUnidadeByUuid(this.uuid).subscribe((data) => {
-         console.log(data);
+
          this.unidade = data;
          this.unidadeId = data.id;
          this.unidade.idUnidadeGerenciadora = data.unidadeGerenciadora?.id;
@@ -112,6 +113,7 @@ export class FormEditarUnidadeComponent implements OnInit {
       this.usuarioService.findUsuariosUnidade(this.uuid).subscribe((data) => {
          this.representantes = data;
          this.unidade.usuarios = data;
+         console.log(this.unidade);
       });
       this.mapZoom = 6;
       this.mapMarkerVisible = false;
@@ -344,10 +346,6 @@ export class FormEditarUnidadeComponent implements OnInit {
       }else{
          Swal.fire('Ops...', 'Formulário incompleto!', 'error').then();
       }
-      // setTimeout(() => {
-      //    this.loadingService.show = false;
-      //    this.router.navigate(['/portal-admin/unidades']);
-      // }, 1200);
    }
 
 

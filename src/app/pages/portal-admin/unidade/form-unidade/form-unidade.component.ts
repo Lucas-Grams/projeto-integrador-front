@@ -266,7 +266,7 @@ export class FormUnidadeComponent implements OnInit {
       const permissaoIndex: number = user.permissoes.findIndex((perm) => perm.descricao === 'representante');
       if (permissaoIndex === -1) {
          // Se o usuário não tem a permissão, adiciona
-         user.permissoes.push(permissao);
+         user.permissoes.splice(0, 0, permissao);
       } else {
          // Se o usuário já tem a permissão, remove
          user.permissoes.splice(permissaoIndex, 1);
@@ -293,7 +293,6 @@ export class FormUnidadeComponent implements OnInit {
    }
 
    salvar() {
-      this.loadingService.show = true;
       if (this.gerenciadoraSelect) {
          this.formGroup.get("idUnidadeGerenciadora")?.setValue(this.gerenciadoraSelect.getOptionSelected());
       }
@@ -301,19 +300,19 @@ export class FormUnidadeComponent implements OnInit {
       console.log(this.unidade);
       if (this.formGroup.valid) {
          this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
-            if (mensagem.status === "SUCCESS" ) {
-               swal.fire(mensagem.msg).then();
-               setTimeout(() => {
-                  this.loadingService.show = false;
-                  this.router.navigate(['/portal-admin/unidades']);
-               }, 1200);
+            if (mensagem.status === 'SUCCESS' ) {
+                  Swal.fire("OK.", 'Unidade cadastrada com sucesso!', 'success').then(()=>{
+                     this.loadingService.show = true;
+                     this.router.navigate(['/portal-admin/unidades']);
+                     this.loadingService.show = false;
+                  });
             }else{
-               swal.fire("Ocorreu um erro ao salvar a unidade, tente novamente mais tarde.").then();
+               this.loadingService.show = false;
+               Swal.fire('Ops.',"Ocorreu um erro ao salvar a unidade, tente novamente mais tarde.", 'error').then();
             }
          });
       } else {
          Swal.fire('Ops...', 'Formulário incompleto!', 'error').then();
       }
    }
-
 }
