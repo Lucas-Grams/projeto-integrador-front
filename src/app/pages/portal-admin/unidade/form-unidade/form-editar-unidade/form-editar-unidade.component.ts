@@ -102,7 +102,6 @@ export class FormEditarUnidadeComponent implements OnInit {
          longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required])
       });
       this.unidadeService.findUnidadeByUuid(this.uuid).subscribe((data) => {
-
          this.unidade = data;
          this.unidadeId = data.id;
          this.unidade.idUnidadeGerenciadora = data.unidadeGerenciadora?.id;
@@ -110,11 +109,13 @@ export class FormEditarUnidadeComponent implements OnInit {
          this.validaCoordenadas();
          this.selecionaGerenciadora()
       });
+
       this.usuarioService.findUsuariosUnidade(this.uuid).subscribe((data) => {
          this.representantes = data;
          this.unidade.usuarios = data;
          console.log(this.unidade);
       });
+
       this.mapZoom = 6;
       this.mapMarkerVisible = false;
       this.searchCoord = false;

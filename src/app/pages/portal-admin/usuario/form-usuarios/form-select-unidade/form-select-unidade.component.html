@@ -1,0 +1,20 @@
+
+   <div class="row mb-2">
+      <div class="col-6">
+         <div class="br-select">
+            <div class="br-input">
+               <br-select-pnip
+                  id="idUsuario"
+                  label="Selecione a Unidade"
+                  [options]="unis"
+                  (change)="selecionaUnidade(unis.id)"
+                  #unidadeSelect>
+               </br-select-pnip>
+            </div>
+
+         </div>
+      </div>
+      <button class="br-button primary mt-3" type="button" (click)="emitirUnidade()" >Adicionar</button>
+   </div>
+   <br-divider size="medium" class="mt-3"></br-divider>
+

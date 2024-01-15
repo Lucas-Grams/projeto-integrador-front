@@ -1,0 +1,38 @@
+<br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
+<br-divider size="medium" class="mt-0"></br-divider>
+<div class="p-5">
+   <div class="row">
+      <div class="col">
+         <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Usuários</h2>
+      </div>
+      <div class="col-auto">
+         <br-button icon="plus" label="Novo Usuário" type="primary" [routerLink]="'/portal-admin/usuarios/cadastrar-novo-usuario'"></br-button>
+      </div>
+   </div>
+
+   <table class="table">
+      <thead class="thead-light">
+      <tr>
+         <th class="text-blue-vivid-60 text-bold" scope="col">Ativo</th>
+         <th class="text-blue-vivid-60 text-bold" scope="col">Nome</th>
+         <th class="text-blue-vivid-60 text-bold" scope="col">CPF</th>
+         <th class="text-blue-vivid-60 text-bold" scope="col">E-mail</th>
+         <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
+      </tr>
+      </thead>
+      <tbody *ngFor="let usuario of usuarios">
+      <tr>
+         <td><br-switch icon [checked]="usuario.ativo" (change)="inativar(usuario)"></br-switch></td>
+         <td>{{usuario.nome}}</td>
+         <td>{{usuario.cpf}}</td>
+         <td>{{usuario.email}}</td>
+         <td class="text-center">
+            <!--               <button class="br-button"><br-icon-base icon-name="pencil-alt" family-name="fas" class="mr-2 text-success" [routerLink]="'editar/' + unidade.uuid"/></button>-->
+            <!--               <button class="br-button"><br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="deletar(unidade.uuid)"/></button>-->
+            <button class="br-button"><br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60" [routerLink]="'editar/' + usuario.uuid"/></button>
+         </td>
+      </tr>
+      </tbody>
+   </table>
+
+</div>

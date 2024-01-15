@@ -21,6 +21,10 @@ export class UsuarioService {
       return this.http.get<Usuario[]>(`${this.urlUsuario}` + '');
    }
 
+   findByUuid(uuid: String):Observable<Usuario>{
+      return this.http.get<Usuario>(`${this.urlUsuario}`+ '/findByUuid/' + uuid);
+   }
+
    findUsuariosUnidade(uuid?: String):Observable<Usuario[]>{
       return this.http.get<Usuario[]>(`${this.urlUsuario}` + '/findUsuariosUnidade/'+ uuid);
    }
