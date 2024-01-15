@@ -23,6 +23,7 @@
       "@govbr-ds/core": "^3.4.1",
       "@govbr-ds/webcomponents": "^1.14.0-alpha.2",
       "@ng-select/ng-select": "^10.0.4",
+      "@ngui/map": "^0.30.3",
       "angular-oauth2-oidc": "^15.0.1",
       "ngx-toastr": "^16.2.0",
       "node": "18.13.0",
