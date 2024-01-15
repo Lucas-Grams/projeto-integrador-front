@@ -4,6 +4,7 @@ import {Unidade} from "../../../../core/models/unidade.model";
 import {Location} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import Swal from "sweetalert2";
+import {UsuarioService} from "../../../../core/services/usuario.service";
 
 
 @Component({
@@ -27,15 +28,20 @@ export class ListarUnidadesComponent implements OnInit {
 
    unidades: Unidade[] = [];
 
-   constructor(private unidadeService: UnidadeService,
+   constructor(private unidadeService: UnidadeService, private usuarioService: UsuarioService,
                private el: ElementRef) {
    }
 
    ngOnInit() {
       this.unidadeService.findAll().subscribe((data) => {
          this.unidades = data;
-         console.log(this.unidades)
-      })
+         this.unidades.forEach((uni)=>{
+            this.usuarioService.findUsuariosUnidade(uni.uuid).subscribe((data) => {
+               uni.usuarios = data;
+            });
+         });
+
+      });
    }
 
    inativar(unidade: Unidade) {
