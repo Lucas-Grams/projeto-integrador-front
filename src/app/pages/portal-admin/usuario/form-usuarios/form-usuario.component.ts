@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Unidade} from "../../../../core/models/unidade.model";
 import {cpfValidator} from "../../../../utils/validators/cpf.validator";
 import {Permissao, Usuario} from "../../../../core/models/usuario.model";
+import {UnidadeUsuario} from "../../../../core/models/UnidadeUsuario.model";
 
 @Component({
    selector: 'pnip-admin-form-usuairo',
@@ -31,6 +32,8 @@ export class FormUsuarioComponent implements OnInit {
    usuario: Usuario = new Usuario();
    formGroup: FormGroup;
    unidades: Unidade[] = [];
+   unidadeUsuario: UnidadeUsuario[] = [];
+
 
    constructor(private fb: FormBuilder) {
 
@@ -47,55 +50,66 @@ export class FormUsuarioComponent implements OnInit {
    }
 
    receberUnidade(unidade: Unidade) {
-
-      const jaExiste = this.unidades.find(uni=> this.comparaUnidades(uni, unidade));
+      const jaExiste = this.unidadeUsuario.find(uni => this.comparaUnidades(uni, unidade));
       if (!jaExiste) {
-          this.unidades.push(unidade);
+         this.unidades.push(unidade);
+         const permissao: Permissao = {id: null, descricao: 'so'};
+         let uniUsu = new UnidadeUsuario();
+         uniUsu.unidade = unidade;
+         uniUsu.usuario = this.usuario;
+         uniUsu.permissao.push(permissao);
+         uniUsu.ativo = true;
+         this.unidadeUsuario.push(uniUsu);
       }
    }
 
-   comparaUnidades(uni1: Unidade, uni2: Unidade) {
-      return uni1.uuid == uni2.uuid;
+   comparaUnidades(uni1: UnidadeUsuario, uni2: Unidade) {
+      return uni1.unidade.uuid == uni2.uuid;
    }
 
-   //usuarioIsRepresentante(user: Usuario): void {
-      // const permissao: Permissao = {id: null, descricao: 'representante'};
-      // if (!user.permissoes) {
-      //    user.permissoes = [];
-      // }
-      // const permissaoIndex: number = user.permissoes.findIndex((perm) => perm.descricao === 'representante');
-      // if (permissaoIndex === -1) {
-      //    // Se o usuário não tem a permissão, adiciona
-      //    user.permissoes.splice(0, 0, permissao);
-      // } else {
-      //    // Se o usuário já tem a permissão, remove
-      //    user.permissoes.splice(permissaoIndex, 1);
-      // }
-  // }
 
-   // isRepresentante(user: Usuario): boolean {
-   //    // if (user.permissoes && user.permissoes.length > 0) {
-   //    //    for (const perm of user.permissoes) {
-   //    //       if (perm.descricao === 'representante') {
-   //    //          return true;
-   //    //       }
-   //    //    }
-   //    // }
-   //    // return false;
-   // }
+   usuarioIsRepresentante(uni: UnidadeUsuario): void {
+      const permissao: Permissao = {id: null, descricao: 'representante'};
+      if (!uni.permissao) {
+         uni.permissao = [];
+      }
+      const permissaoIndex: number = uni.permissao.findIndex((perm) => perm.descricao === 'representante');
+      if (permissaoIndex === -1) {
+         // Se o usuário não tem a permissão, adiciona
+         uni.permissao.splice(0, 0, permissao);
+      } else {
+         // Se o usuário já tem a permissão, remove
+         uni.permissao.splice(permissaoIndex, 1);
+      }
+   }
+
+   isRepresentante(uni: UnidadeUsuario): boolean {
+      if (uni.permissao && uni.permissao != null && uni.permissao != undefined) {
+         for (const perm of uni.permissao) {
+            if (perm.descricao?.includes('representante')) {
+               return true;
+            }
+         }
+      }
+      return false;
+   }
 
 
    cancelarUnidade(unidade: String) {
-      const index = this.unidades.findIndex(u => u.uuid === unidade);
+      const index = this.unidadeUsuario.findIndex(u => u.unidade.uuid === unidade);
       if (index !== -1) {
-         this.unidades.splice(index, 1);
+         this.unidadeUsuario.splice(index, 1);
       }
    }
 
    salvar() {
+      console.log(this.unidadeUsuario)
       if (this.formGroup.valid) {
          this.usuario = this.formGroup.value;
-         console.log(this.usuario)
+         this.unidadeUsuario.forEach((uni) =>{
+            uni.usuario = this.usuario;
+         })
+         console.log(this.unidadeUsuario)
          // if (this.formGroup.valid) {
          //    this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
          //       if (mensagem.status === 'SUCCESS' ) {

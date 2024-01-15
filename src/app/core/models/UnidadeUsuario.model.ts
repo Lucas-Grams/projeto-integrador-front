@@ -1,11 +1,12 @@
 import {Endereco} from "./endereco.model";
 import {Unidade} from "./unidade.model";
+import {Usuario} from "./usuario.model";
 
-export class Usuario{
+export class UnidadeUsuario{
    id?: number;
-   unidades?:Unidade[]=[];
-   usuarios?: Usuario[]=[];
-   permissoes?: Permissao[]=[];
+   unidade:Unidade =  new Unidade();
+   usuario: Usuario = new Usuario();
+   permissao: Permissao[] = [];
    ativo?:boolean;
 
 }

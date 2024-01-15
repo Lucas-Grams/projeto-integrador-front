@@ -18,7 +18,7 @@
             <ng-container
                *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'nome'}"></ng-container>
          </div>
-         <div class="col-2">
+         <div class="col-3">
             <br-input density="small" name="cpf" label="CPF" formControlName="cpf" mask="###.###.###-##"
                       [attr.state]="validatorsFormsUtils.getStateOfField('cpf')"/>
             <ng-container
@@ -30,9 +30,6 @@
             <ng-container
                *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'email'}"></ng-container>
          </div>
-         <div class="col-2">
-
-         </div>
       </div>
    </form>
 
@@ -42,32 +39,32 @@
       (unidadeEmitter)="receberUnidade($event)">
    </pnip-admin-form-select-unidade>
 
-   <ng-container *ngIf="unidades.length>0; else semUnidades">
+   <ng-container *ngIf="unidadeUsuario .length>0; else semUnidades">
 
 
-         <table class="table">
-            <thead class="thead-light">
+      <table class="table">
+         <thead class="thead-light">
+         <tr>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Representante</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Nome</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Módulos</th>
+
+            <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
+         </tr>
+         </thead>
+         <ng-container *ngFor="let unidade of unidadeUsuario">
             <tr>
-               <th class="text-blue-vivid-60 text-bold" scope="col"></th>
-               <th class="text-blue-vivid-60 text-bold" scope="col">Nome</th>
-               <th class="text-blue-vivid-60 text-bold" scope="col">Módulos</th>
-
-               <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
-            </tr>
-            </thead>
-            <ng-container *ngFor="let unidade of unidades">
-            <tr>
-               <td><br-switch icon [checked]="unidade.ativo"></br-switch></td>
-               <td>{{unidade.nome}}</td>
+               <td><br-switch icon [checked]="isRepresentante(unidade)" (onChange)="usuarioIsRepresentante(unidade)"></br-switch></td>
+               <td>{{unidade.unidade.nome}}</td>
                <td>Em desenvolvimento</td>
                <td class="text-center">
                   <!--               <button class="br-button"><br-icon-base icon-name="pencil-alt" family-name="fas" class="mr-2 text-success" [routerLink]="'editar/' + unidade.uuid"/></button>-->
-                  <button class="br-button"><br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="cancelarUnidade(unidade.uuid)"/></button>
-<!--                  <button class="br-button"><br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60" [routerLink]="'editar/' + unidade.uuid"/></button>-->
+                  <button class="br-button"><br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="cancelarUnidade(unidade.unidade.uuid)"/></button>
+                  <!--                  <button class="br-button"><br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60" [routerLink]="'editar/' + unidade.uuid"/></button>-->
                </td>
             </tr>
-            </ng-container>
-         </table>
+         </ng-container>
+      </table>
    </ng-container>
    <ng-template #semUnidades>
       <div class="br-message info" role="alert">
@@ -83,5 +80,5 @@
 
    <div class="d-flex justify-content-end mt-4">
       <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/usuarios'"/>
-      <br-button label="Salvar" type="primary" [disabled]="!formGroup.valid" (click)="salvar()"/>
+      <br-button label="Salvar" type="primary" (click)="salvar()"/>
    </div>

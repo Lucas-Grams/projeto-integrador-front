@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponseDto} from "../dto/response.dto";
 import {Usuario} from "../models/usuario.model";
+import {UnidadeUsuario} from "../models/UnidadeUsuario.model";
 
 const URL= "http://localhost:8089";
 @Injectable({
@@ -31,5 +32,9 @@ export class UsuarioService {
 
    findUsuariosDip():Observable<Usuario[]>{
       return this.http.get<Usuario[]>(`${this.urlUsuario}` + '/findUsuariosDip');
+   }
+
+   findUnidadesByUsuarioUuid(uuid: String):Observable<UnidadeUsuario[]>{
+      return this.http.get<UnidadeUsuario[]>(`${this.urlUsuario}` + '/findUnidadesByUsuarioUuid/'+ uuid);
    }
 }
