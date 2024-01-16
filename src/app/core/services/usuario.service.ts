@@ -37,4 +37,8 @@ export class UsuarioService {
    findUnidadesByUsuarioUuid(uuid: String):Observable<UnidadeUsuario[]>{
       return this.http.get<UnidadeUsuario[]>(`${this.urlUsuario}` + '/findUnidadesByUsuarioUuid/'+ uuid);
    }
+
+   salvar(unidadeUsuario: UnidadeUsuario[]):Observable<ResponseDto>{
+      return this.http.post<ResponseDto>(`${this.urlUsuario}` + '/salvarUsuario', unidadeUsuario);
+   }
 }
