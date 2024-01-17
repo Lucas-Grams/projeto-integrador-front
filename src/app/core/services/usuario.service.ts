@@ -41,4 +41,8 @@ export class UsuarioService {
    salvar(unidadeUsuario: UnidadeUsuario[]):Observable<ResponseDto>{
       return this.http.post<ResponseDto>(`${this.urlUsuario}` + '/salvarUsuario', unidadeUsuario);
    }
+
+   ativaInativa(uuid?: String):Observable<ResponseDto>{
+      return this.http.post<ResponseDto>(`${this.urlUsuario}` + '/ativaInativa',uuid);
+   }
 }

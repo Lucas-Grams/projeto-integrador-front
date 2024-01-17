@@ -22,7 +22,7 @@
       </thead>
       <tbody *ngFor="let usuario of usuarios">
       <tr>
-         <td><br-switch icon [checked]="usuario.ativo" (change)="inativar(usuario)"></br-switch></td>
+         <td><br-switch icon [checked]="usuario.ativo" (onChange)="inativar(usuario)"></br-switch></td>
          <td>{{usuario.nome}}</td>
          <td>{{usuario.cpf}}</td>
          <td>{{usuario.email}}</td>
