@@ -75,13 +75,13 @@ export class FormEditarUnidadeComponent implements OnInit {
    representante: Usuario = new Usuario();
 
    constructor(
-      private loadingService: LoadingService,
-      private fb: FormBuilder,
-      private unidadeService: UnidadeService,
-      private cepService: CepService,
-      private route: ActivatedRoute,
-      private router: Router,
-      private usuarioService: UsuarioService,
+       private loadingService: LoadingService,
+       private fb: FormBuilder,
+       private unidadeService: UnidadeService,
+       private cepService: CepService,
+       private route: ActivatedRoute,
+       private router: Router,
+       private usuarioService: UsuarioService,
    ) {
       this.unidade = new Unidade();
       this.route.params.subscribe((param) => {

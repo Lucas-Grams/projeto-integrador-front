@@ -33,9 +33,7 @@ export class FormRepresentanteUnidadeComponent implements OnInit {
          email: [this.newUsuario?.email, [Validators.required, Validators.email, Validators.maxLength(70)]],
       });
 
-      // this.formGroup2.valueChanges.subscribe(() => {
-      //    this.emitirForm.emit(this.formGroup2);
-      //       // });
+
    }
 
    ngOnInit() {
@@ -57,9 +55,7 @@ export class FormRepresentanteUnidadeComponent implements OnInit {
          if (us.id == this.userSelect.getOptionSelected()) {
             this.newUsuario = Object.assign(us);
          }
-      })
-      console.log(this.newUsuario)
-      //this.emitirNovoUsuario();
+      });
    }
 
    adicionarNovoUsuario() {
