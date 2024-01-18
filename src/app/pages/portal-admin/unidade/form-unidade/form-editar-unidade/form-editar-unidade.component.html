@@ -143,13 +143,11 @@
    <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Usuários da unidade</h2>
 
    <pnip-admin-form-representante-unidade
-      (emitirForm)="receberForm($event)"
       (newUserEmitter)="receberNovoUsuario($event)"
-      (uuid) = "unidade.uuid"
       #formUser>
    </pnip-admin-form-representante-unidade>
 
-   <ng-container *ngIf="unidade.usuarios.length > 0; else semUsuarios">
+   <ng-container *ngIf="unidadeUsuario.length > 0; else semUsuarios">
       <table class="table">
          <thead class="thead-light">
          <tr>
@@ -160,14 +158,14 @@
             <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
          </tr>
          </thead>
-         <tbody *ngFor="let usuario of unidade.usuarios">
-         <tr>
-            <td><br-switch icon (onChange)="usuarioIsRepresentante(usuario)"  [checked]="isRepresentante(usuario)"></br-switch></td>
-            <td>{{usuario.nome}}</td>
-            <td>{{usuario.cpf}}</td>
-            <td>{{usuario.email}}</td>
+         <tbody *ngFor="let uni of unidadeUsuario">
+         <tr *ngIf="uni.ativo == true">
+            <td><br-switch icon (onChange)="usuarioIsRepresentante(uni)"  [checked]="isRepresentante(uni)"></br-switch></td>
+            <td>{{uni.usuario.nome}}</td>
+            <td>{{uni.usuario.cpf}}</td>
+            <td>{{uni.usuario.email}}</td>
             <td class="text-center">
-               <button class="br-button"><br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="cancelarUsuario(usuario)"/></button>
+               <button class="br-button"><br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="cancelarUsuario(uni)"/></button>
             </td>
          </tr>
          </tbody>

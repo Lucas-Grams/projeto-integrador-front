@@ -43,35 +43,27 @@ export class ListarUsuariosComponent implements OnInit {
    inativar(usuario: Usuario) {
       Swal.fire({
          title: 'Ops...',
-         text: `Você tem certeza que deseja  ${usuario.ativo? 'inativar' : 'ativar'} essa unidade?`,
+         text: `Você tem certeza que deseja  ${usuario.ativo? 'inativar' : 'ativar'} esse usuário?`,
          icon: 'warning',
          showCancelButton: true,
          confirmButtonText: 'Sim',
          cancelButtonText: 'Não'
       }).then((result) => {
          if (result.value) {
-            if(true){
-               Swal.fire({
-                  title: 'Erro!',
-                  text: `Esta unidade não pode ser desativada por ser uma ${usuario.nome}.`,
-                  icon: 'error',
-                  showCancelButton: true,
-                  confirmButtonText: 'OK'
-               }).then(()=>this.el.nativeElement.ownerDocument.defaultView.location.reload());
-            }else if(usuario != null){
-               Swal.fire({
-                  title: 'Erro!',
-                  text: `Esta unidade não pode ser desativada por existirem usuários vinculados.`,
-                  icon: 'error',
-                  showCancelButton: true,
-                  confirmButtonText: 'OK'
-               }).then(()=>this.el.nativeElement.ownerDocument.defaultView.location.reload());
-            }else {
-               // this.unidadeService.inativarUnidade(usuario.uuid).subscribe(() => {
-               //    this.el.nativeElement.ownerDocument.defaultView.location.reload();
-               // });
-            }
+            this.usuarioService.ativaInativa(usuario.uuid).subscribe((msg)=>{
+               if(msg.status == 'SUCCESS'){
+                  Swal.fire({
+                     title: 'Sucesso!',
+                     text: `Usuário inativado/ativado com sucesso!.`,
+                     icon: 'success',
+                     showCancelButton: true,
+                     confirmButtonText: 'OK'
+                  }).then(()=>this.el.nativeElement.ownerDocument.defaultView.location.reload());
+
+               }
+            });
          }
+
       })
    }
 
