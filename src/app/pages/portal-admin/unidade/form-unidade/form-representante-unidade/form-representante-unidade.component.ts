@@ -35,10 +35,6 @@ export class FormRepresentanteUnidadeComponent implements OnInit {
          cpf: [this.newUsuario?.cpf, [Validators.required, cpfValidator()]],
          email: [this.newUsuario?.email, [Validators.required, Validators.email, Validators.maxLength(70)]],
       });
-
-      // this.formGroup2.valueChanges.subscribe(() => {
-      //    this.emitirForm.emit(this.formGroup2);
-      //       // });
    }
 
    ngOnInit() {
@@ -50,21 +46,6 @@ export class FormRepresentanteUnidadeComponent implements OnInit {
          });
       });
    }
-
-   // getAddressByCep() {
-   //    const field = this.formGroup2.get('cep');
-   //    if (!field?.value) return;
-   //    const cep = field?.value[0];
-   //    if (cep.length === 9) {
-   //       this.cepService.getAddrress(cep).subscribe(response => {
-   //          if (response && !response.erro) {
-   //             this.formGroup2.get('rua')?.setValue(response.logradouro);
-   //             this.formGroup2.get('cidade')?.setValue(response.localidade);
-   //             this.formGroup2.get('uf')?.setValue(response.uf);
-   //          }
-   //       });
-   //    }
-   // }
 
    verificaNovoUser(event: boolean) {
       event ? this.novoUser = true : this.novoUser = false;
@@ -85,7 +66,6 @@ export class FormRepresentanteUnidadeComponent implements OnInit {
          }
       })
       console.log(this.newUsuario)
-      //this.emitirNovoUsuario();
    }
 
    adicionarNovoUsuario() {

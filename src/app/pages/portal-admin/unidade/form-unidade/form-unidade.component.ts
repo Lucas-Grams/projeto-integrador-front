@@ -71,10 +71,7 @@ export class FormUnidadeComponent implements OnInit {
    @ViewChild('gerenciadoraSelect', {static: false}) gerenciadoraSelect!: BrSelectComponent;
 
    validarUc: boolean = false;
-   newUsuario: Usuario = new Usuario();
-
    @ViewChild('formUser') formUser?: FormRepresentanteUnidadeComponent;
-   formRepresentante!: FormGroup;
    representante: Usuario = new Usuario();
 
    tipoUnidade: any = [];
@@ -240,20 +237,6 @@ export class FormUnidadeComponent implements OnInit {
       }
    }
 
-   // receberForm(form: FormGroup){
-   //    this.formRepresentante = form;
-   //    this.representante.nome = this.formRepresentante.get('nome')?.value;
-   //    this.representante.cpf = this.formRepresentante.get('cpf')?.value;
-   //    this.representante.email = this.formRepresentante.get('email')?.value;
-   //    this.representante.permissao?.push('so');
-   //    console.log(this.representante);
-   //    const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, this.representante));
-   //    if(!jaExiste){
-   //       this.unidade.usuarios.push(this.representante);
-   //       console.log(this.unidade.usuarios)
-   //    }
-   //    this.representante = new Usuario();
-   // }
    comparaUsuarios(user1: Usuario, user2: Usuario) {
       return user1.cpf == user2.cpf && user1.email == user2.email;
    }
