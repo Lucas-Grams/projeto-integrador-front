@@ -44,47 +44,52 @@ export class FormEditarUsuarioComponent implements OnInit {
          this.uuid = param['uuid'];
       });
 
-      this.usuarioService.findByUuid(this.uuid).subscribe((data) => {
-         this.usuario = data;
-         this.formGroup = this.fb.group({
-            id: this.fb.control(this.usuario.id),
-            nome: this.fb.control(this.usuario.nome, [Validators.minLength(2), Validators.maxLength(100), Validators.required]),
-            cpf: this.fb.control(this.usuario.cpf, [Validators.required, cpfValidator()]),
-            email: this.fb.control(this.usuario.email, [Validators.required, Validators.email, Validators.maxLength(70)])
-         });
-      });
-      this.usuarioService.findUnidadesByUsuarioUuid(this.uuid).subscribe((data) => {
-         this.unidadeUsuario = data;
-         this.filterUnidadesUsuario(this.unidadeUsuario);
-      });
-   }
+        this.usuarioService.findByUuid(this.uuid).subscribe((data)=>{
+            this.usuario = data;
+            this.formGroup = this.fb.group({
+                id: this.fb.control(this.usuario.id),
+                nome: this.fb.control(this.usuario.nome, [Validators.minLength(2), Validators.maxLength(100), Validators.required]),
+                cpf: this.fb.control(this.usuario.cpf, [Validators.required, cpfValidator()]),
+                email: this.fb.control(this.usuario.email, [Validators.required, Validators.email, Validators.maxLength(70)])
+            });
+        });
+        // Agora que os dados estão disponíveis, crie o FormGroup
+        this.usuarioService.findUnidadesByUsuarioUuid(this.uuid).subscribe((data) => {
+            this.unidadeUsuario = data;
+            this.filterUnidadesUsuario(this.unidadeUsuario);
+        });
+    }
 
-   ngOnInit() {
-   }
+    ngOnInit() {
+
+    }
+
+
+
 
    filterUnidadesUsuario(vinculos: UnidadeUsuario[]) {
       let vinculosFiltrados: UnidadeUsuario[] = [];
 
-      vinculos.forEach((uni) => {
-         // Verifica se vinculosFiltrados não está vazio
-         if (vinculosFiltrados.length === 0) {
-            vinculosFiltrados.push(uni);
-         } else {
-            // Encontra o índice do elemento com a mesma unidade.id
-            let i = vinculosFiltrados.findIndex((item) => item.unidade.id === uni.unidade.id);
-
-            if (i === -1) {
-               // Se não encontrar, adiciona uma nova entrada
-               vinculosFiltrados.push(uni);
+        vinculos.forEach((uni) => {
+            // Verifica se vinculosFiltrados não está vazio
+            if (vinculosFiltrados.length === 0) {
+                vinculosFiltrados.push(uni);
             } else {
-               // Se encontrar, adiciona a permissão ao array existente
-               vinculosFiltrados[i].permissao.push(...uni.permissao);
+                // Encontra o índice do elemento com a mesma unidade.id
+                let i = vinculosFiltrados.findIndex((item) => item.unidade.id === uni.unidade.id);
+
+                if (i === -1) {
+                    // Se não encontrar, adiciona uma nova entrada
+                    vinculosFiltrados.push(uni);
+                } else {
+                    // Se encontrar, adiciona a permissão ao array existente
+                    vinculosFiltrados[i].permissao.push(...uni.permissao);
+                }
             }
-         }
-      });
-      this.unidadeUsuario = [];
-      this.unidadeUsuario = vinculosFiltrados;
-   }
+        });
+        this.unidadeUsuario = [];
+        this.unidadeUsuario = vinculosFiltrados;
+    }
 
 
    receberUnidade(unidade: Unidade) {
@@ -110,20 +115,20 @@ export class FormEditarUsuarioComponent implements OnInit {
       }
    }
 
-   usuarioIsRepresentante(uni: UnidadeUsuario): void {
-      const permissao: Permissao = {id: null, descricao: 'representante'};
-      if (!uni.permissao) {
-         uni.permissao = [];
-      }
-      const permissaoIndex: number = uni.permissao.findIndex((perm) => perm.descricao === 'representante');
-      if (permissaoIndex === -1) {
-         // Se o usuário não tem a permissão, adiciona
-         uni.permissao.splice(0, 0, permissao);
-      } else {
-         // Se o usuário já tem a permissão, remove
-         uni.permissao.splice(permissaoIndex, 1);
-      }
-   }
+    usuarioIsRepresentante(uni: UnidadeUsuario): void {
+        const permissao: Permissao = {id: null, descricao: 'representante'};
+        if (!uni.permissao) {
+            uni.permissao = [];
+        }
+        const permissaoIndex: number = uni.permissao.findIndex((perm) => perm.descricao === 'representante');
+        if (permissaoIndex === -1) {
+            // Se o usuário não tem a permissão, adiciona
+            uni.permissao.splice(0, 0, permissao);
+        } else {
+            // Se o usuário já tem a permissão, remove
+            uni.permissao.splice(permissaoIndex, 1);
+        }
+    }
 
    isRepresentante(uni: UnidadeUsuario): boolean {
       if (uni.permissao && uni.permissao != null && uni.permissao != undefined) {
