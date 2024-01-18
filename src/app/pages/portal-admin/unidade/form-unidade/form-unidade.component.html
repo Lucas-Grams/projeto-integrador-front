@@ -5,7 +5,6 @@
 
    <form [formGroup]="formGroup" (ngSubmit)="salvar()">
       <pnip-validators-forms-utils [formGroup]="formGroup" #validatorsFormsUtils></pnip-validators-forms-utils>
-      <!-- tipo/gerenciadora -->
       <div class="row mb-2">
          <div class="col-4">
             <div class="br-select">
@@ -43,7 +42,6 @@
          </div>
       </div>
 
-      <!-- nome/cep -->
       <div class="row mb-2">
 
          <div class="col-2">
@@ -65,7 +63,6 @@
          </div>
       </div>
 
-      <!-- rua/numero/bairro -->
       <div class="row mb-3">
          <div class="col-4">
             <br-input density="small" name="complemento" label="Complemento" formControlName="complemento"/>
@@ -96,14 +93,8 @@
                   <br-input density="small" name="coordenadas" label="Coordenadas"  type="text" [value]="latLng"/>
                </div>
          </div>
-
-
-         <!--         <div class="col-4">-->
-         <!--            <br-input density="small" name="bairro" label="Bairro" formControlName="bairro"/>-->
-         <!--         </div>-->
       </div>
       <div class="form-row">
-         <!-- MAPA -->
          <ng-container *ngIf="this.unidade.endereco.latitude && this.unidade.endereco.longitude">
             <div class="form-group ">
                <ngui-map class="gmap"
@@ -148,7 +139,7 @@
    #formUser>
 </pnip-admin-form-representante-unidade>
 
-   <ng-container *ngIf="unidade.usuarios.length > 0; else semUsuarios">
+   <ng-container *ngIf="unidadeUsuario.length > 0; else semUsuarios">
       <table class="table">
          <thead class="thead-light">
          <tr>
@@ -159,14 +150,14 @@
             <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
          </tr>
          </thead>
-         <tbody *ngFor="let usuario of unidade.usuarios">
+         <tbody *ngFor="let uni of unidadeUsuario">
          <tr>
-            <td><br-switch icon (onChange)="usuarioIsRepresentante(usuario)"  [checked]="isRepresentante(usuario)"></br-switch></td>
-            <td>{{usuario.nome}}</td>
-            <td>{{usuario.cpf}}</td>
-            <td>{{usuario.email}}</td>
+            <td><br-switch icon (onChange)="usuarioIsRepresentante(uni)"  [checked]="isRepresentante(uni)"></br-switch></td>
+            <td>{{uni.usuario.nome}}</td>
+            <td>{{uni.usuario.cpf}}</td>
+            <td>{{uni.usuario.email}}</td>
             <td class="text-center">
-               <button class="br-button"><br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="cancelarUsuario(usuario)"/></button>
+               <button class="br-button"><br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="cancelarUsuario(uni)"/></button>
             </td>
          </tr>
          </tbody>

@@ -25,10 +25,7 @@ export class FormRepresentanteUnidadeComponent implements OnInit {
    @Output() newUserEmitter: EventEmitter<Usuario> = new EventEmitter<Usuario>();
    @ViewChild('userSelect', {static: false}) userSelect!: BrSelectComponent;
    users: any = [];
-   @Input() uuid?: String;
-
    constructor(private fb: FormBuilder,
-               private cepService: CepService,
                private usuarioService: UsuarioService) {
       this.formGroup2 = this.fb.group({
          nome: [this.newUsuario?.nome, [Validators.required, Validators.maxLength(100)]],
@@ -36,35 +33,17 @@ export class FormRepresentanteUnidadeComponent implements OnInit {
          email: [this.newUsuario?.email, [Validators.required, Validators.email, Validators.maxLength(70)]],
       });
 
-      // this.formGroup2.valueChanges.subscribe(() => {
-      //    this.emitirForm.emit(this.formGroup2);
-      //       // });
+
    }
 
    ngOnInit() {
       this.usuarioService.findUsuariosDip().subscribe((data) => {
-         console.log(data)
          this.usuarios = data;
          this.usuarios.forEach((user) => {
             this.users.push({label: user.nome + '-' + user.email, value: user.id})
          });
       });
    }
-
-   // getAddressByCep() {
-   //    const field = this.formGroup2.get('cep');
-   //    if (!field?.value) return;
-   //    const cep = field?.value[0];
-   //    if (cep.length === 9) {
-   //       this.cepService.getAddrress(cep).subscribe(response => {
-   //          if (response && !response.erro) {
-   //             this.formGroup2.get('rua')?.setValue(response.logradouro);
-   //             this.formGroup2.get('cidade')?.setValue(response.localidade);
-   //             this.formGroup2.get('uf')?.setValue(response.uf);
-   //          }
-   //       });
-   //    }
-   // }
 
    verificaNovoUser(event: boolean) {
       event ? this.novoUser = true : this.novoUser = false;
@@ -74,25 +53,16 @@ export class FormRepresentanteUnidadeComponent implements OnInit {
       this.newUsuario = new Usuario();
       this.usuarios.forEach((us) => {
          if (us.id == this.userSelect.getOptionSelected()) {
-            if(us.permissoes == null){
-               us.permissoes = [];
-            }
-            if (us.permissoes.length == 0) {
-               const permissao: Permissao = { descricao: 'so'};
-               us.permissoes.push(permissao);
-            }
             this.newUsuario = Object.assign(us);
          }
-      })
-      console.log(this.newUsuario)
-      //this.emitirNovoUsuario();
+      });
    }
 
    adicionarNovoUsuario() {
       let user = new Usuario();
       user.nome = this.formGroup2.get("nome")?.value;
       user.email = this.formGroup2.get("email")?.value;
-      user.cpf = this.formGroup2.get("cpf")?.value;
+      user.cpf = this.formGroup2.get("cpf")?.value.toString();
       const permissao: Permissao = { descricao: 'so'};
       user.permissoes.push(permissao);
       this.newUsuario = Object.assign({}, user);
