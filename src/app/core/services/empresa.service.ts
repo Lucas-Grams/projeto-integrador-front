@@ -24,15 +24,15 @@ export class EmpresaService {
 
 
    findAll():Observable<Empresa[]>{
-        return this.http.get<Empresa[]>(`${this.urlEmpresa}` + '/findAll');
+        return this.http.get<Empresa[]>(`${this.urlEmpresa}` + '/find-all');
     }
 
     findEmpresaByUuid(uuid: String):Observable<Empresa>{
-        return this.http.get<Empresa>(`${this.urlEmpresa}` + '/findEmpresaByUuid/'+ uuid);
+        return this.http.get<Empresa>(`${this.urlEmpresa}` + '/find-empresa-by-uuid/'+ uuid);
     }
 
     ativaInativa(uuid?: String):Observable<ResponseDto>{
-        return this.http.post<ResponseDto>(`${this.urlEmpresa}` + '/ativaInativa',uuid);
+        return this.http.post<ResponseDto>(`${this.urlEmpresa}` + '/ativa-inativa',uuid);
     }
 
     salvar(empresa: EmpresaUsuario[]):Observable<ResponseDto>{
@@ -40,6 +40,6 @@ export class EmpresaService {
     }
 
     findUsuariosByUuidEmpresa(uuid: String):Observable<EmpresaUsuario[]>{
-        return this.http.get<EmpresaUsuario[]>(`${this.urlEmpresa}` + '/findUsuariosByUuidEmpresa/'+ uuid);
+        return this.http.get<EmpresaUsuario[]>(`${this.urlEmpresa}` + '/find-usuarios-by-uuid-empresa/'+ uuid);
     }
 }

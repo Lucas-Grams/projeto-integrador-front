@@ -22,27 +22,27 @@ export class UnidadeService{
    }
 
    findAll():Observable<Unidade[]>{
-      return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/findAll');
+      return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/find-all');
    }
 
    getGerenciadoras(tipo: String):Observable<Unidade[]>{
-      return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/getGerenciadoras/'+ tipo);
+      return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/get-gerenciadoras/'+ tipo);
    }
 
    inativarUnidade(uuid: String){
-      return this.http.post(`${this.urlUnidade}` + '/inativarUnidade/', uuid);
+      return this.http.post(`${this.urlUnidade}` + '/inativar-unidade/', uuid);
    }
 
    findUnidadeByUuid(uuid: String): Observable<Unidade>{
-      return this.http.get<Unidade>(`${this.urlUnidade}` + '/findUnidadeByUuid/'+ uuid);
+      return this.http.get<Unidade>(`${this.urlUnidade}` + '/find-unidade-by-uuid/'+ uuid);
    }
 
 
    findTiposUnidades():Observable<ResponseDto<TipoUnidade[]>>{
-      return this.http.get<ResponseDto<TipoUnidade[]>>(`${this.urlUnidade}` + '/findAllTipos')
+      return this.http.get<ResponseDto<TipoUnidade[]>>(`${this.urlUnidade}` + '/find-all-tipos')
    }
 
    findUsuariosByUnidadeUuid(uuid: String):Observable<UnidadeUsuario[]>{
-   return this.http.get<UnidadeUsuario[]>(`${this.urlUnidade}` + '/findUsuariosByUnidadeUuid/'+ uuid);
+   return this.http.get<UnidadeUsuario[]>(`${this.urlUnidade}` + '/find-usuarios-by-unidade-uuid/'+ uuid);
 }
 }
