@@ -29,6 +29,11 @@ export class PrincipalComponent {
          label:'USUÁRIOS',
          icon:'user',
          url:'/usuarios'
+      },
+      {
+         label:'EMPRESAS',
+         icon:'city',
+         url:'/empresas'
       }
    ];
 

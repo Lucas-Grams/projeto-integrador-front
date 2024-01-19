@@ -5,7 +5,7 @@ import {Observable} from "rxjs";
 import {ResponseDto} from "../dto/response.dto";
 import {EnvService} from "./env/env.service";
 import {TipoUnidade} from "../models/tipo-unidade.model";
-import {UnidadeUsuario} from "../models/UnidadeUsuario.model";
+import {UnidadeUsuario} from "../models/unidade-usuario.model";
 
 @Injectable({
    providedIn: 'root'

@@ -3,17 +3,16 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Unidade} from "../../../../../core/models/unidade.model";
 import {UnidadeService} from "../../../../../core/services/unidade.service";
-import {ToastrService} from "ngx-toastr";
 import {CepService} from "../../../../../core/services/cep.service";
-import {ValidatorsFormsUtils} from "../../../../../utils/components/validators-forms.utils";
 import {LoadingService} from "../../../../../core/services/loading.service";
-import {Permissao, Usuario} from "../../../../../core/models/usuario.model";
+import {Usuario} from "../../../../../core/models/usuario.model";
 import {UsuarioService} from "../../../../../core/services/usuario.service";
 import Swal from "sweetalert2";
 import {BrSelectComponent} from "../../../../../shared/br-select/br-select.component";
 import {FormRepresentanteUnidadeComponent} from "../form-representante-unidade/form-representante-unidade.component";
 import {InfoWindow} from "@ngui/map";
-import {UnidadeUsuario} from "../../../../../core/models/UnidadeUsuario.model";
+import {UnidadeUsuario} from "../../../../../core/models/unidade-usuario.model";
+import {Permissao} from "../../../../../core/models/permissao.model";
 
 interface Marker {
    object: google.maps.Marker,

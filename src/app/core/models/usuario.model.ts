@@ -1,6 +1,7 @@
 import {Endereco} from "./endereco.model";
+import {Permissao} from "./permissao.model";
 
-export class Usuario{
+export class Usuario {
    id?: number;
    nome?: String;
    cpf?: String;
@@ -10,10 +11,5 @@ export class Usuario{
    endereco?: Endereco;
    ativo?: boolean;
    uuid?: String;
-   permissoes:Permissao[] = [];
-
-}
-export class Permissao{
-   id?: number | null;
-   descricao?: String;
+   permissoes: Permissao[] = [];
 }

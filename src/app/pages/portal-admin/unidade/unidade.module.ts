@@ -37,13 +37,13 @@ import {NguiMapModule} from "@ngui/map";
             positionClass: 'toast-top-right',
             preventDuplicates: true,
         }),
-       NguiMapModule,
-       NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyCMyG1h3lMnkv9fYUelTjDe9IXwpxpa0-U&libraries=visualization,drawing'})
-    ],
-   providers: [
-      UnidadeService,
-      ToastrService
-   ],
-   schemas: [CUSTOM_ELEMENTS_SCHEMA]
+NguiMapModule,
+    NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyCMyG1h3lMnkv9fYUelTjDe9IXwpxpa0-U&libraries=visualization,drawing'})
+],
+providers: [
+    UnidadeService,
+    ToastrService
+],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class UnidadeModule {}

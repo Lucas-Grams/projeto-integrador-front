@@ -2,12 +2,13 @@ import {Component, EventEmitter, OnInit, Output, ViewChild, ViewChildren} from '
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Unidade} from "../../../../../core/models/unidade.model";
 import {cpfValidator} from "../../../../../utils/validators/cpf.validator";
-import {Permissao, Usuario} from "../../../../../core/models/usuario.model";
+import { Usuario} from "../../../../../core/models/usuario.model";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UsuarioService} from "../../../../../core/services/usuario.service";
-import {UnidadeUsuario} from "../../../../../core/models/UnidadeUsuario.model";
+import {UnidadeUsuario} from "../../../../../core/models/unidade-usuario.model";
 import Swal from "sweetalert2";
 import {LoadingService} from "../../../../../core/services/loading.service";
+import {Permissao} from "../../../../../core/models/permissao.model";
 
 @Component({
     selector: 'pnip-admin-form-editar-usuairo',
