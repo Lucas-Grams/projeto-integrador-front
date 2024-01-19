@@ -7,20 +7,23 @@ import {Usuario} from "../models/usuario.model";
 import {UnidadeUsuario} from "../models/unidade-usuario.model";
 import {Empresa} from "../models/empresa.model";
 import {EmpresaUsuario} from "../models/empresa-usuario.model";
+import {EnvService} from "./env/env.service";
 
 const URL= "http://localhost:8089";
 @Injectable({
-    providedIn: 'root'
+   providedIn: 'root'
 })
 export class EmpresaService {
-    private readonly urlEmpresa = URL + "/empresa";
-    private http: HttpClient;
+   private urlEmpresa: string;
+   private http: HttpClient;
 
-    constructor(http: HttpClient) {
-        this.http = http;
-    }
+   constructor(http: HttpClient, private env: EnvService) {
+      this.urlEmpresa = this.env.url.api +  "/empresa";
+      this.http = http;
+   }
 
-    findAll():Observable<Empresa[]>{
+
+   findAll():Observable<Empresa[]>{
         return this.http.get<Empresa[]>(`${this.urlEmpresa}` + '/findAll');
     }
 

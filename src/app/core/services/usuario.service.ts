@@ -20,7 +20,6 @@ export class UsuarioService {
       this.http = http;
    }
 
-
    findAll():Observable<Usuario[]>{
       return this.http.get<Usuario[]>(`${this.urlUsuario}` + '');
    }
