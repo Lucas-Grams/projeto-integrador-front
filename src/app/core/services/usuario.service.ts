@@ -26,26 +26,26 @@ export class UsuarioService {
    }
 
    findByUuid(uuid: String):Observable<Usuario>{
-      return this.http.get<Usuario>(`${this.urlUsuario}`+ '/findByUuid/' + uuid);
+      return this.http.get<Usuario>(`${this.urlUsuario}`+ '/find-by-uuid/' + uuid);
    }
 
    findUsuariosUnidade(uuid?: String):Observable<Usuario[]>{
-      return this.http.get<Usuario[]>(`${this.urlUsuario}` + '/findUsuariosUnidade/'+ uuid);
+      return this.http.get<Usuario[]>(`${this.urlUsuario}` + '/find-usuarios-unidade/'+ uuid);
    }
 
    findUsuariosDip():Observable<Usuario[]>{
-      return this.http.get<Usuario[]>(`${this.urlUsuario}` + '/findUsuariosDip');
+      return this.http.get<Usuario[]>(`${this.urlUsuario}` + '/find-usuarios-dip');
    }
 
    findUnidadesByUsuarioUuid(uuid: String):Observable<UnidadeUsuario[]>{
-      return this.http.get<UnidadeUsuario[]>(`${this.urlUsuario}` + '/findUnidadesByUsuarioUuid/'+ uuid);
+      return this.http.get<UnidadeUsuario[]>(`${this.urlUsuario}` + '/find-unidades-by-usuario-uuid/'+ uuid);
    }
 
    salvar(unidadeUsuario: UnidadeUsuario[]):Observable<ResponseDto>{
-      return this.http.post<ResponseDto>(`${this.urlUsuario}` + '/salvarUsuario', unidadeUsuario);
+      return this.http.post<ResponseDto>(`${this.urlUsuario}` + '/salvar-usuario', unidadeUsuario);
    }
 
    ativaInativa(uuid?: String):Observable<ResponseDto>{
-      return this.http.post<ResponseDto>(`${this.urlUsuario}` + '/ativaInativa',uuid);
+      return this.http.post<ResponseDto>(`${this.urlUsuario}` + '/ativa-inativa',uuid);
    }
 }

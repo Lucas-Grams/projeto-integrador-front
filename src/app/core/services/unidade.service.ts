@@ -21,19 +21,19 @@ export class UnidadeService{
    }
 
    findAll():Observable<Unidade[]>{
-      return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/findAll');
+      return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/find-all');
    }
 
    getGerenciadoras(tipo: String):Observable<Unidade[]>{
-      return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/getGerenciadoras/'+ tipo);
+      return this.http.get<Unidade[]>(`${this.urlUnidade}` + '/get-gerenciadoras/'+ tipo);
    }
 
    inativarUnidade(uuid: String){
-      return this.http.post(`${this.urlUnidade}` + '/inativarUnidade/', uuid);
+      return this.http.post(`${this.urlUnidade}` + '/inativar-unidade/', uuid);
    }
 
    findUnidadeByUuid(uuid: String): Observable<Unidade>{
-      return this.http.get<Unidade>(`${this.urlUnidade}` + '/findUnidadeByUuid/'+ uuid);
+      return this.http.get<Unidade>(`${this.urlUnidade}` + '/find-unidade-by-uuid/'+ uuid);
    }
 
    update(unidade: Unidade):Observable<ResponseDto<Unidade>>{
@@ -41,6 +41,6 @@ export class UnidadeService{
    }
 
    findTiposUnidades():Observable<ResponseDto<TipoUnidade[]>>{
-      return this.http.get<ResponseDto<TipoUnidade[]>>(`${this.urlUnidade}` + '/findAllTipos')
+      return this.http.get<ResponseDto<TipoUnidade[]>>(`${this.urlUnidade}` + '/find-all-tipos')
    }
 }
