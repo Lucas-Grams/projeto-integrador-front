@@ -5,16 +5,18 @@ import {Observable} from "rxjs";
 import {ResponseDto} from "../dto/response.dto";
 import {Usuario} from "../models/usuario.model";
 import {UnidadeUsuario} from "../models/UnidadeUsuario.model";
+import {EnvService} from "./env/env.service";
 
 const URL= "http://localhost:8089";
 @Injectable({
    providedIn: 'root'
 })
 export class UsuarioService {
-   private readonly urlUsuario = URL + "/usuario";
+   private urlUsuario: string;
    private http: HttpClient;
 
-   constructor(http: HttpClient) {
+   constructor(http: HttpClient, private env: EnvService) {
+      this.urlUsuario = this.env.url.api +  "/usuario";
       this.http = http;
    }
 
