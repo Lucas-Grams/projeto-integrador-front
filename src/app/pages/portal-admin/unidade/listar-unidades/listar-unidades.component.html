@@ -9,9 +9,9 @@
          <br-button icon="plus" label="Nova unidade" type="primary" [routerLink]="'/portal-admin/unidades/cadastrar-nova-unidade'"></br-button>
       </div>
    </div>
-<ng-container *ngIf="unidades.length>0; else semUnidades">
-   <table class="table">
-      <thead class="thead-light">
+   <ng-container *ngIf="unidades.length>0; else semUnidades">
+      <table class="table">
+         <thead class="thead-light">
          <tr>
             <th class="text-blue-vivid-60 text-bold" scope="col">Ativa</th>
             <th class="text-blue-vivid-60 text-bold" scope="col">Tipo</th>
@@ -20,8 +20,8 @@
             <th class="text-blue-vivid-60 text-bold" scope="col">UF</th>
             <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
          </tr>
-      </thead>
-      <tbody *ngFor="let unidade of unidades">
+         </thead>
+         <tbody *ngFor="let unidade of unidades">
          <tr>
             <td><br-switch icon [checked]="unidade.ativo" (click)="inativar(unidade)"></br-switch></td>
             <td>{{unidade.tipo}}</td>
@@ -29,12 +29,14 @@
             <td>{{unidade.endereco?.cidade}}</td>
             <td>{{unidade.endereco?.uf}}</td>
             <td class="text-center">
+               <!--               <button class="br-button"><br-icon-base icon-name="pencil-alt" family-name="fas" class="mr-2 text-success" [routerLink]="'editar/' + unidade.uuid"/></button>-->
+               <!--               <button class="br-button"><br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="deletar(unidade.uuid)"/></button>-->
                <button class="br-button"><br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60" [routerLink]="'editar/' + unidade.uuid"/></button>
             </td>
          </tr>
-      </tbody>
-   </table>
-</ng-container>
+         </tbody>
+      </table>
+   </ng-container>
    <ng-template #semUnidades>
       <div class="br-message info" role="alert">
          <div class="icon"><i class="fas fa-info-circle fa-lg" aria-hidden="true"></i>

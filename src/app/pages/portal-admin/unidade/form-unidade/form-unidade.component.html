@@ -10,12 +10,12 @@
             <div class="br-select">
                <div class="br-input">
                   <br-select-pnip
-                     id="tipoUnidade"
-                     label="Tipo de Unidade"
-                     [options]="tipoUnidade"
-                     [optionSelected]="unidade.tipo"
-                     (change)="selecionaGerenciadora()"
-                     #tipoUnidadeSelect>
+                          id="tipoUnidade"
+                          label="Tipo de Unidade"
+                          [options]="tipoUnidade"
+                          [optionSelected]="unidade.tipo"
+                          (change)="selecionaGerenciadora()"
+                          #tipoUnidadeSelect>
                   </br-select-pnip>
                </div>
             </div>
@@ -30,11 +30,11 @@
                <div class="br-select">
                   <div class="br-input">
                      <br-select-pnip
-                        id="idUnidadeGerenciadora"
-                        label="Unidade Gerenciadora"
-                        [options]="unidades"
-                        [optionSelected]="unidades.id"
-                        #gerenciadoraSelect>
+                             id="idUnidadeGerenciadora"
+                             label="Unidade Gerenciadora"
+                             [options]="unidades"
+                             [optionSelected]="unidades.id"
+                             #gerenciadoraSelect>
                      </br-select-pnip>
                   </div>
                </div>
@@ -49,13 +49,13 @@
                       [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (change)="validaCEP()"
                       (ngModelChange)="validaCEP()"/>
             <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
+                    *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
          </div>
          <div class="col-8">
             <br-input density="small" name="rua" label="Rua" formControlName="rua"
                       [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
             <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'rua'}"></ng-container>
+                    *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'rua'}"></ng-container>
          </div>
          <div class="col-2">
             <br-input density="small" name="numero" label="Número" formControlName="numero" type="text"
@@ -74,24 +74,24 @@
                   <br-input density="small" name="municipio" label="Município" formControlName="cidade"
                             [attr.state]="validatorsFormsUtils.getStateOfField('cidade')"/>
                   <ng-container
-                     *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cidade'}"></ng-container>
+                          *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cidade'}"></ng-container>
                </div>
             </div>
          </div>
 
          <div class="col-1">
-               <div class="br-input">
-                  <br-input density="small" name="uf" label="UF" formControlName="uf"
-                            [attr.state]="validatorsFormsUtils.getStateOfField('uf')"/>
-                  <ng-container
-                     *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'uf'}"></ng-container>
-               </div>
+            <div class="br-input">
+               <br-input density="small" name="uf" label="UF" formControlName="uf"
+                         [attr.state]="validatorsFormsUtils.getStateOfField('uf')"/>
+               <ng-container
+                       *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'uf'}"></ng-container>
+            </div>
          </div>
 
          <div class="col-3">
-               <div class="br-input">
-                  <br-input density="small" name="coordenadas" label="Coordenadas"  type="text" [value]="latLng"/>
-               </div>
+            <div class="br-input">
+               <br-input density="small" name="coordenadas" label="Coordenadas"  type="text" [value]="latLng"/>
+            </div>
          </div>
       </div>
       <div class="form-row">
@@ -106,11 +106,11 @@
                          [fullscreenControlOptions]="{ position: 'TOP_RIGHT' }"
                >
                   <marker
-                     position="{{ unidade.endereco.latitude }}, {{
+                          position="{{ unidade.endereco.latitude }}, {{
                                      unidade.endereco.longitude
                                   }}"
-                     draggable="true"
-                     (dragend)="moveuPontoMaps($event)"
+                          draggable="true"
+                          (dragend)="moveuPontoMaps($event)"
                   >
                   </marker>
                </ngui-map>
@@ -128,14 +128,16 @@
          </ng-container>
       </div>
 
-</form>
+   </form>
 
-<h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Adicionar Usuários</h2>
-<pnip-admin-form-representante-unidade
+   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Adicionar Usuários</h2>
+   <pnip-admin-form-representante-unidade
 
-   (newUserEmitter)="receberNovoUsuario($event)"
-   #formUser>
-</pnip-admin-form-representante-unidade>
+           (newUserEmitter)="receberNovoUsuario($event)"
+           (isEdit) = "false"
+           (uuid) = "unidade.uuid"
+           #formUser>
+   </pnip-admin-form-representante-unidade>
 
    <ng-container *ngIf="unidadeUsuario.length > 0; else semUsuarios">
       <table class="table">
@@ -173,9 +175,9 @@
       </div>
    </ng-template>
 
-<div class="d-flex justify-content-end mt-4">
-   <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/unidades'"/>
-   <br-button label="Salvar" type="primary" (click)="salvar()"/>
-</div>
+   <div class="d-flex justify-content-end mt-4">
+      <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/unidades'"/>
+      <br-button label="Salvar" type="primary" (click)="salvar()"/>
+   </div>
 
 </div>

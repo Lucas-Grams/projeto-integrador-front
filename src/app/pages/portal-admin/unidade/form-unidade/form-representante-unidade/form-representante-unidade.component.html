@@ -1,4 +1,5 @@
 <div class="row">
+
    <div class="br-tab">
       <nav class="tab-nav">
          <ul>
@@ -17,6 +18,7 @@
    </div>
 </div>
 
+
 <ng-container *ngIf="novoUser; else usuarioExistente">
    <form [formGroup]="formGroup2">
 
@@ -28,19 +30,19 @@
             <br-input density="small" name="nome" label="Nome completo" formControlName="nome"
                       [attr.state]="validatorsFormsUtils.getStateOfField('nome')"/>
             <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'nome'}"></ng-container>
+                    *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'nome'}"></ng-container>
          </div>
          <div class="col-2">
             <br-input density="small" name="cpf" label="CPF" formControlName="cpf" mask="###.###.###-##"
                       [attr.state]="validatorsFormsUtils.getStateOfField('cpf')"/>
             <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cpf'}"></ng-container>
+                    *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cpf'}"></ng-container>
          </div>
          <div class="col-4">
             <br-input density="small" name="email" label="E-mail" formControlName="email"
                       [attr.state]="validatorsFormsUtils.getStateOfField('email')"/>
             <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'email'}"></ng-container>
+                    *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'email'}"></ng-container>
          </div>
 
          <button class="br-button primary mr-3 mt-3" type="button" (click)="adicionarNovoUsuario()">Adicionar</button>
@@ -56,11 +58,11 @@
          <div class="br-select">
             <div class="br-input">
                <br-select-pnip
-                  id="idUsuario"
-                  label="Selecione o usuário"
-                  [options]="users"
-                  (change)="selecionaUsuario(users.value)"
-                  #userSelect>
+                       id="idUsuario"
+                       label="Selecione o usuário"
+                       [options]="users"
+                       (change)="selecionaUsuario(users.value)"
+                       #userSelect>
                </br-select-pnip>
             </div>
 

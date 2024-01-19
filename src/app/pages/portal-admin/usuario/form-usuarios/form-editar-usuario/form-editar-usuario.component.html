@@ -7,38 +7,38 @@
       </div>
    </div>
    <ng-container *ngIf="formGroup">
-   <form [formGroup]="formGroup">
+      <form [formGroup]="formGroup">
 
-      <pnip-validators-forms-utils [formGroup]="formGroup" #validatorsFormsUtils></pnip-validators-forms-utils>
+         <pnip-validators-forms-utils [formGroup]="formGroup" #validatorsFormsUtils></pnip-validators-forms-utils>
 
-      <!-- nome/cpf -->
-      <div class="row mb-2">
-         <div class="col-4">
-            <br-input density="small" name="nome" label="Nome completo" [value]="usuario.nome" formControlName="nome"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('nome')"/>
-            <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'nome'}"></ng-container>
+         <!-- nome/cpf -->
+         <div class="row mb-2">
+            <div class="col-4">
+               <br-input density="small" name="nome" label="Nome completo" [value]="usuario.nome" formControlName="nome"
+                         [attr.state]="validatorsFormsUtils.getStateOfField('nome')"/>
+               <ng-container
+                       *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'nome'}"></ng-container>
+            </div>
+            <div class="col-3">
+               <br-input density="small" name="cpf" label="CPF" formControlName="cpf" [value]="usuario.cpf" mask="###.###.###-##"
+                         [attr.state]="validatorsFormsUtils.getStateOfField('cpf')"/>
+               <ng-container
+                       *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cpf'}"></ng-container>
+            </div>
+            <div class="col-4">
+               <br-input density="small" name="email" label="E-mail" formControlName="email" [value]="usuario.email"
+                         [attr.state]="validatorsFormsUtils.getStateOfField('email')"/>
+               <ng-container
+                       *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'email'}"></ng-container>
+            </div>
          </div>
-         <div class="col-3">
-            <br-input density="small" name="cpf" label="CPF" formControlName="cpf" [value]="usuario.cpf" mask="###.###.###-##"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('cpf')"/>
-            <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cpf'}"></ng-container>
-         </div>
-         <div class="col-4">
-            <br-input density="small" name="email" label="E-mail" formControlName="email" [value]="usuario.email"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('email')"/>
-            <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'email'}"></ng-container>
-         </div>
-      </div>
-   </form>
+      </form>
    </ng-container>
 
    <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Unidades disponíveis</h2>
 
    <pnip-admin-form-select-unidade
-      (unidadeEmitter)="receberUnidade($event)">
+           (unidadeEmitter)="receberUnidade($event)">
    </pnip-admin-form-select-unidade>
 
    <ng-container *ngIf="unidadeUsuario .length>0; else semUnidades">
