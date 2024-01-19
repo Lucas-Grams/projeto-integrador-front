@@ -208,6 +208,12 @@ export class FormEditarEmpresaComponent implements OnInit {
             empUsu.permissao.push(permissao);
             empUsu.ativo = true;
             this.empresaUsuario.push(empUsu);
+        }else{
+           this.empresaUsuario.forEach((emp)=>{
+              if(this.comparaUsuarios(emp, novoUsuario) && emp.ativo == false){
+                 emp.ativo = true;
+              }
+           })
         }
     }
     isRepresentante(emp: EmpresaUsuario): boolean {
@@ -272,7 +278,6 @@ export class FormEditarEmpresaComponent implements OnInit {
 
 
     salvar() {
-console.log(this.formGroup)
         if (this.formGroup?.valid ) {
             this.montaObjeto();
             if (this.empresaUsuario.length == 0) {
@@ -284,7 +289,6 @@ console.log(this.formGroup)
                     emp.empresa = this.empresa;
                 });
             }
-            console.log(this.empresaUsuario);
 
             this.empresaService.salvar(this.empresaUsuario).subscribe(mensagem => {
                 if (mensagem.status === 'SUCCESS' ) {
