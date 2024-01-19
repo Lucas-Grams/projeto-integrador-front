@@ -32,6 +32,7 @@ export class ViewSolicitacaoComponent implements OnInit {
    metadado: any;
    solicitacao: any;
    msgIndeferir = '';
+   responseOperacao = '';
    statusSolicitacao = '';
    showMessage = false;
 
@@ -58,6 +59,7 @@ export class ViewSolicitacaoComponent implements OnInit {
    }
 
    enviarSolicitacao() {
+      this.responseOperacao = '';
       if (this.statusSolicitacao === 'deferir') {
          const numEmbaracao = this.metadado?.habilitarTRDTO?.embarcacoes.length;
          let count = 0;
@@ -91,8 +93,8 @@ export class ViewSolicitacaoComponent implements OnInit {
          if (response) {
             this.router.navigate(['portal-mpa/solicitacoes']);
          }
-      }, error => {
-         console.error(error);
+      }, (responseError: any) => {
+         this.responseOperacao = responseError.error.message;
       });
    }
 

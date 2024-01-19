@@ -176,6 +176,10 @@
    </tbody>
 </table>
 
+<div class="mt-5">
+   <br-message *ngIf="responseOperacao" state="warning" title="Atenção" show-icon="true">{{responseOperacao}}.</br-message>
+</div>
+
 <div class="d-flex justify-content-end mt-5">
    <br-button label="Fechar" type="secondary" class="mr-2" (click)="router.navigate(['/portal-mpa/solicitacoes'])"/>
    <br-button label="Enviar" type="primary" (click)="enviarSolicitacao()" [disabled]="statusSolicitacao === '' || solicitacao.status !== 'EM_ANALISE'"/>

@@ -51,7 +51,7 @@
                 (change)="onUploadSelected($event, 'copiaHabilitacao')">
          <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'copiaHabilitacao'}"></ng-container>
          <br-message *ngIf="formGroup.get('copiaHabilitacao')?.valid" feedback state="success" show-icon="true">
-            Arquivo selecionado
+            Arquivo selecionado ({{this.formGroup.get('copiaHabilitacao')?.value}}).
          </br-message>
       </div>
       <div class="col-6 upload">
@@ -65,7 +65,7 @@
                (change)="onUploadSelected($event, 'diplomaCertificacao')">
          <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'diplomaCertificacao'}"></ng-container>
          <br-message *ngIf="formGroup.get('diplomaCertificacao')?.valid" feedback state="success" show-icon="true">
-            Arquivo selecionado
+            Arquivo selecionado ({{this.formGroup.get('diplomaCertificacao')?.value}}).
          </br-message>
       </div>
    </div>
