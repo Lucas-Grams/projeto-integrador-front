@@ -81,10 +81,8 @@ export class FormUsuarioComponent implements OnInit {
       }
       const permissaoIndex: number = uni.permissao.findIndex((perm) => perm.descricao === 'representante');
       if (permissaoIndex === -1) {
-         // Se o usuário não tem a permissão, adiciona
          uni.permissao.splice(0, 0, permissao);
       } else {
-         // Se o usuário já tem a permissão, remove
          uni.permissao.splice(permissaoIndex, 1);
       }
    }

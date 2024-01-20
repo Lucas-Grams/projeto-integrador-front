@@ -4,22 +4,13 @@ import {LoadingService} from "../../../../core/services/loading.service";
 import {Router} from "@angular/router";
 import {Unidade} from "../../../../core/models/unidade.model";
 import {UnidadeService} from "../../../../core/services/unidade.service";
-import {ToastrService} from "ngx-toastr";
 import {CepService} from "../../../../core/services/cep.service";
-import {cpfValidator} from "../../../../utils/validators/cpf.validator";
-import {cepValidator} from "../../../../utils/validators/cep.validator";
-import {ValidatorsFormsUtils} from "../../../../utils/components/validators-forms.utils";
 import {Usuario} from "../../../../core/models/usuario.model";
 import {FormRepresentanteUnidadeComponent} from "./form-representante-unidade/form-representante-unidade.component";
-import {Endereco} from "../../../../core/models/endereco.model";
 import {BrSelectComponent} from "../../../../shared/br-select/br-select.component";
-import {Hash} from "angular-oauth2-oidc/token-validation/fast-sha256js";
-import {TipoUnidade} from "../../../../core/models/tipo-unidade.model";
 import {Location} from "@angular/common";
 import {InfoWindow} from "@ngui/map";
-import {Subscription} from "rxjs";
 import Swal from "sweetalert2";
-import {getTokenAtPosition} from "@angular/compiler-cli/src/ngtsc/util/src/typescript";
 import {UnidadeUsuario} from "../../../../core/models/unidade-usuario.model";
 import {Permissao} from "../../../../core/models/permissao.model";
 
@@ -259,10 +250,8 @@ export class FormUnidadeComponent implements OnInit {
         }
         const permissaoIndex: number = uni.permissao.findIndex((perm) => perm.descricao === 'representante');
         if (permissaoIndex === -1) {
-            // Se o usuário não tem a permissão, adiciona
             uni.permissao.splice(0, 0, permissao);
         } else {
-            // Se o usuário já tem a permissão, remove
             uni.permissao.splice(permissaoIndex, 1);
         }
     }

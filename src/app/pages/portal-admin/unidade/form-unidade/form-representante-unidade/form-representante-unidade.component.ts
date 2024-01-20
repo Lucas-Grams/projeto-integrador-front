@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from "@angula
 import {CepService} from "../../../../../core/services/cep.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {cpfValidator} from "../../../../../utils/validators/cpf.validator";
-import {cepValidator} from "../../../../../utils/validators/cep.validator";
 import { Usuario} from "../../../../../core/models/usuario.model";
 import {UsuarioService} from "../../../../../core/services/usuario.service";
 import {BrSelectComponent} from "../../../../../shared/br-select/br-select.component";

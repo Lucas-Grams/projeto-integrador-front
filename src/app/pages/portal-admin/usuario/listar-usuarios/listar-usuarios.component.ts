@@ -1,8 +1,6 @@
 import {Component, OnInit, ElementRef} from '@angular/core';
 import {UnidadeService} from "../../../../core/services/unidade.service";
 import {Unidade} from "../../../../core/models/unidade.model";
-import {Location} from "@angular/common";
-import {ActivatedRoute, Router} from "@angular/router";
 import Swal from "sweetalert2";
 import {UsuarioService} from "../../../../core/services/usuario.service";
 import {Usuario} from "../../../../core/models/usuario.model";
@@ -59,13 +57,9 @@ export class ListarUsuariosComponent implements OnInit {
                      showCancelButton: true,
                      confirmButtonText: 'OK'
                   }).then(()=>this.el.nativeElement.ownerDocument.defaultView.location.reload());
-
                }
             });
          }
-
-      })
+      });
    }
-
-
 }

@@ -108,18 +108,14 @@ export class FormEditarEmpresaComponent implements OnInit {
         let vinculosFiltrados: EmpresaUsuario[] = [];
 
         vinculos.forEach((emp) => {
-            // Verifica se vinculosFiltrados não está vazio
             if (vinculosFiltrados.length === 0) {
                 vinculosFiltrados.push(emp);
             } else {
-                // Encontra o índice do elemento com a mesma unidade.id
                 let i = vinculosFiltrados.findIndex((item) => item.usuario.id === emp.usuario.id);
 
                 if (i === -1) {
-                    // Se não encontrar, adiciona uma nova entrada
                     vinculosFiltrados.push(emp);
                 } else {
-                    // Se encontrar, adiciona a permissão ao array existente
                     vinculosFiltrados[i].permissao.push(...emp.permissao);
                 }
             }

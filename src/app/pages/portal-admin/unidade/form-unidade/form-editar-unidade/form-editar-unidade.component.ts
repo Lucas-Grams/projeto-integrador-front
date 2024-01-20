@@ -144,14 +144,11 @@ export class FormEditarUnidadeComponent implements OnInit {
          if (vinculosFiltrados.length === 0) {
             vinculosFiltrados.push(uni);
          } else {
-            // Encontra o índice do elemento com a mesma unidade.id
             let i = vinculosFiltrados.findIndex((item) => item.usuario.id === uni.usuario.id);
 
             if (i === -1) {
-               // Se não encontrar, adiciona uma nova entrada
                vinculosFiltrados.push(uni);
             } else {
-               // Se encontrar, adiciona a permissão ao array existente
                vinculosFiltrados[i].permissao.push(...uni.permissao);
             }
          }
@@ -395,9 +392,7 @@ export class FormEditarUnidadeComponent implements OnInit {
          });
       } else {
          Swal.fire('Ops...', 'Formulário incompleto!', 'error').then();
-
       }
    }
-
 
 }
