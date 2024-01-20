@@ -17,13 +17,13 @@
                <div class="br-select">
                   <div class="br-input">
                      <br-select-pnip
-                        [disabled]="!isEdit"
-                        id="tipoUnidade"
-                        label="Tipo de Unidade"
-                        [options]="tipoUnidade"
-                        [optionSelected]="unidade.tipo"
-                        (change)="selecionaGerenciadora()"
-                        #tipoUnidadeSelect>
+                             [disabled]="!isEdit"
+                             id="tipoUnidade"
+                             label="Tipo de Unidade"
+                             [options]="tipoUnidade"
+                             [optionSelected]="unidade.tipo"
+                             (change)="selecionaGerenciadora()"
+                             #tipoUnidadeSelect>
                      </br-select-pnip>
                   </div>
                </div>
@@ -34,20 +34,20 @@
                          [attr.state]="validatorsFormsUtils.getStateOfField('nome')"/>
             </div>
             <div class="col-4">
-                     <ng-container *ngIf="!validarUc">
-                        <div class="br-select">
-                           <div class="br-input">
-                              <br-select-pnip
-                                 [disabled]="!isEdit"
-                                 id="idUnidadeGerenciadora"
-                                 label="Unidade Gerenciadora"
-                                 [options]="unidades"
-                                 [optionSelected]="unidade.idUnidadeGerenciadora"
-                                 #gerenciadoraSelect>
-                              </br-select-pnip>
-                           </div>
-                        </div>
-                     </ng-container>
+               <ng-container *ngIf="!validarUc">
+                  <div class="br-select">
+                     <div class="br-input">
+                        <br-select-pnip
+                                [disabled]="!isEdit"
+                                id="idUnidadeGerenciadora"
+                                label="Unidade Gerenciadora"
+                                [options]="unidades"
+                                [optionSelected]="unidade.idUnidadeGerenciadora"
+                                #gerenciadoraSelect>
+                        </br-select-pnip>
+                     </div>
+                  </div>
+               </ng-container>
 
             </div>
          </div>
@@ -60,7 +60,7 @@
                          [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (change)="validaCEP()"
                          (ngModelChange)="validaCEP()" [(ngModel)]="unidade.endereco.cep"/>
                <ng-container
-                  *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
+                       *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
             </div>
             <div class="col-8">
                <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="rua" label="Rua" formControlName="rua"
@@ -87,16 +87,16 @@
                </div>
             </div>
             <div class="col-1">
-                  <div class="br-input">
-                     <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="uf" label="UF" formControlName="uf"
-                               [attr.state]="validatorsFormsUtils.getStateOfField('uf')"
-                               [(ngModel)]="unidade.endereco.uf"/>
-                  </div>
+               <div class="br-input">
+                  <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="uf" label="UF" formControlName="uf"
+                            [attr.state]="validatorsFormsUtils.getStateOfField('uf')"
+                            [(ngModel)]="unidade.endereco.uf"/>
+               </div>
             </div>
             <div class="col-3">
                <div class="br-input">
                   <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="coordenadas" label="Coordenadas"
-                           [value]="latLng" />
+                            [value]="latLng" />
                </div>
             </div>
 
@@ -115,11 +115,11 @@
                             [fullscreenControlOptions]="{ position: 'TOP_RIGHT' }"
                   >
                      <marker
-                        position="{{ unidade.endereco.latitude }}, {{
+                             position="{{ unidade.endereco.latitude }}, {{
                                      unidade.endereco.longitude
                                   }}"
-                        draggable="true"
-                        (dragend)="moveuPontoMaps($event)"
+                             draggable="true"
+                             (dragend)="moveuPontoMaps($event)"
                      >
                      </marker>
                   </ngui-map>
@@ -143,8 +143,8 @@
    <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Usuários da unidade</h2>
 
    <pnip-admin-form-representante-unidade
-      (newUserEmitter)="receberNovoUsuario($event)"
-      #formUser>
+           (newUserEmitter)="receberNovoUsuario($event)"
+           #formUser>
    </pnip-admin-form-representante-unidade>
 
    <ng-container *ngIf="unidadeUsuario.length > 0; else semUsuarios">
