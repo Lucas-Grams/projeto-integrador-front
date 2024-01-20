@@ -11,8 +11,8 @@ export class Unidade{
    ativo: boolean;
    uuid: String;
    dataCadastro?: Date;
-   ultima_atualizacao?: Date;
-   usuarioRepresentante?: Usuario;
+   ultimaAtualizacao?: Date;
+   usuarios: Usuario[] = [];
 
 
 

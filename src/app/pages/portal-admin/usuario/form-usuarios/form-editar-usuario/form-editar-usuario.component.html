@@ -1,0 +1,86 @@
+<br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
+<br-divider size="medium" class="mt-0"></br-divider>
+<div class="p-5">
+   <div class="row">
+      <div class="col">
+         <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Atualizar Usuário</h2>
+      </div>
+   </div>
+   <ng-container *ngIf="formGroup">
+   <form [formGroup]="formGroup">
+
+      <pnip-validators-forms-utils [formGroup]="formGroup" #validatorsFormsUtils></pnip-validators-forms-utils>
+
+      <!-- nome/cpf -->
+      <div class="row mb-2">
+         <div class="col-4">
+            <br-input density="small" name="nome" label="Nome completo" [value]="usuario.nome" formControlName="nome"
+                      [attr.state]="validatorsFormsUtils.getStateOfField('nome')"/>
+            <ng-container
+               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'nome'}"></ng-container>
+         </div>
+         <div class="col-3">
+            <br-input density="small" name="cpf" label="CPF" formControlName="cpf" [value]="usuario.cpf" mask="###.###.###-##"
+                      [attr.state]="validatorsFormsUtils.getStateOfField('cpf')"/>
+            <ng-container
+               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cpf'}"></ng-container>
+         </div>
+         <div class="col-4">
+            <br-input density="small" name="email" label="E-mail" formControlName="email" [value]="usuario.email"
+                      [attr.state]="validatorsFormsUtils.getStateOfField('email')"/>
+            <ng-container
+               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'email'}"></ng-container>
+         </div>
+      </div>
+   </form>
+   </ng-container>
+
+   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Unidades disponíveis</h2>
+
+   <pnip-admin-form-select-unidade
+      (unidadeEmitter)="receberUnidade($event)">
+   </pnip-admin-form-select-unidade>
+
+   <ng-container *ngIf="unidadeUsuario .length>0; else semUnidades">
+
+
+      <table class="table">
+         <thead class="thead-light">
+         <tr>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Representante</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Nome</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Módulos</th>
+
+            <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
+         </tr>
+         </thead>
+         <ng-container *ngFor="let unidade of unidadeUsuario">
+            <tr *ngIf="unidade.ativo == true">
+               <td><br-switch icon [checked]="isRepresentante(unidade)" (onChange)="usuarioIsRepresentante(unidade)"></br-switch></td>
+               <td>{{unidade.unidade.nome}}</td>
+               <td>Em desenvolvimento</td>
+               <td class="text-center">
+                  <!--               <button class="br-button"><br-icon-base icon-name="pencil-alt" family-name="fas" class="mr-2 text-success" [routerLink]="'editar/' + unidade.uuid"/></button>-->
+                  <button class="br-button"><br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="cancelarUnidade(unidade)"/></button>
+                  <!--                  <button class="br-button"><br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60" [routerLink]="'editar/' + unidade.uuid"/></button>-->
+               </td>
+            </tr>
+         </ng-container>
+      </table>
+   </ng-container>
+   <ng-template #semUnidades>
+      <div class="br-message info" role="alert">
+         <div class="icon"><i class="fas fa-info-circle fa-lg" aria-hidden="true"></i>
+         </div>
+         <div class="content"><span class="message-title">Atenção.</span><span class="message-body"> Não há unidades para esse usuário.</span></div>
+         <div class="close">
+            <button class="br-button circle small" type="button" aria-label="Fechar"><i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+         </div>
+      </div>
+   </ng-template>
+
+   <div class="d-flex justify-content-end mt-4">
+      <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/usuarios'"/>
+      <br-button label="Salvar" type="primary" (click)="salvar()"/>
+   </div>

@@ -1,27 +1,42 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild, ViewChildren} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LoadingService} from "../../../../core/services/loading.service";
 import {Router} from "@angular/router";
 import {Unidade} from "../../../../core/models/unidade.model";
 import {UnidadeService} from "../../../../core/services/unidade.service";
-import { ToastrService } from "ngx-toastr";
+import {ToastrService} from "ngx-toastr";
 import {CepService} from "../../../../core/services/cep.service";
 import {cpfValidator} from "../../../../utils/validators/cpf.validator";
 import {cepValidator} from "../../../../utils/validators/cep.validator";
 import {ValidatorsFormsUtils} from "../../../../utils/components/validators-forms.utils";
-import {Usuario} from "../../../../core/models/usuario.model";
+import {Permissao, Usuario} from "../../../../core/models/usuario.model";
 import {FormRepresentanteUnidadeComponent} from "./form-representante-unidade/form-representante-unidade.component";
 import {Endereco} from "../../../../core/models/endereco.model";
+import {BrSelectComponent} from "../../../../shared/br-select/br-select.component";
+import {Hash} from "angular-oauth2-oidc/token-validation/fast-sha256js";
+import {TipoUnidade} from "../../../../core/models/tipo-unidade.model";
+import {Location} from "@angular/common";
+import {InfoWindow} from "@ngui/map";
+import {Subscription} from "rxjs";
+import Swal from "sweetalert2";
+import {getTokenAtPosition} from "@angular/compiler-cli/src/ngtsc/util/src/typescript";
 
 
 declare var swal: any;
+
+interface Marker {
+   object: google.maps.Marker,
+}
+
 @Component({
    selector: 'pnip-admin-form-unidade',
    templateUrl: './form-unidade.component.html',
    styleUrls: [],
-   providers:[CepService]
+   providers: [CepService]
+
 })
-export class FormUnidadeComponent implements OnInit{
+
+export class FormUnidadeComponent implements OnInit {
 
    public breadcrumb = [
       {
@@ -39,27 +54,27 @@ export class FormUnidadeComponent implements OnInit{
       }
    ];
 
+   @ViewChild('infoWindow') infoWindow?: InfoWindow;
+   searchCoord: boolean = false;
+   mapZoom: number = 16;
+   mapMarkerVisible?: boolean;
+   map: google.maps.Map | null = null;
+   marker: { lat: any, lng: any } = {lat: '', lng: ''};
+   latLng: string = '';
+
+
    formGroup: FormGroup;
    unidade: Unidade;
    unidadesGerenciadoras: Unidade[] = [];
+   unidades: any = [];
+   @ViewChild('tipoUnidadeSelect', {static: false}) tipoUnidadeSelect!: BrSelectComponent;
+   @ViewChild('gerenciadoraSelect', {static: false}) gerenciadoraSelect!: BrSelectComponent;
 
    validarUc: boolean = false;
-   newUsuario: Usuario = new Usuario();
-
    @ViewChild('formUser') formUser?: FormRepresentanteUnidadeComponent;
-   formRepresentante!: FormGroup;
    representante: Usuario = new Usuario();
 
-   tipoUnidade = [
-      {id: 1, value: 'Unidade Central (UC)', item: 'UC'},
-      {id: 2, value: 'Programa/Seção (PS)', item: 'PS'},
-      {id: 3, value: 'Supeorvisão Regional (SR)', item: 'SR'},
-      {id: 4, value: 'Inspetoria Vetrinária Local (IVZ)', item: 'IVZ'},
-      {id: 5, value: 'Ministério da Pesca e Aquicultura (MPA)', item: 'MPA'},
-      {id: 6, value: 'Secretaria Nacional (SN)', item: 'SN'},
-      {id: 7, value: 'Departamento (DP)', item: 'DP'},
-      {id: 8, value: 'Superintendencia Federal da Pesca (SFP)', item: 'SFP'}
-   ]
+   tipoUnidade: any = [];
 
 
    constructor(private loadingService: LoadingService,
@@ -67,71 +82,108 @@ export class FormUnidadeComponent implements OnInit{
                private fb: FormBuilder,
                private unidadeService: UnidadeService,
                private cepService: CepService,
-               private toast: ToastrService) {
+               public location: Location
+   ) {
       this.unidade = new Unidade();
       this.formGroup = this.fb.group({
          nome: this.fb.control(this.unidade.nome, [Validators.minLength(2), Validators.maxLength(100), Validators.required]),
          tipo: this.fb.control(this.unidade.tipo, [Validators.minLength(2), Validators.required]),
          idUnidadeGerenciadora: this.fb.control(this.unidade.idUnidadeGerenciadora, [Validators.required]),
-         cep: this.fb.control(this.unidade.endereco.cep, [ Validators.required, Validators.minLength(8), Validators.maxLength(10) ]),
-         rua: this.fb.control( this.unidade.endereco.rua, [Validators.minLength(2),Validators.maxLength(70), Validators.required]),
-         numero: this.fb.control(this.unidade.endereco.numero, [ Validators.minLength(1), Validators.required]),
+         cep: this.fb.control(this.unidade.endereco.cep, [Validators.required, Validators.minLength(8), Validators.maxLength(10)]),
+         rua: this.fb.control(this.unidade.endereco.rua, [Validators.minLength(2), Validators.maxLength(70), Validators.required]),
+         numero: this.fb.control(this.unidade.endereco.numero, [Validators.minLength(1), Validators.required]),
          bairro: this.fb.control(this.unidade.endereco.bairro, [Validators.minLength(2), Validators.maxLength(50)]),
          complemento: this.fb.control(this.unidade.endereco.complemento, [Validators.minLength(2), Validators.maxLength(50)]),
          cidade: this.fb.control(this.unidade.endereco.cidade, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
          uf: this.fb.control(this.unidade.endereco.uf, [Validators.minLength(2), Validators.maxLength(2), Validators.required]),
-         latitude: this.fb.control( this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
-         longitude: this.fb.control( this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
-         usuarioRepresentante: this.fb.control( this.unidade.usuarioRepresentante)
+         latitude: this.fb.control(this.unidade.endereco.latitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
+         longitude: this.fb.control(this.unidade.endereco.longitude, [Validators.minLength(2), Validators.maxLength(50), Validators.required]),
+         usuarios: this.fb.control(this.unidade.usuarios)
       });
 
-
+      this.mapZoom = 6;
+      this.mapMarkerVisible = false;
+      this.searchCoord = false;
    }
 
    ngOnInit() {
+      this.unidadeService.findTiposUnidades().subscribe((data) => {
+         data.data?.forEach((tipo) => {
+            this.tipoUnidade.push({label: tipo.nome?.toString(), value: tipo.tipo});
+         });
+      });
+      this.representante = new Usuario();
    }
 
 
    selecionaGerenciadora() {
-      switch(this.formGroup.get("tipo")?.value){
+      this.unidades = [];
+      let tipo;
+      this.tipoUnidadeSelect.getOptionSelected().length > 0 ? tipo = this.tipoUnidadeSelect.getOptionSelected() : tipo = this.unidade.tipo;
+      switch (tipo) {
          case 'PS':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("UC").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni) => {
+                  this.unidades.push({label: uni.nome.toString(), value: uni.id});
+               });
             })
             break;
          case 'SR':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("UC").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni) => {
+                  this.unidades.push({label: uni.nome.toString(), value: uni.id});
+               });
             })
             break;
          case 'IVZ':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("SR").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni) => {
+                  this.unidades.push({label: uni.nome.toString(), value: uni.id});
+               });
             })
             break;
          case 'SN':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("MPA").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni) => {
+                  this.unidades.push({label: uni.nome.toString(), value: uni.id});
+               });
             })
             break;
          case 'DP':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("SN").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni) => {
+                  this.unidades.push({label: uni.nome.toString(), value: uni.id});
+               });
             })
             break;
          case 'SFP':
             this.validarUc = false;
+            this.formGroup.get("tipo")?.setValue(this.tipoUnidadeSelect.getOptionSelected());
             this.unidadeService.getGerenciadoras("MPA").subscribe((data) => {
                this.unidadesGerenciadoras = data;
+               this.unidadesGerenciadoras.forEach((uni) => {
+                  this.unidades.push({label: uni.nome.toString(), value: uni.id});
+               });
             })
             break;
          default:
             this.validarUc = true;
+            this.formGroup.get("tipo")?.setValue(tipo);
             break;
       }
    }
@@ -147,46 +199,103 @@ export class FormUnidadeComponent implements OnInit{
                this.formGroup.get('rua')?.setValue(response.logradouro);
                this.formGroup.get('cidade')?.setValue(response.localidade);
                this.formGroup.get('uf')?.setValue(response.uf);
-
+               this.formGroup.get('bairro')?.setValue(response.bairro);
+               this.unidade.endereco.rua = response.logradouro;
+               this.unidade.endereco.cidade = response.localidade;
+               this.unidade.endereco.uf = response.uf;
+               this.unidade.endereco.bairro = response.bairro;
+               this.cepService.findAddress(this.unidade.endereco, () => {
+                  this.marker.lat = this.unidade.endereco.latitude.toString();
+                  this.marker.lng = this.unidade.endereco.longitude.toString();
+                  this.formGroup.get('latitude')?.setValue(this.marker.lat);
+                  this.formGroup.get('longitude')?.setValue(this.marker.lng);
+                  this.latLng = this.marker.lat + ', ' + this.marker.lng;
+               });
             }
          });
       }
 
    }
-   receberNovoUsuario(novoUsuario: Usuario) {
-      console.log("receber novo usuario");
-      this.representante = novoUsuario;
+
+   moveuPontoMaps(event: any) {
+      this.latLng = event.latLng.toString().replace(/[()]/g, '');
+      const [lat, lng] = this.latLng.split(',').map(coord => coord.trim());
+      this.marker.lat = lat;
+      this.marker.lng = lng;
+      this.unidade.endereco.latitude = this.marker.lat;
+      this.unidade.endereco.longitude = this.marker.lng;
+      this.formGroup.get('latitude')?.setValue(this.marker.lat);
+      this.formGroup.get('longitude')?.setValue(this.marker.lng);
    }
 
-   receberForm(form: FormGroup){
-      console.log("receber form");
-      this.formRepresentante = form;
-      this.representante.endereco = new Endereco()
-      this.representante.nome = this.formRepresentante.get('nome')?.value;
-      this.representante.cpf = this.formRepresentante.get('cpf')?.value;
-      this.representante.email = this.formRepresentante.get('email')?.value;
-      this.representante.endereco.rua = this.formRepresentante.get('rua')?.value;
-      this.representante.endereco.cep = this.formRepresentante.get('cep')?.value;
-      this.representante.endereco.cidade = this.formRepresentante.get('cidade')?.value;
-      this.representante.endereco.bairro = this.formRepresentante.get('bairro')?.value;
-      this.representante.endereco.uf = this.formRepresentante.get('uf')?.value;
-      this.representante.endereco.complemento = this.formRepresentante.get('complemento')?.value;
-      this.representante.endereco.numero = this.formRepresentante.get('numero')?.value;
+   receberNovoUsuario(novoUsuario: Usuario) {
+      this.representante = novoUsuario;
+      console.log(this.representante.permissoes)
+      const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, novoUsuario));
+      if (!jaExiste) {
+         this.unidade.usuarios.push(this.representante);
+      }
+   }
+
+   comparaUsuarios(user1: Usuario, user2: Usuario) {
+      return user1.cpf == user2.cpf && user1.email == user2.email;
+   }
+
+   usuarioIsRepresentante(user: Usuario): void {
+      const permissao: Permissao = {id: null, descricao: 'representante'};
+      if (!user.permissoes) {
+         user.permissoes = [];
+      }
+      const permissaoIndex: number = user.permissoes.findIndex((perm) => perm.descricao === 'representante');
+      if (permissaoIndex === -1) {
+         // Se o usuário não tem a permissão, adiciona
+         user.permissoes.splice(0, 0, permissao);
+      } else {
+         // Se o usuário já tem a permissão, remove
+         user.permissoes.splice(permissaoIndex, 1);
+      }
+   }
+
+   isRepresentante(user: Usuario): boolean {
+      if (user.permissoes && user.permissoes.length > 0) {
+         for (const perm of user.permissoes) {
+            if (perm.descricao === 'representante') {
+               return true;
+            }
+         }
+      }
+      return false;
+   }
+
+
+   cancelarUsuario(user: Usuario) {
+      const index = this.unidade.usuarios.findIndex(u => u.nome === user.nome);
+      if (index !== -1) {
+         this.unidade.usuarios.splice(index, 1);
+      }
    }
 
    salvar() {
-      this.loadingService.show = true;
+      if (this.gerenciadoraSelect) {
+         this.formGroup.get("idUnidadeGerenciadora")?.setValue(this.gerenciadoraSelect.getOptionSelected());
+      }
       this.unidade = this.formGroup.value;
-      this.unidade.usuarioRepresentante = this.representante;
-
-console.log(this.unidade);
-      this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
-        // swal.fire(mensagem.msg).then();
-      });
-      setTimeout(() => {
-         this.loadingService.show = false;
-         this.router.navigate(['/portal-admin/unidades']);
-      }, 1200);
+      console.log(this.unidade);
+      if (this.formGroup.valid) {
+         this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
+            if (mensagem.status === 'SUCCESS' ) {
+                  Swal.fire("OK.", 'Unidade cadastrada com sucesso!', 'success').then(()=>{
+                     this.loadingService.show = true;
+                     this.router.navigate(['/portal-admin/unidades']);
+                     this.loadingService.show = false;
+                  });
+            }else{
+               this.loadingService.show = false;
+               Swal.fire('Ops.',"Ocorreu um erro ao salvar a unidade, tente novamente mais tarde.", 'error').then();
+            }
+         });
+      } else {
+         Swal.fire('Ops...', 'Formulário incompleto!', 'error').then();
+      }
    }
-
 }
