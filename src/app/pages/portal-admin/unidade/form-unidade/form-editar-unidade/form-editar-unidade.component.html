@@ -143,8 +143,8 @@
    <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Usuários da unidade</h2>
 
    <pnip-admin-form-representante-unidade
-           (newUserEmitter)="receberNovoUsuario($event)"
-           #formUser>
+      (newUserEmitter)="receberNovoUsuario($event)"
+      #formUser>
    </pnip-admin-form-representante-unidade>
 
    <ng-container *ngIf="unidadeUsuario.length > 0; else semUsuarios">

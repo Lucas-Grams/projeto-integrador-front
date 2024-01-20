@@ -1,7 +1,6 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild, ViewChildren} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Usuario} from "../../../../core/models/usuario.model";
-import {UnidadeUsuario} from "../../../../core/models/unidade-usuario.model";
 import {UsuarioService} from "../../../../core/services/usuario.service";
 import Swal from "sweetalert2";
 import {LoadingService} from "../../../../core/services/loading.service";
@@ -12,9 +11,6 @@ import {EmpresaUsuario} from "../../../../core/models/empresa-usuario.model";
 import {EmpresaService} from "../../../../core/services/empresa.service";
 import {cnpjValidator} from "../../../../utils/validators/cnpj.validator";
 import {InfoWindow} from "@ngui/map";
-import {
-    FormRepresentanteUnidadeComponent
-} from "../../unidade/form-unidade/form-representante-unidade/form-representante-unidade.component";
 import {Permissao} from "../../../../core/models/permissao.model";
 import {Endereco} from "../../../../core/models/endereco.model";
 
@@ -162,10 +158,8 @@ export class FormEmpresaComponent implements OnInit {
         }
         const permissaoIndex: number = uni.permissao.findIndex((perm) => perm.descricao === 'representante');
         if (permissaoIndex === -1) {
-            // Se o usuário não tem a permissão, adiciona
             uni.permissao.splice(0, 0, permissao);
         } else {
-            // Se o usuário já tem a permissão, remove
             uni.permissao.splice(permissaoIndex, 1);
         }
     }

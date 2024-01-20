@@ -1,8 +1,6 @@
 import {Component, OnInit, ElementRef} from '@angular/core';
 import {UnidadeService} from "../../../../core/services/unidade.service";
 import {Unidade} from "../../../../core/models/unidade.model";
-import {Location} from "@angular/common";
-import {ActivatedRoute, Router} from "@angular/router";
 import Swal from "sweetalert2";
 import {UsuarioService} from "../../../../core/services/usuario.service";
 
@@ -63,7 +61,7 @@ export class ListarUnidadesComponent implements OnInit {
                   showCancelButton: true,
                   confirmButtonText: 'OK'
                }).then(()=>this.el.nativeElement.ownerDocument.defaultView.location.reload());
-            }else if(unidade.usuarios != null && unidade.ativo){
+            }else if(unidade.usuarios != null && unidade.ativo == true){
                Swal.fire({
                   title: 'Erro!',
                   text: `Esta unidade não pode ser desativada por existirem usuários vinculados.`,
@@ -79,6 +77,4 @@ export class ListarUnidadesComponent implements OnInit {
          }
       })
    }
-
-
 }

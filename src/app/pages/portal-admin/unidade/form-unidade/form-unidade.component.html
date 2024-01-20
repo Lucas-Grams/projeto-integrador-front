@@ -99,19 +99,12 @@
             <div class="form-group ">
                <ngui-map class="gmap"
                          zoom="14"
-                         center="{{unidade.endereco.latitude }},{{
-                                  unidade.endereco.longitude
-                               }}"
+                         center="{{unidade.endereco.latitude }},{{unidade.endereco.longitude}}"
                          [fullscreenControl]="true"
-                         [fullscreenControlOptions]="{ position: 'TOP_RIGHT' }"
-               >
+                         [fullscreenControlOptions]="{ position: 'TOP_RIGHT' }">
                   <marker
-                          position="{{ unidade.endereco.latitude }}, {{
-                                     unidade.endereco.longitude
-                                  }}"
-                          draggable="true"
-                          (dragend)="moveuPontoMaps($event)"
-                  >
+                     position="{{ unidade.endereco.latitude }}, {{unidade.endereco.longitude}}"                     draggable="true"
+                     (dragend)="moveuPontoMaps($event)">
                   </marker>
                </ngui-map>
             </div>
@@ -133,10 +126,8 @@
    <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Adicionar Usuários</h2>
    <pnip-admin-form-representante-unidade
 
-           (newUserEmitter)="receberNovoUsuario($event)"
-           (isEdit) = "false"
-           (uuid) = "unidade.uuid"
-           #formUser>
+      (newUserEmitter)="receberNovoUsuario($event)"
+      #formUser>
    </pnip-admin-form-representante-unidade>
 
    <ng-container *ngIf="unidadeUsuario.length > 0; else semUsuarios">

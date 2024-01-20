@@ -1,11 +1,5 @@
 import {Component, OnInit, ElementRef} from '@angular/core';
-import {UnidadeService} from "../../../../core/services/unidade.service";
-import {Unidade} from "../../../../core/models/unidade.model";
-import {Location} from "@angular/common";
-import {ActivatedRoute, Router} from "@angular/router";
 import Swal from "sweetalert2";
-import {UsuarioService} from "../../../../core/services/usuario.service";
-import {Usuario} from "../../../../core/models/usuario.model";
 import {Empresa} from "../../../../core/models/empresa.model";
 import {EmpresaService} from "../../../../core/services/empresa.service";
 
