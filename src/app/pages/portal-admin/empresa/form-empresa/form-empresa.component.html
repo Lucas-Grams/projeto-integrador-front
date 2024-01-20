@@ -1,0 +1,157 @@
+<br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
+<br-divider size="medium" class="mt-0"></br-divider>
+<div class="p-5">
+    <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Cadastrar nova empresa</h2>
+
+    <form [formGroup]="formGroup" (ngSubmit)="salvar()">
+        <pnip-validators-forms-utils [formGroup]="formGroup" #validatorsFormsUtils></pnip-validators-forms-utils>
+        <div class="row mb-2">
+            <div class="col-4">
+                <br-input density="small" name="razaoSocial" label="Razão Social da empresa" formControlName="razaoSocial"
+                          [attr.state]="validatorsFormsUtils.getStateOfField('razaoSocial')"/>
+            </div>
+            <div class="col-4">
+                <br-input density="small" name="nomeFantasia" label="Nome Fantasia da empresa" formControlName="nomeFantasia"
+                          [attr.state]="validatorsFormsUtils.getStateOfField('nomeFantasia')"/>
+            </div>
+            <div class="col-4">
+                <br-input density="small" name="cnpj" label="CNPJ da empresa" formControlName="cnpj" mask="##.###.###/####-##"
+                          [attr.state]="validatorsFormsUtils.getStateOfField('cnpj')"/>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-2">
+                <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"
+                          [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (change)="validaCEP()"
+                          (ngModelChange)="validaCEP()"/>
+                <ng-container
+                        *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
+            </div>
+            <div class="col-8">
+                <br-input density="small" name="rua" label="Rua" formControlName="rua"
+                          [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
+                <ng-container
+                        *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'rua'}"></ng-container>
+            </div>
+            <div class="col-2">
+                <br-input density="small" name="numero" label="Número" formControlName="numero" type="text"
+                          [attr.state]="validatorsFormsUtils.getStateOfField('numero')"/>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-4">
+                <br-input density="small" name="complemento" label="Complemento" formControlName="complemento"/>
+            </div>
+
+            <div class="col-4">
+                <div class="br-select">
+                    <div class="br-input">
+                        <br-input density="small" name="municipio" label="Município" formControlName="cidade"
+                                  [attr.state]="validatorsFormsUtils.getStateOfField('cidade')"/>
+                        <ng-container
+                                *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cidade'}"></ng-container>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-1">
+                <div class="br-input">
+                    <br-input density="small" name="uf" label="UF" formControlName="uf"
+                              [attr.state]="validatorsFormsUtils.getStateOfField('uf')"/>
+                    <ng-container
+                            *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'uf'}"></ng-container>
+                </div>
+            </div>
+
+            <div class="col-3">
+                <div class="br-input">
+                    <br-input density="small" name="coordenadas" label="Coordenadas"  type="text" [value]="latLng"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <ng-container *ngIf="this.empresa.endereco?.latitude && this.empresa.endereco?.longitude">
+                <div class="form-group ">
+                    <ngui-map class="gmap"
+                              zoom="14"
+                              center="{{empresa.endereco?.latitude }},{{
+                                  empresa.endereco?.longitude
+                               }}"
+                              [fullscreenControl]="true"
+                              [fullscreenControlOptions]="{ position: 'TOP_RIGHT' }"
+                    >
+                        <marker
+                                position="{{ empresa.endereco?.latitude }}, {{
+                                     empresa.endereco?.longitude
+                                  }}"
+                                draggable="true"
+                                (dragend)="moveuPontoMaps($event)"
+                        >
+                        </marker>
+                    </ngui-map>
+                </div>
+                <div class="col-12 text-center">
+                    <p>
+                        <label>Latitude:</label>
+                        {{ empresa.endereco?.latitude }}
+                        <span class="ml-3"></span>
+                        <label>Longitude:</label>
+                        {{ empresa.endereco?.longitude }}
+                    </p>
+                </div>
+
+            </ng-container>
+        </div>
+
+    </form>
+
+    <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Adicionar Usuários</h2>
+    <pnip-admin-form-usuario-empresa
+            (newUserEmitter)="receberNovoUsuario($event)"
+            #formUser>
+    </pnip-admin-form-usuario-empresa>
+
+    <ng-container *ngIf="empresaUsuario.length > 0; else semUsuarios">
+        <table class="table">
+            <thead class="thead-light">
+            <tr>
+                <th class="text-blue-vivid-60 text-bold" scope="col">Representante</th>
+                <th class="text-blue-vivid-60 text-bold" scope="col">Nome</th>
+                <th class="text-blue-vivid-60 text-bold" scope="col">CPF</th>
+                <th class="text-blue-vivid-60 text-bold" scope="col">E-mail</th>
+                <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
+            </tr>
+            </thead>
+            <tbody *ngFor="let emp of empresaUsuario">
+            <tr>
+                <td><br-switch icon (onChange)="usuarioIsRepresentante(emp)"  [checked]="isRepresentante(emp)"></br-switch></td>
+                <td>{{emp.usuario.nome}}</td>
+                <td>{{emp.usuario.cpf}}</td>
+                <td>{{emp.usuario.email}}</td>
+                <td class="text-center">
+                    <button class="br-button"><br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="cancelarUsuario(emp)"/></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </ng-container>
+    <ng-template #semUsuarios>
+        <div class="br-message info" role="alert">
+            <div class="icon"><i class="fas fa-info-circle fa-lg" aria-hidden="true"></i>
+            </div>
+            <div class="content"><span class="message-title">Atenção.</span><span class="message-body"> Não há usuarios cadastrados para essa empresa.</span></div>
+            <div class="close">
+                <button class="br-button circle small" type="button" aria-label="Fechar"><i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </ng-template>
+
+    <div class="d-flex justify-content-end mt-4">
+        <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/empresas'"/>
+        <br-button label="Salvar" type="primary" (click)="salvar()"/>
+    </div>
+
+</div>
