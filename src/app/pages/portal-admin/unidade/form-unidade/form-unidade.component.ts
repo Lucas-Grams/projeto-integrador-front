@@ -20,6 +20,7 @@ import {InfoWindow} from "@ngui/map";
 import {Subscription} from "rxjs";
 import Swal from "sweetalert2";
 import {getTokenAtPosition} from "@angular/compiler-cli/src/ngtsc/util/src/typescript";
+import {UnidadeUsuario} from "../../../../core/models/UnidadeUsuario.model";
 
 
 declare var swal: any;
@@ -71,10 +72,14 @@ export class FormUnidadeComponent implements OnInit {
    @ViewChild('gerenciadoraSelect', {static: false}) gerenciadoraSelect!: BrSelectComponent;
 
    validarUc: boolean = false;
+   newUsuario: Usuario = new Usuario();
+
    @ViewChild('formUser') formUser?: FormRepresentanteUnidadeComponent;
+   formRepresentante!: FormGroup;
    representante: Usuario = new Usuario();
 
    tipoUnidade: any = [];
+   unidadeUsuario: UnidadeUsuario[] = [];
 
 
    constructor(private loadingService: LoadingService,
@@ -229,37 +234,42 @@ export class FormUnidadeComponent implements OnInit {
    }
 
    receberNovoUsuario(novoUsuario: Usuario) {
-      this.representante = novoUsuario;
-      console.log(this.representante.permissoes)
-      const jaExiste = this.unidade.usuarios.find(user => this.comparaUsuarios(user, novoUsuario));
+      const jaExiste = this.unidadeUsuario.find(uni => this.comparaUsuarios(uni, novoUsuario));
       if (!jaExiste) {
+         const permissao: Permissao = {id: null, descricao: 'so'};
+         let uniUsu = new UnidadeUsuario();
+         uniUsu.usuario = novoUsuario;
+         uniUsu.unidade = this.unidade;
          this.unidade.usuarios.push(this.representante);
+         uniUsu.permissao.push(permissao);
+         uniUsu.ativo = true;
+         this.unidadeUsuario.push(uniUsu);
       }
    }
 
-   comparaUsuarios(user1: Usuario, user2: Usuario) {
-      return user1.cpf == user2.cpf && user1.email == user2.email;
+   comparaUsuarios(uni: UnidadeUsuario, user: Usuario) {
+      return uni.usuario.cpf == user.cpf && uni.usuario.email == user.email;
    }
 
-   usuarioIsRepresentante(user: Usuario): void {
+   usuarioIsRepresentante(uni: UnidadeUsuario): void {
       const permissao: Permissao = {id: null, descricao: 'representante'};
-      if (!user.permissoes) {
-         user.permissoes = [];
+      if (!uni.permissao) {
+         uni.permissao = [];
       }
-      const permissaoIndex: number = user.permissoes.findIndex((perm) => perm.descricao === 'representante');
+      const permissaoIndex: number = uni.permissao.findIndex((perm) => perm.descricao === 'representante');
       if (permissaoIndex === -1) {
          // Se o usuário não tem a permissão, adiciona
-         user.permissoes.splice(0, 0, permissao);
+         uni.permissao.splice(0, 0, permissao);
       } else {
          // Se o usuário já tem a permissão, remove
-         user.permissoes.splice(permissaoIndex, 1);
+         uni.permissao.splice(permissaoIndex, 1);
       }
    }
 
-   isRepresentante(user: Usuario): boolean {
-      if (user.permissoes && user.permissoes.length > 0) {
-         for (const perm of user.permissoes) {
-            if (perm.descricao === 'representante') {
+   isRepresentante(uni: UnidadeUsuario): boolean {
+      if (uni.permissao && uni.permissao != null && uni.permissao != undefined) {
+         for (const perm of uni.permissao) {
+            if (perm.descricao?.includes('representante')) {
                return true;
             }
          }
@@ -268,27 +278,57 @@ export class FormUnidadeComponent implements OnInit {
    }
 
 
-   cancelarUsuario(user: Usuario) {
-      const index = this.unidade.usuarios.findIndex(u => u.nome === user.nome);
+   cancelarUsuario(unidade: UnidadeUsuario) {
+      const index = this.unidadeUsuario.findIndex(uni => uni.usuario.cpf === unidade.usuario.cpf);
       if (index !== -1) {
-         this.unidade.usuarios.splice(index, 1);
+         this.unidadeUsuario.splice(index, 1);
+      }
+   }
+
+
+   montaObjeto() {
+      this.unidade.nome = this.formGroup.get("nome")?.value;
+      this.unidade.tipo = this.formGroup.get("tipo")?.value;
+      this.unidade.endereco.cep = this.formGroup.get("cep")?.value.toString();
+      this.unidade.endereco.cidade = this.formGroup.get("cidade")?.value.toString();
+      this.unidade.endereco.uf = this.formGroup.get("uf")?.value.toString();
+      this.unidade.endereco.rua = this.formGroup.get("rua")?.value.toString();
+      this.unidade.endereco.bairro = this.formGroup.get("bairro")?.value.toString();
+      this.unidade.endereco.numero = this.formGroup.get("numero")?.value.toString();
+      this.unidade.endereco.complemento = this.formGroup.get("complemento")?.value.toString();
+      this.unidade.endereco.latitude = this.formGroup.get("latitude")?.value.toString();
+      this.unidade.endereco.longitude = this.formGroup.get("longitude")?.value.toString();
+      this.unidade.ativo = true;
+      if (this.gerenciadoraSelect) {
+         this.formGroup.get("idUnidadeGerenciadora")?.setValue(this.gerenciadoraSelect.getOptionSelected());
+         this.unidade.idUnidadeGerenciadora = this.gerenciadoraSelect.getOptionSelected();
+         this.unidadesGerenciadoras.forEach((uni)=>{
+            if(uni.id == this.unidade.idUnidadeGerenciadora){
+               this.unidade.unidadeGerenciadora = uni;
+            }
+         });
       }
    }
 
    salvar() {
-      if (this.gerenciadoraSelect) {
-         this.formGroup.get("idUnidadeGerenciadora")?.setValue(this.gerenciadoraSelect.getOptionSelected());
-      }
-      this.unidade = this.formGroup.value;
-      console.log(this.unidade);
       if (this.formGroup.valid) {
-         this.unidadeService.salvar(this.unidade).subscribe(mensagem => {
+         this.montaObjeto();
+         if (this.unidadeUsuario.length == 0) {
+            let uni = new UnidadeUsuario();
+            this.unidadeUsuario.push(uni);
+         } else {
+            this.unidadeUsuario.forEach((uni) => {
+               uni.unidade = this.unidade;
+            });
+         }
+         console.log(this.unidadeUsuario)
+         this.unidadeService.salvar(this.unidadeUsuario).subscribe(mensagem => {
             if (mensagem.status === 'SUCCESS' ) {
-                  Swal.fire("OK.", 'Unidade cadastrada com sucesso!', 'success').then(()=>{
-                     this.loadingService.show = true;
-                     this.router.navigate(['/portal-admin/unidades']);
-                     this.loadingService.show = false;
-                  });
+               Swal.fire("OK.", 'Unidade cadastrada com sucesso!', 'success').then(()=>{
+                  this.loadingService.show = true;
+                  this.router.navigate(['/portal-admin/unidades']);
+                  this.loadingService.show = false;
+               });
             }else{
                this.loadingService.show = false;
                Swal.fire('Ops.',"Ocorreu um erro ao salvar a unidade, tente novamente mais tarde.", 'error').then();

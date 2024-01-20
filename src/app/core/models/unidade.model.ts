@@ -20,7 +20,7 @@ export class Unidade{
       this.nome = '';
       this.tipo = '';
       this.idUnidadeGerenciadora;
-      this.ativo = false;
+      this.ativo = true;
       this.uuid = '';
       this.endereco = new Endereco();
    }

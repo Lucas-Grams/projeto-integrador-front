@@ -107,10 +107,19 @@ export class FormUsuarioComponent implements OnInit {
       }
    }
 
+   montaObjeto(){
+      this.usuario.nome = this.formGroup.get("nome")?.value as String;
+      this.usuario.email = this.formGroup.get("email")?.value as String;
+      const field = this.formGroup.get('cpf');
+      if (!field?.value) return;
+      const cpf = field?.value[0];
+      this.usuario.cpf = cpf;
+   }
+
    salvar() {
       console.log(this.unidadeUsuario)
       if (this.formGroup.valid) {
-         this.usuario = this.formGroup.value;
+         this.montaObjeto()
          if(this.unidadeUsuario.length == 0){
             let uni = new UnidadeUsuario();
             uni.usuario = this.formGroup.value;
@@ -120,7 +129,6 @@ export class FormUsuarioComponent implements OnInit {
                uni.usuario = this.usuario;
             });
          }
-         console.log(this.unidadeUsuario)
          if (this.formGroup.valid) {
             this.usuarioService.salvar(this.unidadeUsuario).subscribe(mensagem => {
                if (mensagem.status === 'SUCCESS' ) {
