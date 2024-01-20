@@ -61,7 +61,7 @@ export class ListarUnidadesComponent implements OnInit {
                   showCancelButton: true,
                   confirmButtonText: 'OK'
                }).then(()=>this.el.nativeElement.ownerDocument.defaultView.location.reload());
-            }else if(unidade.usuarios != null){
+            }else if(unidade.usuarios != null && unidade.ativo){
                Swal.fire({
                   title: 'Erro!',
                   text: `Esta unidade não pode ser desativada por existirem usuários vinculados.`,

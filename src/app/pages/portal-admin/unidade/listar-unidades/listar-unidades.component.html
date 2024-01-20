@@ -9,7 +9,7 @@
          <br-button icon="plus" label="Nova unidade" type="primary" [routerLink]="'/portal-admin/unidades/cadastrar-nova-unidade'"></br-button>
       </div>
    </div>
-
+<ng-container *ngIf="unidades.length>0; else semUnidades">
    <table class="table">
       <thead class="thead-light">
          <tr>
@@ -26,13 +26,27 @@
             <td><br-switch icon [checked]="unidade.ativo" (click)="inativar(unidade)"></br-switch></td>
             <td>{{unidade.tipo}}</td>
             <td>{{unidade.nome}}</td>
-            <td>{{unidade.endereco.cidade}}</td>
-            <td>{{unidade.endereco.uf}}</td>
+            <td>{{unidade.endereco?.cidade}}</td>
+            <td>{{unidade.endereco?.uf}}</td>
             <td class="text-center">
                <button class="br-button"><br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60" [routerLink]="'editar/' + unidade.uuid"/></button>
             </td>
          </tr>
       </tbody>
    </table>
+</ng-container>
+   <ng-template #semUnidades>
+      <div class="br-message info" role="alert">
+         <div class="icon"><i class="fas fa-info-circle fa-lg" aria-hidden="true"></i>
+         </div>
+         <div class="content"><span class="message-title">Atenção.</span><span class="message-body"> Não há unidades cadastradas.</span>
+         </div>
+         <div class="close">
+            <button class="br-button circle small" type="button" aria-label="Fechar"><i class="fas fa-times"
+                                                                                        aria-hidden="true"></i>
+            </button>
+         </div>
+      </div>
+   </ng-template>
 
 </div>

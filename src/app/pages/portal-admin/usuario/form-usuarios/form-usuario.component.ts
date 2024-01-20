@@ -57,7 +57,6 @@ export class FormUsuarioComponent implements OnInit {
    receberUnidade(unidade: Unidade) {
       const jaExiste = this.unidadeUsuario.find(uni => this.comparaUnidades(uni, unidade));
       if (!jaExiste) {
-         this.unidades.push(unidade);
          const permissao: Permissao = {id: null, descricao: 'so'};
          let uniUsu = new UnidadeUsuario();
          uniUsu.unidade = unidade;
@@ -100,15 +99,14 @@ export class FormUsuarioComponent implements OnInit {
    }
 
 
-   cancelarUnidade(unidade: String) {
-      const index = this.unidadeUsuario.findIndex(u => u.unidade.uuid === unidade);
+   cancelarUnidade(uuid: String) {
+      const index = this.unidadeUsuario.findIndex(u => u.unidade.uuid === uuid);
       if (index !== -1) {
          this.unidadeUsuario.splice(index, 1);
       }
    }
 
    salvar() {
-      console.log(this.unidadeUsuario)
       if (this.formGroup.valid) {
          this.usuario = this.formGroup.value;
          if(this.unidadeUsuario.length == 0){

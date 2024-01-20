@@ -39,7 +39,7 @@ export class FormSelectUnidadeComponent implements OnInit {
          if (unidade.id == this.unidadeSelect.getOptionSelected()) {
             this.newUnidade = Object.assign(unidade);
          }
-      })
+      });
    }
 
    emitirUnidade() {

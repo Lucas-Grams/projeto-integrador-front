@@ -25,21 +25,19 @@ export class FormRepresentanteUnidadeComponent implements OnInit {
    @Output() newUserEmitter: EventEmitter<Usuario> = new EventEmitter<Usuario>();
    @ViewChild('userSelect', {static: false}) userSelect!: BrSelectComponent;
    users: any = [];
-   @Input() uuid?: String;
-
    constructor(private fb: FormBuilder,
-               private cepService: CepService,
                private usuarioService: UsuarioService) {
       this.formGroup2 = this.fb.group({
          nome: [this.newUsuario?.nome, [Validators.required, Validators.maxLength(100)]],
          cpf: [this.newUsuario?.cpf, [Validators.required, cpfValidator()]],
          email: [this.newUsuario?.email, [Validators.required, Validators.email, Validators.maxLength(70)]],
       });
+
+
    }
 
    ngOnInit() {
       this.usuarioService.findUsuariosDip().subscribe((data) => {
-         console.log(data)
          this.usuarios = data;
          this.usuarios.forEach((user) => {
             this.users.push({label: user.nome + '-' + user.email, value: user.id})
@@ -55,24 +53,16 @@ export class FormRepresentanteUnidadeComponent implements OnInit {
       this.newUsuario = new Usuario();
       this.usuarios.forEach((us) => {
          if (us.id == this.userSelect.getOptionSelected()) {
-            if(us.permissoes == null){
-               us.permissoes = [];
-            }
-            if (us.permissoes.length == 0) {
-               const permissao: Permissao = { descricao: 'so'};
-               us.permissoes.push(permissao);
-            }
             this.newUsuario = Object.assign(us);
          }
-      })
-      console.log(this.newUsuario)
+      });
    }
 
    adicionarNovoUsuario() {
       let user = new Usuario();
       user.nome = this.formGroup2.get("nome")?.value;
       user.email = this.formGroup2.get("email")?.value;
-      user.cpf = this.formGroup2.get("cpf")?.value;
+      user.cpf = this.formGroup2.get("cpf")?.value.toString();
       const permissao: Permissao = { descricao: 'so'};
       user.permissoes.push(permissao);
       this.newUsuario = Object.assign({}, user);
