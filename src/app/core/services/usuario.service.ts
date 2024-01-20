@@ -1,13 +1,11 @@
 import {Injectable} from "@angular/core";
-import {Unidade} from "../models/unidade.model";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponseDto} from "../dto/response.dto";
 import {Usuario} from "../models/usuario.model";
-import {UnidadeUsuario} from "../models/UnidadeUsuario.model";
 import {EnvService} from "./env/env.service";
+import {UnidadeUsuario} from "../models/unidade-usuario.model";
 
-const URL= "http://localhost:8089";
 @Injectable({
    providedIn: 'root'
 })
@@ -19,7 +17,6 @@ export class UsuarioService {
       this.urlUsuario = this.env.url.api +  "/usuario";
       this.http = http;
    }
-
 
    findAll():Observable<Usuario[]>{
       return this.http.get<Usuario[]>(`${this.urlUsuario}` + '');
@@ -35,6 +32,10 @@ export class UsuarioService {
 
    findUsuariosDip():Observable<Usuario[]>{
       return this.http.get<Usuario[]>(`${this.urlUsuario}` + '/find-usuarios-dip');
+   }
+
+   findUsuariosEmpresas():Observable<Usuario[]> {
+      return this.http.get<Usuario[]>(`${this.urlUsuario}` + '/find-usuarios-empresas');
    }
 
    findUnidadesByUsuarioUuid(uuid: String):Observable<UnidadeUsuario[]>{

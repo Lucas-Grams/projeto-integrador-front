@@ -3,17 +3,16 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Unidade} from "../../../../../core/models/unidade.model";
 import {UnidadeService} from "../../../../../core/services/unidade.service";
-import {ToastrService} from "ngx-toastr";
 import {CepService} from "../../../../../core/services/cep.service";
-import {ValidatorsFormsUtils} from "../../../../../utils/components/validators-forms.utils";
 import {LoadingService} from "../../../../../core/services/loading.service";
-import {Permissao, Usuario} from "../../../../../core/models/usuario.model";
+import {Usuario} from "../../../../../core/models/usuario.model";
 import {UsuarioService} from "../../../../../core/services/usuario.service";
 import Swal from "sweetalert2";
 import {BrSelectComponent} from "../../../../../shared/br-select/br-select.component";
 import {FormRepresentanteUnidadeComponent} from "../form-representante-unidade/form-representante-unidade.component";
 import {InfoWindow} from "@ngui/map";
-import {UnidadeUsuario} from "../../../../../core/models/UnidadeUsuario.model";
+import {UnidadeUsuario} from "../../../../../core/models/unidade-usuario.model";
+import {Permissao} from "../../../../../core/models/permissao.model";
 
 interface Marker {
    object: google.maps.Marker,
@@ -75,13 +74,13 @@ export class FormEditarUnidadeComponent implements OnInit {
    representante: Usuario = new Usuario();
 
    constructor(
-      private loadingService: LoadingService,
-      private fb: FormBuilder,
-      private unidadeService: UnidadeService,
-      private cepService: CepService,
-      private route: ActivatedRoute,
-      private router: Router,
-      private usuarioService: UsuarioService,
+       private loadingService: LoadingService,
+       private fb: FormBuilder,
+       private unidadeService: UnidadeService,
+       private cepService: CepService,
+       private route: ActivatedRoute,
+       private router: Router,
+       private usuarioService: UsuarioService,
    ) {
       this.unidade = new Unidade();
       this.route.params.subscribe((param) => {
@@ -328,6 +327,7 @@ export class FormEditarUnidadeComponent implements OnInit {
          // Se o usuário não tem a permissão, adiciona
          uni.permissao.splice(0, 0, permissao);
       } else {
+         // Se o usuário já tem a permissão, remove
          uni.permissao.splice(permissaoIndex, 1);
       }
    }

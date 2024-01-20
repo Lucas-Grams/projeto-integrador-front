@@ -17,13 +17,13 @@
                <div class="br-select">
                   <div class="br-input">
                      <br-select-pnip
-                        [disabled]="!isEdit"
-                        id="tipoUnidade"
-                        label="Tipo de Unidade"
-                        [options]="tipoUnidade"
-                        [optionSelected]="unidade.tipo"
-                        (change)="selecionaGerenciadora()"
-                        #tipoUnidadeSelect>
+                             [disabled]="!isEdit"
+                             id="tipoUnidade"
+                             label="Tipo de Unidade"
+                             [options]="tipoUnidade"
+                             [optionSelected]="unidade.tipo"
+                             (change)="selecionaGerenciadora()"
+                             #tipoUnidadeSelect>
                      </br-select-pnip>
                   </div>
                </div>
@@ -38,12 +38,12 @@
                   <div class="br-select">
                      <div class="br-input">
                         <br-select-pnip
-                           [disabled]="!isEdit"
-                           id="idUnidadeGerenciadora"
-                           label="Unidade Gerenciadora"
-                           [options]="unidades"
-                           [optionSelected]="unidade.idUnidadeGerenciadora"
-                           #gerenciadoraSelect>
+                                [disabled]="!isEdit"
+                                id="idUnidadeGerenciadora"
+                                label="Unidade Gerenciadora"
+                                [options]="unidades"
+                                [optionSelected]="unidade.idUnidadeGerenciadora"
+                                #gerenciadoraSelect>
                         </br-select-pnip>
                      </div>
                   </div>
@@ -60,7 +60,7 @@
                          [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (change)="validaCEP()"
                          (ngModelChange)="validaCEP()" [(ngModel)]="unidade.endereco.cep"/>
                <ng-container
-                  *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
+                       *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
             </div>
             <div class="col-8">
                <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="rua" label="Rua" formControlName="rua"
@@ -115,11 +115,11 @@
                             [fullscreenControlOptions]="{ position: 'TOP_RIGHT' }"
                   >
                      <marker
-                        position="{{ unidade.endereco.latitude }}, {{
+                             position="{{ unidade.endereco.latitude }}, {{
                                      unidade.endereco.longitude
                                   }}"
-                        draggable="true"
-                        (dragend)="moveuPontoMaps($event)"
+                             draggable="true"
+                             (dragend)="moveuPontoMaps($event)"
                      >
                      </marker>
                   </ngui-map>

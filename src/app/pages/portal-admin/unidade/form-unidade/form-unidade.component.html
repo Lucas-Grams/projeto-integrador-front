@@ -10,12 +10,12 @@
             <div class="br-select">
                <div class="br-input">
                   <br-select-pnip
-                     id="tipoUnidade"
-                     label="Tipo de Unidade"
-                     [options]="tipoUnidade"
-                     [optionSelected]="unidade.tipo"
-                     (change)="selecionaGerenciadora()"
-                     #tipoUnidadeSelect>
+                          id="tipoUnidade"
+                          label="Tipo de Unidade"
+                          [options]="tipoUnidade"
+                          [optionSelected]="unidade.tipo"
+                          (change)="selecionaGerenciadora()"
+                          #tipoUnidadeSelect>
                   </br-select-pnip>
                </div>
             </div>
@@ -30,11 +30,11 @@
                <div class="br-select">
                   <div class="br-input">
                      <br-select-pnip
-                        id="idUnidadeGerenciadora"
-                        label="Unidade Gerenciadora"
-                        [options]="unidades"
-                        [optionSelected]="unidades.id"
-                        #gerenciadoraSelect>
+                             id="idUnidadeGerenciadora"
+                             label="Unidade Gerenciadora"
+                             [options]="unidades"
+                             [optionSelected]="unidades.id"
+                             #gerenciadoraSelect>
                      </br-select-pnip>
                   </div>
                </div>
@@ -49,13 +49,13 @@
                       [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (change)="validaCEP()"
                       (ngModelChange)="validaCEP()"/>
             <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
+                    *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
          </div>
          <div class="col-8">
             <br-input density="small" name="rua" label="Rua" formControlName="rua"
                       [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
             <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'rua'}"></ng-container>
+                    *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'rua'}"></ng-container>
          </div>
          <div class="col-2">
             <br-input density="small" name="numero" label="Número" formControlName="numero" type="text"
@@ -74,7 +74,7 @@
                   <br-input density="small" name="municipio" label="Município" formControlName="cidade"
                             [attr.state]="validatorsFormsUtils.getStateOfField('cidade')"/>
                   <ng-container
-                     *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cidade'}"></ng-container>
+                          *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cidade'}"></ng-container>
                </div>
             </div>
          </div>
@@ -84,7 +84,7 @@
                <br-input density="small" name="uf" label="UF" formControlName="uf"
                          [attr.state]="validatorsFormsUtils.getStateOfField('uf')"/>
                <ng-container
-                  *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'uf'}"></ng-container>
+                       *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'uf'}"></ng-container>
             </div>
          </div>
 
