@@ -12,8 +12,6 @@ export interface EmbarcacaoDTO {
    comprimento: string;
    petrecho: string;
    codigoIn: string;
-   declaracaoProprietario: string;
    frota: string;
-   declaracaoProprietarioBase64: string;
 
 }

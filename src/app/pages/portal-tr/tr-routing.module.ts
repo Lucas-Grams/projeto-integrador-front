@@ -14,6 +14,10 @@ const routes: Routes = [
          {
             path: 'primeiro-acesso',
             loadChildren: () => import('./primeiro-acesso/primeiro-acesso.module').then(m => m.PrimeiroAcessoModule)
+         },
+         {
+            path: 'embarcacoes',
+            loadChildren: () => import('./embarcacoes/embarcacoes.module').then(m => m.EmbarcacoesModule)
          }
       ]
    }
