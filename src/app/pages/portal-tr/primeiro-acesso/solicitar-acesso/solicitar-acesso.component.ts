@@ -42,7 +42,6 @@ export class SolicitarAcessoComponent implements OnInit {
       this.loadingService.show = true;
       this.trService.solicitarHabilitacao(dto).subscribe(
          (response) => {
-            //this.router.navigate(['/portal-tr/primeiro-acesso/minhas-solicitacoes'], {queryParams: {message: 'true'}});
             this.loadingService.show = false;
             if (!this.auth.usuarioLogado()) {
                this.loginService.login();

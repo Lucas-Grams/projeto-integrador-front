@@ -1,0 +1,59 @@
+<br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
+<br-divider size="medium" class="mt-0"></br-divider>
+<div class="p-5">
+   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-5 pb-0">
+      <div class="d-flex justify-content-between align-items-center w-100">
+         <div>Minhas embarcações</div>
+         <div>
+            <br-button label="Nova embarcação" type="primary" (click)="novaEmbarcacao()"/>
+         </div>
+      </div>
+   </h2>
+
+   <table class="table">
+      <thead class="thead-light">
+         <tr>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Situação</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Código embarcação</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Código de frota</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Nome da embarcação</th>
+            <th class="text-blue-vivid-60 text-bold text-center" scope="col">Declaração</th>
+            <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
+         </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngIf="embarcacoes?.length; else semEmbarcacoes">
+         <ng-container *ngFor="let e of embarcacoes">
+            <tr>
+               <td class="text-center">
+                  <div [ngClass]="{'bg-success': e.ativo, 'bg-danger': !e.ativo}" class="text-center pt-1 pb-1"
+                        [style.border-radius]="'4px'" [style.width]="'70%'">
+                     <div class="text-secondary-01">{{e.ativo ? 'Ativa' : 'Inativa'}}</div>
+                  </div>
+               </td>
+               <td>{{e.embarcacaoDTO.numRgp}}</td>
+               <td>{{e.embarcacaoDTO.frota}}</td>
+               <td>{{e.embarcacaoDTO.nome}}</td>
+               <td class="text-center" [style.cursor]="'pointer'">
+                  <br-icon-base icon-name="file" family-name="fas" class="mr-2 text-blue-vivid-60" (click)="verDeclaracaoProprietario(e.uuid)"/>
+               </td>
+               <td class="text-center" [style.cursor]="'pointer'">
+                  <br-icon-base icon-name="eye" family-name="fas" class="text-blue-vivid-60" (click)="visualizar(e.uuid)"/>
+               </td>
+            </tr>
+         </ng-container>
+      </ng-container>
+      <ng-template #semEmbarcacoes>
+         <tr>
+            <td class="text-center text-secondary-07" colspan="5">
+               <div [style.font-size]="'16px'">Não há embarcações</div>
+            </td>
+         </tr>
+      </ng-template>
+      </tbody>
+   </table>
+   <div class="d-flex justify-content-end mt-4" (click)="voltar()">
+      <br-button label="Voltar" type="secondary"/>
+   </div>
+
+</div>

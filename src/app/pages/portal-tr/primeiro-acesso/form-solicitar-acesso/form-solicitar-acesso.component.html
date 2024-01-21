@@ -19,9 +19,6 @@
    <div *ngSwitchCase="'dados-profissionais'">
       <pnip-tr-form-dados-profissionais [dto]="dto" (onSaveStep)="onSaveStep()" (onBackToStepEvent)="backToStep()" #dadosProfissionais/>
    </div>
-   <div *ngSwitchCase="'embarcacoes'">
-      <pnip-tr-form-embarcacoes [dto]="dto" (onSaveStep)="onSaveStep()" (onBackToStepEvent)="backToStep()" #embarcacoes/>
-   </div>
    <div *ngSwitchCase="'revisar-solicitacao'">
       <pnip-tr-form-revisar-solicitacao [dto]="dto" (onSaveEvent)="onSaveAll()" (onBackToStepEvent)="backToStep()"/>
    </div>

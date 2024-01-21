@@ -1,0 +1,6 @@
+.upload-file {
+   height: 32px;
+   border-radius: 6px;
+   border: 2px #005ea2 dotted;
+   cursor: pointer
+}

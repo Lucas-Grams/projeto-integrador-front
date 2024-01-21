@@ -16,10 +16,6 @@ export class RevisarSolicitacaoComponent {
 
    constructor() {}
 
-   removerEmbarcacao(index: number) {
-      this.dto.embarcacoes = this.dto.embarcacoes.filter((e, i) => i !== index);
-   }
-
    verPdf(base64: string) {
       PdfUtils.openViewer(base64)
    }

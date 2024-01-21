@@ -137,45 +137,6 @@
    </div>
 </div>
 
-<br-message *ngIf="showMessage" state="warning" closable title="Por favor, para continuar aprove ou reprove as embarcações." show-icon="true">
-</br-message>
-
-<table class="table" *ngIf="solicitacao">
-   <thead class="thead-light">
-   <tr>
-      <th class="text-blue-vivid-60 text-bold" scope="col">Data</th>
-      <th class="text-blue-vivid-60 text-bold" scope="col">Cód. Embarcação</th>
-      <th class="text-blue-vivid-60 text-bold" scope="col">Cód. Frota</th>
-      <th class="text-blue-vivid-60 text-bold" scope="col">Nome Embarcação</th>
-      <th class="text-blue-vivid-60 text-bold" scope="col">Declaração</th>
-      <th class="text-blue-vivid-60 text-bold" scope="col">Ações</th>
-   </tr>
-   </thead>
-   <tbody>
-   <ng-container *ngFor="let embarcacao of metadado?.habilitarTRDTO?.embarcacoes">
-      <tr>
-         <td>{{solicitacao.dataSolicitacao | date :'dd/MM/yyyy'}}</td>
-         <td>{{embarcacao.numMarinha}}</td>
-         <td>{{embarcacao.frota}}</td>
-         <td>{{embarcacao.nome}}</td>
-         <td>
-            <br-icon-base icon-name="file" family-name="fas" class="mr-2 text-blue-vivid-60 cursor-pointer" (click)="verPdf(embarcacao.declaracaoProprietario)"/>
-         </td>
-         <td>
-            <br-button icon label="Primary" [title]="'Reprovar'" type="tertiary" circle="true" [active]="embarcacao.aprovada === false"
-                       (click)="embarcacao.aprovada = false" [disabled]="solicitacao.status !== 'EM_ANALISE'">
-               <br-icon-base icon-name="ban" family-name="fas" class="text-danger"/>
-            </br-button>
-            <br-button icon label="Primary" [title]="'Aprovar'" type="tertiary" circle="true" [active]="embarcacao.aprovada"
-                       (click)="embarcacao.aprovada = true" [disabled]="solicitacao.status !== 'EM_ANALISE'">
-               <br-icon-base icon-name="check" family-name="fas" class="text-info"/>
-            </br-button>
-         </td>
-      </tr>
-   </ng-container>
-   </tbody>
-</table>
-
 <div class="mt-5">
    <br-message *ngIf="responseOperacao" state="warning" title="Atenção" show-icon="true">{{responseOperacao}}.</br-message>
 </div>
@@ -221,7 +182,7 @@
             </div>
             <div class="br-modal-body">
                <p class="text-center small">
-                  Esta opção encerra o processo para habilitação do TR e vínculo com as embarcações.
+                  Esta opção encerra o processo para habilitação do TR.
                   Se necessário, informe, no campo abaixo, o(s) motivo(s) do indeferimento.
                </p>
                <div class="col-12">

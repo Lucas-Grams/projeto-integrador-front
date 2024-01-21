@@ -1,0 +1,172 @@
+<br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
+<br-divider size="medium" class="mt-0"></br-divider>
+<div class="p-5">
+   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Cadastrar embarcação</h2>
+
+   <!-- filtro e adicionar embarcacao -->
+   <div class="row align-items-end">
+      <div class="col-4">
+         <div class="br-select" [style.max-width]="'100%'">
+            <div class="br-input">
+               <!-- item selecionado -->
+               <ng-container *ngIf="embarcacaoSelecionada; else pesquisarEmbarcacao">
+                  <br-input label="Pesquisar embarcações" [attr.disabled]="true"
+                            [value]="embarcacaoSelecionada.numRgp + ' - ' + embarcacaoSelecionada.nome"/>
+                  <button class="br-button" type="button" (click)="limparSelecionado()">
+                     <br-icon-base icon-name="times" family-name="fas"/>
+                  </button>
+               </ng-container>
+               <!-- pesquisar -->
+               <ng-template #pesquisarEmbarcacao>
+                  <br-input label="Pesquisar embarcações" icon-sign="search" placeholder="Busque pelo nome, código RAEP ou TIE"
+                            [(ngModel)]="filtro" (keyup)="buscarEmbarcacoes()"/>
+               </ng-template>
+            </div>
+            <div class="br-list" tabindex="0" [class.d-block]="embarcacoesFiltro != null">
+               <!-- lista embarcacoes -->
+               <ng-container *ngIf="embarcacoesFiltro?.length; else embarcacaNaoEncontrada">
+                  <ng-container *ngFor="let emb of embarcacoesFiltro">
+                     <div class="br-item" tabindex="-1" (click)="selecionarEmbarcacao(emb)">
+                        <div class="br-radio">
+                           <input [id]="emb.id" type="radio" name="embarcacao" [value]="emb.id"/>
+                           <label [for]="emb.id">
+                              {{emb.numRgp}} - {{emb.nome}}
+                           </label>
+                        </div>
+                     </div>
+                  </ng-container>
+               </ng-container>
+               <ng-template #embarcacaNaoEncontrada>
+                  <div class="br-item" tabindex="-1">
+                     <div class="br-radio">
+                        <input [id]="null" type="radio" name="embarcacao" [value]="null"/>
+                        <label [for]="null">Nenhuma embarcação encontrada</label>
+                     </div>
+                  </div>
+               </ng-template>
+            </div>
+         </div>
+      </div>
+      <div class="col-auto">
+         <br-button class="mb-1" label="Adicionar" type="primary" [disabled]="!embarcacaoSelecionada" (click)="adicionarEmbarcacao()"/>
+      </div>
+   </div>
+
+   <!-- embarcoes adicionadas -->
+   <div class="row mt-4">
+      <ng-container *ngFor="let e of dtos; let i = index;">
+         <div class="col-12">
+            <br-card>
+               <br-card-content slot="content">
+                  <div class="text-right" [style.margin-bottom]="'-10px'">
+                     <br-button circle icon="times" density="small" (click)="removerEmbarcacao(i)"></br-button>
+                  </div>
+                  <div class="row">
+                     <div class="col-4">
+                        <br-input density="small" label="Código da embarcação" [value]="e.embarcacaoDTO.numRgp" [attr.disabled]="true"/>
+                     </div>
+                     <div class="col-2">
+                        <br-input density="small" label="Código de frota" [value]="e.embarcacaoDTO.frota" [attr.disabled]="true"/>
+                     </div>
+                     <div class="col-6">
+                        <br-input density="small" label="Nome da embarcação" [value]="e.embarcacaoDTO.nome" [attr.disabled]="true"/>
+                     </div>
+                  </div>
+
+                  <pnip-validators-forms-utils [formGroup]="forms[i]" #validatorsFormsUtils></pnip-validators-forms-utils>
+
+                  <!-- formulario -->
+                  <form [formGroup]="forms[i]">
+                     <!-- proprierario -->
+                     <div class="row mt-2">
+                        <div class="col">
+                           <br-input density="small" name="nomeProprietario" label="Nome do proprietário" formControlName="nomeProprietario"
+                                     [attr.state]="validatorsFormsUtils.getStateOfField('nomeProprietario')"/>
+                           <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'nomeProprietario'}"></ng-container>
+                        </div>
+                        <div class="col">
+                           <br-input density="small" name="cpfProprietario" label="CPF do proprietário" formControlName="cpfProprietario"
+                                     mask="###.###.###-##" [attr.state]="validatorsFormsUtils.getStateOfField('cpfProprietario')"/>
+                           <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cpfProprietario'}"></ng-container>
+                        </div>
+                        <div class="col">
+                           <br-input density="small" name="emailProprietario" label="E-mail do proprietário" formControlName="emailProprietario"
+                                     [attr.state]="validatorsFormsUtils.getStateOfField('emailProprietario')"/>
+                           <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'emailProprietario'}"></ng-container>
+                        </div>
+                     </div>
+                     <div class="row mt-2">
+                        <!-- mercado atuacao -->
+                        <div class="col">
+                           <br-select-pnip [id]="'mercadoAtuacao_' + i" label="Mercado de atuação"
+                                 [options]="[
+                                    {label: 'Nacional',      value: 'Nacional'},
+                                    {label: 'Internacional', value: 'Internacional'},
+                                    {label: 'Ambos',         value: 'Ambos'}
+                                 ]"
+                                 (onSelectedEvent)="onMercadoAtuacaoSelected($event, i)">
+                           </br-select-pnip>
+                           <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'mercadoAtuacao'}"></ng-container>
+                        </div>
+                        <!-- tempo medio pesca -->
+                        <div class="col">
+                           <br-input density="small" label="Tempo médio de pesca" placeholder="Tempo em dias" mask="########"
+                                     formControlName="tempoMedioPesca" [attr.state]="validatorsFormsUtils.getStateOfField('tempoMedioPesca')"/>
+                           <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'tempoMedioPesca'}"></ng-container>
+                        </div>
+                        <!-- tipo conservacao -->
+                        <div class="col">
+                           <br-select-pnip [id]="'tipoConservacao_' + i" label="Tipo de conservação" [multiple]="true"
+                                 [options]="[
+                                    {label: 'Pescado vivo',       value: 'Pescado vivo'},
+                                    {label: 'Pescado fresco',     value: 'Pescado fresco'},
+                                    {label: 'Água refrigerada',   value: 'Água refrigerada'},
+                                    {label: 'Cong. via salmoura', value: 'Cong. via salmoura'}
+                                 ]"
+                                 (onSelectedEvent)="onTipoConservacaoSelected($event, i)">
+                           </br-select-pnip>
+                           <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'tipoConservacao'}"></ng-container>
+                        </div>
+                        <!-- capacidade total -->
+                        <div class="col">
+                           <br-input density="small" label="Capacidade total" placeholder="Tempo em quilogramas" mask="########"
+                                     tooltip-text="Informe a capacidade total do local de armazenamento, em kg." tooltip-place="bottom"
+                                     formControlName="capacidadeTotal" [attr.state]="validatorsFormsUtils.getStateOfField('capacidadeTotal')"/>
+                           <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'capacidadeTotal'}"></ng-container>
+                        </div>
+                        <!-- capacidade pescado -->
+                        <div class="col">
+                           <br-input density="small" label="Capacidade para pescado" placeholder="Tempo em quilogramas" mask="########"
+                                     tooltip-text="Informe a capacidade de armazenamento de pescado, em kg." tooltip-place="bottom"
+                                     formControlName="capacidadePescado" [attr.state]="validatorsFormsUtils.getStateOfField('capacidadePescado')"/>
+                           <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'capacidadePescado'}"></ng-container>
+                        </div>
+                     </div>
+                  </form>
+
+                  <div class="row mt-2">
+                     <div class="col-6">
+                        <label>Declaração do proprietário</label>
+                        <div class="upload-file mt-1 mb-1 w-100" (click)="openDeclaracaoProprietarioUpload(i)">
+                           <div class="text-blue-vivid-60 pt-1 pb-1">
+                              <br-icon-base icon-name="upload" family-name="fas" class="ml-2"/> <i> Selecione o arquivo</i>
+                           </div>
+                        </div>
+                        <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'declaracaoProprietario'}"></ng-container>
+                        <br-message *ngIf="forms[i].get('declaracaoProprietario')?.valid" feedback state="success" show-icon="true">
+                           Arquivo selecionado ({{this.forms[i].get('declaracaoProprietario')?.value}}).
+                        </br-message>
+                     </div>
+                  </div>
+               </br-card-content>
+            </br-card>
+         </div>
+      </ng-container>
+      <input #declaracaoProprietarioInput type="file" accept="application/pdf" class="d-none" (change)="onDeclaracaoProprietarioSelected($event)">
+   </div>
+   <br-divider size="medium" class="mt-0"></br-divider>
+   <div class="d-flex justify-content-end mt-4">
+      <br-button label="Voltar" type="secondary" class="mr-2" (click)="minhasEmbarcacoes()"/>
+      <br-button type="button" label="Cadastrar" type="primary" (click)="submit()"/>
+   </div>
+</div>
