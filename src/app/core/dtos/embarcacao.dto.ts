@@ -13,5 +13,5 @@ export interface EmbarcacaoDTO {
    petrecho: string;
    codigoIn: string;
    frota: string;
-
+   tipoCertificacao: string;
 }
