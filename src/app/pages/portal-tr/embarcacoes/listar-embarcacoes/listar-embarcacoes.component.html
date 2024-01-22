@@ -36,9 +36,9 @@
                <td>{{e.embarcacaoDTO.frota}}</td>
                <td>{{e.embarcacaoDTO.nome}}</td>
                <td>
-                  <div [ngClass]="{'bg-secondary-06': !e.embarcacaoDTO?.tipoCertificacao, 'bg-interactive': e.embarcacaoDTO?.tipoCertificacao}" class="text-center pt-1 pb-1 pl-2 pr-2 bg-secondary-06"
-                       [style.border-radius]="'4px'" [style.width]="'fit-content'">
-                     <div class="text-secondary-01">{{e.embarcacaoDTO?.tipoCertificacao? e?.embarcacaoDTO?.tipoCertificacao:'SEM CERTIFICAÇÕES'}}</div>
+                  <div [ngClass]="{'bg-secondary-06': !e.embarcacaoDTO?.tipoCertificacao, 'bg-interactive': e.embarcacaoDTO?.tipoCertificacao}"
+                       class="text-center pt-1 pb-1 pl-2 pr-2 bg-secondary-06" [style.border-radius]="'4px'" [style.width]="'fit-content'">
+                     <div class="text-secondary-01">{{e.embarcacaoDTO?.tipoCertificacao? e.embarcacaoDTO?.tipoCertificacao:'SEM CERTIFICAÇÕES'}}</div>
                   </div>
                </td>
                <td class="text-center" [style.cursor]="'pointer'">
@@ -47,8 +47,8 @@
                <td class="text-center" [style.cursor]="'pointer'">
                   <br-icon-base icon-name="eye" family-name="fas" class="text-blue-vivid-60" (click)="visualizar(e.uuid)"/>
                   <br-icon-base icon-name="trash" family-name="fas" class="text-red-vivid-60"
-                      [ngClass]="{'disabled': e?.embarcacaoDTO?.tipoCertificacao}"
-                      (click)="showModal('desvincular', e?.embarcacaoDTO, e.uuid)"/>
+                      [ngClass]="{'disabled': e.embarcacaoDTO?.tipoCertificacao}"
+                      (click)="showModal('desvincular', e.embarcacaoDTO, e.uuid)"/>
                </td>
             </tr>
          </ng-container>
