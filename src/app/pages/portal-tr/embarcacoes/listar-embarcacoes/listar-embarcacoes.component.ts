@@ -58,6 +58,8 @@ export class ListarEmbarcacoesComponent {
          const blob = new Blob([response], {type: 'application/pdf'});
          const blobUrl = URL.createObjectURL(blob);
          PdfUtils.openViewer(blobUrl);
+      }, error => {
+         Swal.fire('Erro.', 'Arquivo não encontrado', 'error').then();
       });
    }
 
