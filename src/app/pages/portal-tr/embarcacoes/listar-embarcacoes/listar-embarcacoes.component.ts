@@ -1,5 +1,3 @@
-declare var core: any;
-
 import {Component} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 
@@ -75,27 +73,28 @@ export class ListarEmbarcacoesComponent {
       this.router.navigate(['/portal-tr']);
    }
 
-   desvincularEmbarcacao() {
-      if (this.uuidVinculoEmbarcacao === '') return;
-      this.trService.desvincularEmbarcacao(this.uuidVinculoEmbarcacao).subscribe(response => {
+   desvincularEmbarcacao(uuidVinculoEmbarcacao: string) {
+      this.trService.desvincularEmbarcacao(uuidVinculoEmbarcacao).subscribe(response => {
          Swal.fire('Ok.',response.msg, 'success').then();
          this.modal.hideScrim();
          this.findAll();
       });
    }
 
-   showModal(modalId: string, embarcacao: any, uuidVinculoEmbarcacao: string) {
-      // só deixamos desvincular por ora, somente embarcações não certificadas, as certificadas será modelado
-      if (!embarcacao.tipoCertificacao) {
-         this.uuidVinculoEmbarcacao = uuidVinculoEmbarcacao;
-         this.embarcacao = embarcacao;
-         const modalElem: any = document.getElementById("modal-" + modalId);
-         this.modal = new core.Scrim({
-            closeElement: modalId + 'fechar',
-            trigger: modalElem,
-         });
-         this.modal.showScrim();
-      }
+   showModal(embarcacao: any, uuidVinculoEmbarcacao: string) {
+      Swal.fire({
+         title: 'Atenção.',
+         text: `Esta ação vai excluir o seu vínculo com a embarcação ${embarcacao.nome}
+         A embarcação pode ser cadastrada novamente no futuro.`,
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonText: 'Sim',
+         cancelButtonText: 'Não'
+      }).then((result) => {
+         if (result.value) {
+            this.desvincularEmbarcacao(uuidVinculoEmbarcacao);
+         }
+      });
    }
 
 }

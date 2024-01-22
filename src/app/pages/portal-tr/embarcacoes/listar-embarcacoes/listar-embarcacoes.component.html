@@ -48,7 +48,7 @@
                   <br-icon-base icon-name="eye" family-name="fas" class="text-blue-vivid-60" (click)="visualizar(e.uuid)"/>
                   <br-icon-base icon-name="trash" family-name="fas" class="text-red-vivid-60"
                       [ngClass]="{'disabled': e.embarcacaoDTO?.tipoCertificacao}"
-                      (click)="showModal('desvincular', e.embarcacaoDTO, e.uuid)"/>
+                      (click)="showModal(e.embarcacaoDTO, e.uuid)"/>
                </td>
             </tr>
          </ng-container>
@@ -66,34 +66,4 @@
       <br-button label="Voltar" type="secondary"/>
    </div>
 
-</div>
-
-<!-- modal confirmação desvincular embarcacao -->
-<div class="br-scrim-util foco" id="modal-desvincular" data-scrim="true">
-   <div class="br-modal medium">
-      <div class="br-modal-dialog">
-         <div class="br-modal-content">
-            <div class="br-modal-header">
-               <h4 class="br-modal-title">Excluir vínculo com a embarcação</h4>
-            </div>
-            <div class="br-modal-body">
-               <p class="text-center small">
-                  Esta ação vai excluir o seu vínculo com a embarcação
-               </p>
-               <h4 class="text-bold text-center">
-                  {{embarcacao.nome}}
-               </h4>
-               <p class="text-center small">
-                  A embarcação pode ser cadastrada novamente no futuro.
-               </p>
-            </div>
-            <div class="br-modal-footer justify-content-center">
-               <button class="br-button secondary" type="button" id="desvincularfechar" data-dismiss="scrimexample">Cancelar
-               </button>
-               <button class="br-button primary mt-3 mt-sm-0 ml-sm-3" (click)="desvincularEmbarcacao()" type="button">Excluir vínculo
-               </button>
-            </div>
-         </div>
-      </div>
-   </div>
 </div>
