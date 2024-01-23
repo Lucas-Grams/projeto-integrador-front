@@ -54,6 +54,8 @@ export class DadosPessoaisComponent implements OnInit {
    submit(goToStep = false) {
       if (this.formGroup.valid) {
          const form: HabilitarTRDTO = <HabilitarTRDTO>{...this.formGroup.value};
+               form.cpf = form.cpf.toString();
+               form.telefone = form.telefone ? form.telefone.toString() : form.telefone;
          for (let attr in form) {
             // @ts-ignore
             this.dto[attr] = form[attr];
@@ -67,7 +69,7 @@ export class DadosPessoaisComponent implements OnInit {
    }
 
    voltar() {
-      this.router.navigate(['/portal-tr/primeiro-acesso']);
+      this.router.navigate(['/login']);
    }
 
 }

@@ -13,6 +13,7 @@ import {FormEditarUnidadeComponent} from "./form-unidade/form-editar-unidade/for
 import {
    FormRepresentanteUnidadeComponent
 } from "./form-unidade/form-representante-unidade/form-representante-unidade.component";
+import {NguiMapModule} from "@ngui/map";
 
 
 
@@ -36,12 +37,13 @@ import {
             positionClass: 'toast-top-right',
             preventDuplicates: true,
         }),
-
-    ],
-   providers: [
-      UnidadeService,
-      ToastrService
-   ],
-   schemas: [CUSTOM_ELEMENTS_SCHEMA]
+NguiMapModule,
+    NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyCMyG1h3lMnkv9fYUelTjDe9IXwpxpa0-U&libraries=visualization,drawing'})
+],
+providers: [
+    UnidadeService,
+    ToastrService
+],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class UnidadeModule {}

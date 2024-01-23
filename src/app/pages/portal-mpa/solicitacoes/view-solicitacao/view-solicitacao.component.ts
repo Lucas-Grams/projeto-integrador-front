@@ -32,8 +32,8 @@ export class ViewSolicitacaoComponent implements OnInit {
    metadado: any;
    solicitacao: any;
    msgIndeferir = '';
+   responseOperacao = '';
    statusSolicitacao = '';
-   showMessage = false;
 
    constructor(private trService: TrService, private route: ActivatedRoute, public router: Router) {
 
@@ -58,41 +58,20 @@ export class ViewSolicitacaoComponent implements OnInit {
    }
 
    enviarSolicitacao() {
-      if (this.statusSolicitacao === 'deferir') {
-         const numEmbaracao = this.metadado?.habilitarTRDTO?.embarcacoes.length;
-         let count = 0;
-         this.metadado?.habilitarTRDTO?.embarcacoes.forEach((embarcacao: any) => {
-            if (embarcacao.aprovada || embarcacao.aprovada === false) {
-               count++;
-            }
-         });
-
-         if (count !== numEmbaracao) {
-            this.showMessage = true;
-            return;
-         }
-      }
-
-      let embarcacoes: any = [];
-      this.metadado?.habilitarTRDTO?.embarcacoes.forEach((embarcacao: any) => {
-         if (embarcacao.aprovada || embarcacao.aprovada === false) {
-            embarcacoes.push({id: embarcacao.id, aprovado: embarcacao.aprovada});
-         }
-      });
+      this.responseOperacao = '';
 
       const finalizarSolicitacao = {
          uuidSolicitacao: this.solicitacao.uuidSolicitacao,
          statusSolicitacao: this.statusSolicitacao,
-         msgSolicitacao: (this.statusSolicitacao === 'deferir'? '' : this.msgIndeferir),
-         embarcacoes: embarcacoes
+         msgSolicitacao: (this.statusSolicitacao === 'deferir'? '' : this.msgIndeferir)
       }
 
       this.trService.finalizarSolicitacao(finalizarSolicitacao).subscribe(response => {
          if (response) {
             this.router.navigate(['portal-mpa/solicitacoes']);
          }
-      }, error => {
-         console.error(error);
+      }, (responseError: any) => {
+         this.responseOperacao = responseError.error.message;
       });
    }
 

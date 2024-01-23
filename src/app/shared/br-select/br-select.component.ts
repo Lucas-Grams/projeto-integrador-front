@@ -29,7 +29,12 @@ export class BrSelectComponent implements AfterViewInit, AfterViewChecked {
    }
 
    setSelected() {
-      setTimeout(() => this.onSelectedEvent.emit(this.instance.selectedValue), 10);
+      const emit = () => this.onSelectedEvent.emit(this.instance.selectedValue);
+      if (this.multiple) {
+         emit();
+      } else {
+         setTimeout(emit, 10);
+      }
    }
 
    getOptionSelected() {

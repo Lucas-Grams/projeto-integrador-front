@@ -8,11 +8,11 @@ export class Unidade{
    endereco: Endereco;
    unidadeGerenciadora?: Unidade;
    idUnidadeGerenciadora?: number = 0;
-   ativo: boolean;
+   ativo?: boolean;
    uuid: String;
    dataCadastro?: Date;
-   ultima_atualizacao?: Date;
-   usuarioRepresentante?: Usuario;
+   ultimaAtualizacao?: Date;
+   usuarios: Usuario[] = [];
 
 
 
@@ -20,7 +20,7 @@ export class Unidade{
       this.nome = '';
       this.tipo = '';
       this.idUnidadeGerenciadora;
-      this.ativo = false;
+      this.ativo;
       this.uuid = '';
       this.endereco = new Endereco();
    }

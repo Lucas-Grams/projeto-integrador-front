@@ -1,0 +1,48 @@
+<br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
+<br-divider size="medium" class="mt-0"></br-divider>
+<div class="p-5">
+    <div class="row">
+        <div class="col">
+            <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Empresas</h2>
+        </div>
+        <div class="col-auto">
+            <br-button icon="plus" label="Nova Empresa" type="primary" [routerLink]="'/portal-admin/empresas/cadastrar-nova-empresa'"></br-button>
+        </div>
+    </div>
+
+    <table class="table">
+        <ng-container *ngIf="empresas.length>0; else semEmpresas">
+
+        <thead class="thead-light">
+        <tr>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Ativo</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Razão Social</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">CNPJ</th>
+            <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let empresa of empresas">
+        <tr>
+            <td><br-switch icon [checked]="empresa.ativo" (onChange)="inativar(empresa)"></br-switch></td>
+            <td>{{empresa.razaoSocial}}</td>
+            <td>{{empresa.cnpj}}</td>
+            <td class="text-center">
+                <button class="br-button"><br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60" [routerLink]="'editar/' + empresa.uuid"/></button>
+            </td>
+        </tr>
+        </tbody>
+        </ng-container>
+    </table>
+    <ng-template #semEmpresas>
+        <div class="br-message info" role="alert">
+            <div class="icon"><i class="fas fa-info-circle fa-lg" aria-hidden="true"></i>
+            </div>
+            <div class="content"><span class="message-title">Atenção.</span><span class="message-body"> Não há empresas cadastradas.</span></div>
+            <div class="close">
+                <button class="br-button circle small" type="button" aria-label="Fechar"><i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </ng-template>
+
+</div>

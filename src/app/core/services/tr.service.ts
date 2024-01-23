@@ -54,4 +54,8 @@ export class TrService {
       return this.http.get(`${this.URL}/download/anexos/${uuid}/${nome}`, {responseType: 'blob'});
    }
 
+   public desvincularEmbarcacao(uuidVinculoEmbarcacao: string) {
+      return this.http.post<ResponseDTO<string>>(`${this.URL}/desvincular-embarcacao`, uuidVinculoEmbarcacao);
+   }
+
 }

@@ -1,0 +1,67 @@
+<br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
+<br-divider size="medium" class="mt-0"></br-divider>
+<div class="p-5">
+   <ng-container *ngIf="embarcacao">
+      <h2 class="text-bold text-blue-vivid-60 mt-0 mb-5 pb-0">{{embarcacao.embarcacaoDTO.nome}}</h2>
+      <!-- embarcacao -->
+      <div class="row mt-2">
+         <div class="col-2">
+            <br-input density="small" label="Código da embarcação" [value]="embarcacao.embarcacaoDTO.numRgp" [attr.disabled]="true"/>
+         </div>
+         <div class="col-2">
+            <br-input density="small" label="Código de frota" [value]="embarcacao.embarcacaoDTO.frota" [attr.disabled]="true"/>
+         </div>
+         <div class="col-8">
+            <br-input density="small" label="Nome da embarcação" [value]="embarcacao.embarcacaoDTO.nome" [attr.disabled]="true"/>
+         </div>
+      </div>
+      <!-- proprietario -->
+      <div class="row mt-2">
+         <div class="col">
+            <br-input density="small" label="Nome do proprietário" [value]="embarcacao.nomeProprietario" [attr.disabled]="true"/>
+         </div>
+         <div class="col">
+            <br-input density="small" label="CPF do proprietário" [value]="embarcacao.cpfProprietario" [attr.disabled]="true"/>
+         </div>
+         <div class="col">
+            <br-input density="small" label="E-mail do proprietário" [value]="embarcacao.emailProprietario" [attr.disabled]="true"/>
+         </div>
+      </div>
+      <div class="row mt-2">
+         <!-- mercado atuacao -->
+         <div class="col">
+            <br-input density="small" label="Mercado de atuação" [value]="embarcacao.mercadoAtuacao" [attr.disabled]="true"/>
+         </div>
+         <!-- tempo medio pesca -->
+         <div class="col">
+            <br-input density="small" label="Tempo médio de pesca" [value]="embarcacao.tempoMedioPesca + ' dias'" [attr.disabled]="true"/>
+         </div>
+         <!-- tipo conservacao -->
+         <div class="col">
+            <br-input density="small" label="Tipo de conservação" [value]="embarcacao.tipoConservacao" [attr.disabled]="true"/>
+         </div>
+         <!-- capacidade total -->
+         <div class="col">
+            <br-input density="small" label="Capacidade total" [value]="embarcacao.capacidadeTotal + ' kg'" [attr.disabled]="true"/>
+         </div>
+         <!-- capacidade pescado -->
+         <div class="col">
+            <br-input density="small" label="Capacidade para pescado" [value]="embarcacao.capacidadePescado + ' kg'" [attr.disabled]="true"/>
+         </div>
+      </div>
+      <!-- declaracao proprietario -->
+      <div class="row mt-4">
+         <div class="col-6">
+            <label>Declaração do proprietário</label>
+            <div class="text-blue-vivid-60 mt-2 pb-3 border-bottom">
+               <strong (click)="verDeclaracaoProprietario(embarcacao.uuid)" [style.cursor]="'pointer'">anexo.pdf</strong>
+            </div>
+         </div>
+      </div>
+   </ng-container>
+
+   <div class="d-flex justify-content-end mt-2" (click)="voltar()">
+      <br-button label="Fechar" type="secondary"/>
+   </div>
+
+</div>

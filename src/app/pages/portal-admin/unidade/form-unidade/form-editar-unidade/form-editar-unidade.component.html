@@ -1,126 +1,185 @@
 <br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
 <br-divider size="medium" class="mt-0"></br-divider>
 <div class="p-5">
-   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Visualizar dados da unidade</h2>
-
+   <div class="row">
+      <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Visualizar dados da unidade</h2>
+      <div class="ml-auto">
+         <br-button icon="edit" label="Editar" type="block" (click)="editar()"/>
+      </div>
+   </div>
    <ng-container *ngIf="formGroup">
 
       <form [formGroup]="formGroup" (ngSubmit)="salvar()">
          <pnip-validators-forms-utils [formGroup]="formGroup" #validatorsFormsUtils></pnip-validators-forms-utils>
          <!-- tipo/gerenciadora -->
          <div class="row mb-2">
-            <div class="col-6">
+            <div class="col-4">
                <div class="br-select">
                   <div class="br-input">
-                     <label>Tipo de Unidade</label>
-                     <br>
-                     <select formControlName="tipo" (change)="selecionaGerenciadora()" class="select">
-                        <option *ngFor="let uni of tipoUnidade" [value]="uni.item" >{{uni.value}}</option>
-                     </select>
+                     <br-select-pnip
+                             [disabled]="!isEdit"
+                             id="tipoUnidade"
+                             label="Tipo de Unidade"
+                             [options]="tipoUnidade"
+                             [optionSelected]="unidade.tipo"
+                             (change)="selecionaGerenciadora()"
+                             #tipoUnidadeSelect>
+                     </br-select-pnip>
                   </div>
                </div>
             </div>
-            <div class="col-6">
-               <ng-container *ngIf="unidade.idUnidadeGerenciadora ">
-                  <ng-container *ngIf="!validarUc">
-                     <div class="br-select">
-                        <div class="br-input">
-                           <label>Reporta-se</label>
-                           <br>
-                           <select formControlName="idUnidadeGerenciadora">
-                              <option *ngFor="let unidade of unidadesGerenciadoras"
-                                      [value]="unidade.id" >{{unidade.nome}}</option>
-                           </select>
-                        </div>
+            <div class="col-4">
+               <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="nome" label="Nome da unidade" formControlName="nome"
+                         [(ngModel)]="unidade.nome"
+                         [attr.state]="validatorsFormsUtils.getStateOfField('nome')"/>
+            </div>
+            <div class="col-4">
+               <ng-container *ngIf="!validarUc">
+                  <div class="br-select">
+                     <div class="br-input">
+                        <br-select-pnip
+                                [disabled]="!isEdit"
+                                id="idUnidadeGerenciadora"
+                                label="Unidade Gerenciadora"
+                                [options]="unidades"
+                                [optionSelected]="unidade.idUnidadeGerenciadora"
+                                #gerenciadoraSelect>
+                        </br-select-pnip>
                      </div>
-                  </ng-container>
+                  </div>
                </ng-container>
+
             </div>
          </div>
 
          <!-- nome/cep -->
          <div class="row mb-2">
-            <div class="col-8">
-               <br-input density="small" name="nome" label="Nome da unidade" formControlName="nome" [(ngModel)]="unidade.nome"
-                         [attr.state]="validatorsFormsUtils.getStateOfField('nome')"/>
-            </div>
-            <div class="col-4">
-               <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"
+
+            <div class="col-2">
+               <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"
                          [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (change)="validaCEP()"
                          (ngModelChange)="validaCEP()" [(ngModel)]="unidade.endereco.cep"/>
                <ng-container
-                  *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
-
+                       *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
             </div>
-         </div>
-
-         <!-- rua/numero/bairro -->
-         <div class="row mb-2">
-            <div class="col-6">
-               <br-input density="small" name="rua" label="Rua" formControlName="rua"
+            <div class="col-8">
+               <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="rua" label="Rua" formControlName="rua"
                          [attr.state]="validatorsFormsUtils.getStateOfField('rua')" [(ngModel)]="unidade.endereco.rua"/>
             </div>
             <div class="col-2">
-               <br-input density="small" name="numero" label="Número" formControlName="numero" type="text"
-                         [attr.state]="validatorsFormsUtils.getStateOfField('numero')" [(ngModel)]="unidade.endereco.numero"/>
-            </div>
-            <div class="col-4">
-               <br-input density="small" name="bairro" label="Bairro" formControlName="bairro" [(ngModel)]="unidade.endereco.bairro"/>
+               <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="numero" label="Número" formControlName="numero" type="text"
+                         [attr.state]="validatorsFormsUtils.getStateOfField('numero')"
+                         [(ngModel)]="unidade.endereco.numero"/>
             </div>
          </div>
 
          <!-- complemento/uf/cidade -->
          <div class="row mb-2">
             <div class="col-4">
-               <br-input density="small" name="complemento" label="Complemento" formControlName="complemento" [(ngModel)]="unidade.endereco.complemento"/>
+               <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="complemento" label="Complemento" formControlName="complemento"
+                         [(ngModel)]="unidade.endereco.complemento"/>
             </div>
             <div class="col-4">
-               <div class="br-select">
-                  <div class="br-input">
-                     <br-input density="small" name="uf" label="UF" formControlName="uf"
-                               [attr.state]="validatorsFormsUtils.getStateOfField('uf')" [(ngModel)]="unidade.endereco.uf"/>
+               <div class="br-input">
+                  <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="municipio" label="Município" formControlName="cidade"
+                            [attr.state]="validatorsFormsUtils.getStateOfField('cidade')"
+                            [(ngModel)]="unidade.endereco.cidade"/>
+               </div>
+            </div>
+            <div class="col-1">
+               <div class="br-input">
+                  <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="uf" label="UF" formControlName="uf"
+                            [attr.state]="validatorsFormsUtils.getStateOfField('uf')"
+                            [(ngModel)]="unidade.endereco.uf"/>
+               </div>
+            </div>
+            <div class="col-3">
+               <div class="br-input">
+                  <br-input density="small" [attr.readonly]="isEdit ? null : 'true'" name="coordenadas" label="Coordenadas"
+                            [value]="latLng" />
+               </div>
+            </div>
 
-                  </div>
-               </div>
-            </div>
-            <div class="col-4">
-               <div class="br-select">
-                  <div class="br-input">
-                     <br-input density="small" name="municipio" label="Município" formControlName="cidade"
-                               [attr.state]="validatorsFormsUtils.getStateOfField('cidade')" [(ngModel)]="unidade.endereco.cidade"/>
-                  </div>
-               </div>
-            </div>
          </div>
+
+         <div class="form-row">
+            <!-- MAPA -->
+            <ng-container *ngIf="this.unidade.endereco.latitude && this.unidade.endereco.longitude">
+               <div class="form-group ">
+                  <ngui-map class="gmap"
+                            zoom="14"
+                            center="{{unidade.endereco.latitude }},{{
+                                  unidade.endereco.longitude
+                               }}"
+                            [fullscreenControl]="true"
+                            [fullscreenControlOptions]="{ position: 'TOP_RIGHT' }"
+                  >
+                     <marker
+                             position="{{ unidade.endereco.latitude }}, {{
+                                     unidade.endereco.longitude
+                                  }}"
+                             draggable="true"
+                             (dragend)="moveuPontoMaps($event)"
+                     >
+                     </marker>
+                  </ngui-map>
+               </div>
+               <div class="col-12 text-center">
+                  <p>
+                     <label>Latitude:</label>
+                     {{ unidade.endereco.latitude }}
+                     <span class="ml-3"></span>
+                     <label>Longitude:</label>
+                     {{ unidade.endereco.longitude }}
+                  </p>
+               </div>
+
+            </ng-container>
+         </div>
+
       </form>
    </ng-container>
 
-   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Representante da unidade</h2>
-   <ng-container *ngIf="representantes.length > 0; else semRepresentantes">
-   <table class="table">
-      <thead class="thead-light">
-      <tr>
-         <th class="text-blue-vivid-60 text-bold" scope="col">Nome</th>
-         <th class="text-blue-vivid-60 text-bold" scope="col">CPF</th>
-         <th class="text-blue-vivid-60 text-bold" scope="col">E-mail</th>
-      </tr>
-      </thead>
-      <tbody *ngFor="let usuario of representantes">
-      <tr>
-         <td>{{usuario.nome}}</td>
-         <td>{{usuario.cpf}}</td>
-         <td>{{usuario.email}}</td>
-      </tr>
-      </tbody>
-   </table>
+   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Usuários da unidade</h2>
+
+   <pnip-admin-form-representante-unidade
+      (newUserEmitter)="receberNovoUsuario($event)"
+      #formUser>
+   </pnip-admin-form-representante-unidade>
+
+   <ng-container *ngIf="unidadeUsuario.length > 0; else semUsuarios">
+      <table class="table">
+         <thead class="thead-light">
+         <tr>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Representante</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Nome</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">CPF</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">E-mail</th>
+            <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
+         </tr>
+         </thead>
+         <tbody *ngFor="let uni of unidadeUsuario">
+         <tr *ngIf="uni.ativo == true">
+            <td><br-switch icon (onChange)="usuarioIsRepresentante(uni)"  [checked]="isRepresentante(uni)"></br-switch></td>
+            <td>{{uni.usuario.nome}}</td>
+            <td>{{uni.usuario.cpf}}</td>
+            <td>{{uni.usuario.email}}</td>
+            <td class="text-center">
+               <button class="br-button"><br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="cancelarUsuario(uni)"/></button>
+            </td>
+         </tr>
+         </tbody>
+      </table>
    </ng-container>
-   <ng-template #semRepresentantes>
+   <ng-template #semUsuarios>
       <div class="br-message info" role="alert">
          <div class="icon"><i class="fas fa-info-circle fa-lg" aria-hidden="true"></i>
          </div>
-         <div class="content"><span class="message-title">Atenção.</span><span class="message-body"> Não há representantes cadastrados para essa unidade.</span></div>
+         <div class="content"><span class="message-title">Atenção.</span><span class="message-body"> Não há representantes cadastrados para essa unidade.</span>
+         </div>
          <div class="close">
-            <button class="br-button circle small" type="button" aria-label="Fechar"><i class="fas fa-times" aria-hidden="true"></i>
+            <button class="br-button circle small" type="button" aria-label="Fechar"><i class="fas fa-times"
+                                                                                        aria-hidden="true"></i>
             </button>
          </div>
       </div>
