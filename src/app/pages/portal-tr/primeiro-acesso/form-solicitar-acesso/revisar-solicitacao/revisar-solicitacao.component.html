@@ -69,46 +69,14 @@
          <div class="text-blue-vivid-60 mt-2">
             <strong (click)="verPdf(dto.copiaHabilitacaoBase64)" [style.cursor]="'pointer'">{{dto.copiaHabilitacao}}</strong>
          </div>
-         <br-divider *ngIf="dto.embarcacoes?.length" size="medium" class="mt-3"></br-divider>
       </div>
       <div class="col-6">
          <label>Diploma/Certificado</label>
          <div class="text-blue-vivid-60 mt-2">
             <strong (click)="verPdf(dto.diplomaCertificacaoBase64)" [style.cursor]="'pointer'">{{dto.diplomaCertificacao}}</strong>
          </div>
-         <br-divider *ngIf="dto.embarcacoes?.length" size="medium" class="mt-3"></br-divider>
       </div>
    </div>
-
-   <!-- embarcacoes -->
-   <ng-container *ngIf="dto.embarcacoes?.length">
-      <div class="mt-4 mb-4">
-         <table class="table table-sm">
-            <thead class="thead-light">
-               <tr>
-                  <th class="text-blue-vivid-60 text-bold" scope="col">#</th>
-                  <th class="text-blue-vivid-60 text-bold" scope="col" [style.white-space]="'nowrap'">Código embarcação</th>
-                  <th class="text-blue-vivid-60 text-bold" scope="col" [style.white-space]="'nowrap'">Nome da embarcação</th>
-                  <th class="text-blue-vivid-60 text-bold text-center" scope="col">Declaração</th>
-                  <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
-               </tr>
-            </thead>
-            <tbody>
-               <tr *ngFor="let e of dto.embarcacoes; let i = index">
-                  <td>{{i + 1}}</td>
-                  <td>{{e.numRgp}}</td>
-                  <td>{{e.nome}}</td>
-                  <td class="text-center" [style.cursor]="'pointer'">
-                     <br-icon-base icon-name="file" family-name="fas" class="mr-2 text-blue-vivid-60" (click)="verPdf(e.declaracaoProprietarioBase64)"/>
-                  </td>
-                  <td class="text-center" [style.cursor]="'pointer'">
-                     <br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="removerEmbarcacao(i)"/>
-                  </td>
-               </tr>
-            </tbody>
-         </table>
-      </div>
-   </ng-container>
 </ng-container>
 
 <br-divider size="medium" class="mt-3"></br-divider>

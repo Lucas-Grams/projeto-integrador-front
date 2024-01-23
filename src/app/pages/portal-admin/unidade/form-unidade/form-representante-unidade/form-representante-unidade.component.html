@@ -1,18 +1,23 @@
 <div class="row">
-   <div class="br-item" data-toggle="selection">
-      <div class="br-radio">
-         <input id="radio-01" type="radio" name="radio" [checked]="!novoUser" (click)="verificaNovoUser(false)"/>
-         <label for="radio-01">Usuario existente</label>
-      </div>
-   </div>
-   <div class="br-item" data-toggle="selection">
-      <div class="br-radio">
-         <input id="radio-02" type="radio" name="radio" [checked]="novoUser" (click)="verificaNovoUser(true)"/>
-         <label for="radio-02">Novo Usuario</label>
-      </div>
-   </div>
 
+   <div class="br-tab">
+      <nav class="tab-nav">
+         <ul>
+            <li class="tab-item">
+               <button type="button" data-panel="panel-1-icon"><span class="name">
+                  <span class="d-flex flex-column flex-sm-row"><span class="icon mb-1 mb-sm-0 mr-sm-1"></span>
+                     <span class="name" (click)="verificaNovoUser(false)" >Usuario existente</span></span></span></button>
+            </li>
+            <li class="tab-item">
+               <button type="button" data-panel="panel-2-icon"><span class="name">
+                  <span class="d-flex flex-column flex-sm-row"><span class="icon mb-1 mb-sm-0 mr-sm-1"></span>
+                     <span class="name" (click)="verificaNovoUser(true)">Cadastrar Usuario</span></span></span></button>
+            </li>
+         </ul>
+      </nav>
+   </div>
 </div>
+
 
 <ng-container *ngIf="novoUser; else usuarioExistente">
    <form [formGroup]="formGroup2">
@@ -21,74 +26,29 @@
 
       <!-- nome/cpf -->
       <div class="row mb-2">
-         <div class="col-8">
+         <div class="col-4">
             <br-input density="small" name="nome" label="Nome completo" formControlName="nome"
                       [attr.state]="validatorsFormsUtils.getStateOfField('nome')"/>
             <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'nome'}"></ng-container>
+                    *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'nome'}"></ng-container>
          </div>
-         <div class="col-4">
+         <div class="col-2">
             <br-input density="small" name="cpf" label="CPF" formControlName="cpf" mask="###.###.###-##"
                       [attr.state]="validatorsFormsUtils.getStateOfField('cpf')"/>
             <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cpf'}"></ng-container>
+                    *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cpf'}"></ng-container>
          </div>
-      </div>
-
-      <!-- email/telefone -->
-      <div class="row mb-2">
-         <div class="col-7">
+         <div class="col-4">
             <br-input density="small" name="email" label="E-mail" formControlName="email"
                       [attr.state]="validatorsFormsUtils.getStateOfField('email')"/>
             <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'email'}"></ng-container>
+                    *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'email'}"></ng-container>
          </div>
-         <div class="col-5">
-            <br-input density="small" name="senha" label="Senha" formControlName="senha" type="password"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('senha')"/>
-            <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'senha'}"></ng-container>
-         </div>
+
+         <button class="br-button primary mr-3 mt-3" type="button" (click)="adicionarNovoUsuario()">Adicionar</button>
       </div>
 
-      <!-- cep/logradouro/numero -->
-      <div class="row mb-2">
-         <div class="col-3">
-            <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (change)="getAddressByCep()"
-                      (ngModelChange)="getAddressByCep()"/>
-            <ng-container
-               *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
-         </div>
-         <div class="col-7">
-            <br-input density="small" name="rua" label="Logradouro" formControlName="rua"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
-         </div>
-         <div class="col-2">
-            <br-input density="small" name="numero" label="Número" formControlName="numero"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('numero')"/>
-         </div>
-      </div>
 
-      <!-- complemento/municipio/uf -->
-      <div class="row mb-2">
-         <div class="col-4">
-            <br-input density="small" name="complemento" label="Complemento" formControlName="complemento"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('complemento')"/>
-         </div>
-         <div class="col-4">
-            <br-input density="small" name="cidade" label="Cidade" formControlName="cidade"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('cidade')"/>
-         </div>
-         <div class="col-3">
-            <br-input density="small" name="bairro" label="Bairro" formControlName="bairro"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('bairro')"/>
-         </div>
-         <div class="col-1">
-            <br-input density="small" name="uf" label="UF" formControlName="uf"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('uf')"/>
-         </div>
-      </div>
       <br-divider size="medium" class="mt-3"></br-divider>
    </form>
 </ng-container>
@@ -97,15 +57,19 @@
       <div class="col-6">
          <div class="br-select">
             <div class="br-input">
-               <label>Usuarios</label>
-               <br>
-               <select [(ngModel)]="newUsuario" class="select" (ngModelChange)="selecionaUsuario($event)">
-                  <option *ngFor="let user of usuarios" [ngValue]="user">{{user.nome}}--{{user.email}}</option>
-               </select>
-
+               <br-select-pnip
+                       id="idUsuario"
+                       label="Selecione o usuário"
+                       [options]="users"
+                       (change)="selecionaUsuario(users.value)"
+                       #userSelect>
+               </br-select-pnip>
             </div>
+
          </div>
       </div>
+      <button class="br-button primary mt-3" type="button" (click)="emitirNovoUsuario()">Adicionar</button>
    </div>
+   <br-divider size="medium" class="mt-3"></br-divider>
 </ng-template>
 

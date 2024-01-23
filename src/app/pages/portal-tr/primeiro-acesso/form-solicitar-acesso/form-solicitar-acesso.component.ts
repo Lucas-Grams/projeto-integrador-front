@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {HabilitarTRDTO} from "../../../../core/dtos/habilitar-tr.dto";
-import {EmbarcacoesComponent} from "./embarcacoes/embarcacoes.component";
 import {DadosProfissionaisComponent} from "./dados-profissionais/dados-profissionais.component";
 import {DadosPessoaisComponent} from "./dados-pessoais/dados-pessoais.component";
 
@@ -13,14 +12,12 @@ export class FormSolicitarAcessoComponent {
 
    @ViewChild('dadosPessoais') dadosPessoaisComponent!: DadosPessoaisComponent;
    @ViewChild('dadosProfissionais') dadosProfissionaisComponent!: DadosProfissionaisComponent;
-   @ViewChild('embarcacoes') embarcacoesComponent!: EmbarcacoesComponent;
 
    public dto: HabilitarTRDTO;
 
    public steps = [
       {id: 'dados-pessoais',      title: 'Dados Pessoais',      enabled: true,  done: false},
       {id: 'dados-profissionais', title: 'Dados profissionais', enabled: false, done: false},
-      {id: 'embarcacoes',         title: 'Embarcações',         enabled: false, done: false},
       {id: 'revisar-solicitacao', title: 'Revisar solicitação', enabled: false, done: false},
    ];
 
@@ -40,7 +37,6 @@ export class FormSolicitarAcessoComponent {
          switch (this.active) {
             case 'dados-pessoais':      return this.dadosPessoaisComponent.submit(true);
             case 'dados-profissionais': return this.dadosProfissionaisComponent.submit(true);
-            case 'embarcacoes':         return this.embarcacoesComponent.submit(true);
             default: return true;
          }
       })();
@@ -69,8 +65,6 @@ export class FormSolicitarAcessoComponent {
    }
 
    onSaveAll() {
-      this.dto.cpf = this.dto.cpf.toString();
-      this.dto.telefone = this.dto.telefone? this.dto.telefone.toString(): this.dto.telefone;
       this.onSaveEvent.emit(this.dto);
    }
 

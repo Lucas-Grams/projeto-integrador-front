@@ -1,5 +1,3 @@
-import {EmbarcacaoDTO} from "./embarcacao.dto";
-
 export class HabilitarTRDTO {
 
    id!: number;
@@ -21,6 +19,5 @@ export class HabilitarTRDTO {
    diplomaCertificacao!: string;
    copiaHabilitacaoBase64!: string;
    diplomaCertificacaoBase64!: string;
-   embarcacoes: EmbarcacaoDTO[] = [];
 
 }

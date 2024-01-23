@@ -5,115 +5,166 @@
 
    <form [formGroup]="formGroup" (ngSubmit)="salvar()">
       <pnip-validators-forms-utils [formGroup]="formGroup" #validatorsFormsUtils></pnip-validators-forms-utils>
-      <!-- tipo/gerenciadora -->
       <div class="row mb-2">
-         <div class="col-6">
+         <div class="col-4">
             <div class="br-select">
                <div class="br-input">
-                  <label>Tipo de Unidade</label>
-                  <br>
-                  <select formControlName="tipo" (change)="selecionaGerenciadora()" class="select">
-                     <option *ngFor="let uni of tipoUnidade" [value]="uni.item">{{uni.value}}</option>
-                  </select>
-<!--                  <br-select-pnip-->
-<!--                     id="tipoUnidade"-->
-<!--                     label="Tipo de Unidade"-->
-<!--                     [options]="[-->
-<!--      { label: 'Unidade Central (UC)', value: 'UC'},-->
-<!--      { label: 'Programa/Seção (PS)', value: 'PS'},-->
-<!--      { label: 'Supeorvisão Regional (SR)', value: 'SR'},-->
-<!--      { label: 'Inspetoria Vetrinária Local (IVZ)', value: 'IVZ'},-->
-<!--      { label: 'Ministério da Pesca e Aquicultura (MPA)', value: 'MPA'},-->
-<!--      { label: 'Secretaria Nacional (SN)', value: 'SN'},-->
-<!--      { label: 'Departamento (DP)', value: 'DP'},-->
-<!--      { label: 'Superintendencia Federal da Pesca (SFP)', value: 'SFP'}-->
-<!--   ]"-->
-<!--                     [optionSelected]="unidade.tipo"-->
-<!--                     (change)="selecionaGerenciadora()"-->
-<!--                     #tipoUnidadeSelect>-->
-<!--                  </br-select-pnip>-->
+                  <br-select-pnip
+                          id="tipoUnidade"
+                          label="Tipo de Unidade"
+                          [options]="tipoUnidade"
+                          [optionSelected]="unidade.tipo"
+                          (change)="selecionaGerenciadora()"
+                          #tipoUnidadeSelect>
+                  </br-select-pnip>
                </div>
             </div>
          </div>
-         <div class="col-6">
+         <div class="col-4">
+            <br-input density="small" name="nome" label="Nome da unidade" formControlName="nome"
+                      [attr.state]="validatorsFormsUtils.getStateOfField('nome')"/>
+         </div>
+
+         <div class="col-4">
             <ng-container *ngIf="!validarUc">
                <div class="br-select">
                   <div class="br-input">
-                     <label>Reporta-se</label>
-                     <br>
-                     <select formControlName="idUnidadeGerenciadora" >
-                        <option *ngFor="let unidade of unidadesGerenciadoras"
-                                [value]="unidade.id">{{unidade.nome}}</option>
-                     </select>
+                     <br-select-pnip
+                             id="idUnidadeGerenciadora"
+                             label="Unidade Gerenciadora"
+                             [options]="unidades"
+                             [optionSelected]="unidades.id"
+                             #gerenciadoraSelect>
+                     </br-select-pnip>
                   </div>
                </div>
             </ng-container>
          </div>
       </div>
 
-      <!-- nome/cep -->
       <div class="row mb-2">
-         <div class="col-8">
-            <br-input density="small" name="nome" label="Nome da unidade" formControlName="nome"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('nome')"/>
-         </div>
-         <div class="col-4">
+
+         <div class="col-2">
             <br-input density="small" name="cep" label="CEP" icon="search" formControlName="cep" mask="#####-###"
-                      [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (change)="validaCEP()" (ngModelChange)="validaCEP()"/>
-            <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
-
+                      [attr.state]="validatorsFormsUtils.getStateOfField('cep')" (change)="validaCEP()"
+                      (ngModelChange)="validaCEP()"/>
+            <ng-container
+                    *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cep'}"></ng-container>
          </div>
-      </div>
-
-      <!-- rua/numero/bairro -->
-      <div class="row mb-2">
-         <div class="col-6">
-            <br-input density="small" name="rua" label="Rua" formControlName="rua" [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
-            <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'rua'}"></ng-container>
+         <div class="col-8">
+            <br-input density="small" name="rua" label="Rua" formControlName="rua"
+                      [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
+            <ng-container
+                    *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'rua'}"></ng-container>
          </div>
          <div class="col-2">
-            <br-input density="small" name="numero" label="Número" formControlName="numero" type="number" [attr.state]="validatorsFormsUtils.getStateOfField('rua')"/>
-         </div>
-         <div class="col-4">
-            <br-input density="small" name="bairro" label="Bairro" formControlName="bairro"/>
+            <br-input density="small" name="numero" label="Número" formControlName="numero" type="text"
+                      [attr.state]="validatorsFormsUtils.getStateOfField('numero')"/>
          </div>
       </div>
 
-      <!-- complemento/uf/cidade -->
-      <div class="row mb-2">
+      <div class="row mb-3">
          <div class="col-4">
             <br-input density="small" name="complemento" label="Complemento" formControlName="complemento"/>
          </div>
-         <div class="col-4">
-            <div class="br-select">
-               <div class="br-input">
-                  <br-input density="small" name="uf" label="UF" formControlName="uf"
-                            [attr.state]="validatorsFormsUtils.getStateOfField('uf')"/>
-                  <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'uf'}"></ng-container>
 
-               </div>
-            </div>
-         </div>
          <div class="col-4">
             <div class="br-select">
                <div class="br-input">
                   <br-input density="small" name="municipio" label="Município" formControlName="cidade"
                             [attr.state]="validatorsFormsUtils.getStateOfField('cidade')"/>
-                  <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cidade'}"></ng-container>
+                  <ng-container
+                          *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'cidade'}"></ng-container>
                </div>
+            </div>
          </div>
+
+         <div class="col-1">
+            <div class="br-input">
+               <br-input density="small" name="uf" label="UF" formControlName="uf"
+                         [attr.state]="validatorsFormsUtils.getStateOfField('uf')"/>
+               <ng-container
+                       *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'uf'}"></ng-container>
+            </div>
+         </div>
+
+         <div class="col-3">
+            <div class="br-input">
+               <br-input density="small" name="coordenadas" label="Coordenadas"  type="text" [value]="latLng"/>
+            </div>
          </div>
       </div>
+      <div class="form-row">
+         <ng-container *ngIf="this.unidade.endereco.latitude && this.unidade.endereco.longitude">
+            <div class="form-group ">
+               <ngui-map class="gmap"
+                         zoom="14"
+                         center="{{unidade.endereco.latitude }},{{unidade.endereco.longitude}}"
+                         [fullscreenControl]="true"
+                         [fullscreenControlOptions]="{ position: 'TOP_RIGHT' }">
+                  <marker
+                     position="{{ unidade.endereco.latitude }}, {{unidade.endereco.longitude}}"                     draggable="true"
+                     (dragend)="moveuPontoMaps($event)">
+                  </marker>
+               </ngui-map>
+            </div>
+            <div class="col-12 text-center">
+               <p>
+                  <label>Latitude:</label>
+                  {{ unidade.endereco.latitude }}
+                  <span class="ml-3"></span>
+                  <label>Longitude:</label>
+                  {{ unidade.endereco.longitude }}
+               </p>
+            </div>
+
+         </ng-container>
+      </div>
+
    </form>
 
-
-   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Representante da unidade</h2>
-
+   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Adicionar Usuários</h2>
    <pnip-admin-form-representante-unidade
-      (emitirForm)="receberForm($event)"
+
       (newUserEmitter)="receberNovoUsuario($event)"
-    #formUser>
+      #formUser>
    </pnip-admin-form-representante-unidade>
+
+   <ng-container *ngIf="unidadeUsuario.length > 0; else semUsuarios">
+      <table class="table">
+         <thead class="thead-light">
+         <tr>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Representante</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">Nome</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">CPF</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col">E-mail</th>
+            <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
+         </tr>
+         </thead>
+         <tbody *ngFor="let uni of unidadeUsuario">
+         <tr>
+            <td><br-switch icon (onChange)="usuarioIsRepresentante(uni)"  [checked]="isRepresentante(uni)"></br-switch></td>
+            <td>{{uni.usuario.nome}}</td>
+            <td>{{uni.usuario.cpf}}</td>
+            <td>{{uni.usuario.email}}</td>
+            <td class="text-center">
+               <button class="br-button"><br-icon-base icon-name="times" family-name="fas" class="text-danger" (click)="cancelarUsuario(uni)"/></button>
+            </td>
+         </tr>
+         </tbody>
+      </table>
+   </ng-container>
+   <ng-template #semUsuarios>
+      <div class="br-message info" role="alert">
+         <div class="icon"><i class="fas fa-info-circle fa-lg" aria-hidden="true"></i>
+         </div>
+         <div class="content"><span class="message-title">Atenção.</span><span class="message-body"> Não há representantes cadastrados para essa unidade.</span></div>
+         <div class="close">
+            <button class="br-button circle small" type="button" aria-label="Fechar"><i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+         </div>
+      </div>
+   </ng-template>
 
    <div class="d-flex justify-content-end mt-4">
       <br-button label="Cancelar" type="secondary" class="mr-2" [routerLink]="'/portal-admin/unidades'"/>

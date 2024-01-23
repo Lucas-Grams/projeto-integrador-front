@@ -6,7 +6,6 @@ import {FormSolicitarAcessoComponent} from "./form-solicitar-acesso/form-solicit
 import {PrimeiroAcessoComponent} from "./primeiro-acesso.component";
 import {DadosPessoaisComponent} from "./form-solicitar-acesso/dados-pessoais/dados-pessoais.component";
 import {DadosProfissionaisComponent} from "./form-solicitar-acesso/dados-profissionais/dados-profissionais.component";
-import {EmbarcacoesComponent} from "./form-solicitar-acesso/embarcacoes/embarcacoes.component";
 import {RevisarSolicitacaoComponent} from "./form-solicitar-acesso/revisar-solicitacao/revisar-solicitacao.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
@@ -22,7 +21,6 @@ import {DetalhesSolicitacaoComponent} from "./detalhes-solicitacao/detalhes-soli
       FormSolicitarAcessoComponent,
       DadosPessoaisComponent,
       DadosProfissionaisComponent,
-      EmbarcacoesComponent,
       RevisarSolicitacaoComponent,
       DetalhesSolicitacaoComponent
    ],
