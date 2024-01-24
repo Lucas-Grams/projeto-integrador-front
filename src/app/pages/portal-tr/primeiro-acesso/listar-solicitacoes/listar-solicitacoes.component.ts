@@ -29,8 +29,9 @@ export class ListarSolicitacoesComponent implements OnInit {
          active: true
       }
    ];
-   public ultimoStatus: string | null = null;
    public solicitacoes: SolicitacaoHabilitacaoDTO[] = [];
+   public ultimoSolicitacao: null | SolicitacaoHabilitacaoDTO = null;
+   public isIndeferida: boolean = true;
 
    constructor(private trService: TrService, private loadingService: LoadingService,
                private route: ActivatedRoute, private router: Router) {
@@ -47,13 +48,14 @@ export class ListarSolicitacoesComponent implements OnInit {
             this.showMessage = true;
          }
       });
-      this.findUltimoStatus();
+      this.findUltimaSolicitacao();
    }
 
-   findUltimoStatus() {
-      this.trService.findStatusUltimaSolicitacao().subscribe((response: ResponseDTO<string>) => {
-         if (response) {
-            this.ultimoStatus = response.msg;
+   findUltimaSolicitacao() {
+      this.trService.findUltimaSolicitacao().subscribe((response: ResponseDTO<SolicitacaoHabilitacaoDTO>) => {
+         if (response && response.data) {
+            this.ultimoSolicitacao = response.data;
+            this.isIndeferida = this.ultimoSolicitacao?.status === 'INDEFERIDA';
          }
       });
    }

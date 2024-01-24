@@ -1,6 +1,17 @@
 <br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
 <br-divider size="medium" class="mt-0"></br-divider>
 <div class="p-5">
+
+
+   <!-- motivo indeferida -->
+   <br-message *ngIf="isIndeferida && ultimoSolicitacao?.observacao" state="warning" closable="true">
+      <br-icon-base icon-name="exclamation-triangle" family-name="fas" class="mr-2"/>
+      <span class="info">
+         <strong>Atenção.</strong> Sua solicitação de habilitação foi indeferida.
+         Motivo: {{ultimoSolicitacao?.observacao}}
+      </span>
+   </br-message>
+
    <br-message *ngIf="showMessage" state="success" closable="true">
       <br-icon-base icon-name="check-circle" family-name="fas" class="mr-2"/>
       <span class="info">
@@ -17,7 +28,7 @@
             <th class="text-blue-vivid-60 text-bold" scope="col">Tipo de Solicitação</th>
             <th class="text-blue-vivid-60 text-bold" scope="col">Nº Processo</th>
             <th class="text-blue-vivid-60 text-bold" scope="col">Status</th>
-            <th class="text-blue-vivid-60 text-bold text-center" scope="col">Ações</th>
+            <th class="text-blue-vivid-60 text-bold" scope="col"></th>
          </tr>
       </thead>
       <tbody>
@@ -31,7 +42,7 @@
                      <pnip-status-solicitacao-utils [status]="s.status"/>
                   </td>
                   <td class="text-center" [style.cursor]="'pointer'">
-                     <br-icon-base icon-name="eye" family-name="fas" class="mr-2 text-blue-vivid-60" (click)="visualizar(s.uuid)"/>
+                     <br-icon-base icon-name="eye" family-name="fas" class="text-blue-vivid-60" (click)="visualizar(s.uuid)"/>
                   </td>
                </tr>
             </ng-container>
@@ -46,7 +57,7 @@
       </tbody>
    </table>
    <div class="d-flex justify-content-center mt-4">
-      <ng-container *ngIf="ultimoStatus === 'INDEFERIDA'">
+      <ng-container *ngIf="isIndeferida">
          <br-button label="Solicitar nova habilitação" type="primary" class="mr-2" (click)="novaSolicitacao()"/>
       </ng-container>
    </div>

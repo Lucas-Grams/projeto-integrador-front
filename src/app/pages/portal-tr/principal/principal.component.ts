@@ -33,21 +33,25 @@ export class PrincipalComponent implements OnInit {
    ];
 
    constructor(private trService: TrService, private loadingService: LoadingService, private auth: AuthService,
-               private router: Router) {}
+               private router: Router) {
+      this.loadingService.show = true;
+   }
 
    ngOnInit() {
       if (this.auth.usuarioLogado()) {
-         this.loadingService.show = true;
          this.trService.findStatusUltimaSolicitacao().subscribe((response: ResponseDTO<string>) => {
-            if (response) {
-               if (response && response.msg !== 'DEFERIDA') {
-                  this.router.navigate(['/portal-tr/primeiro-acesso']);
-               }
+            if (response && response.msg !== 'DEFERIDA') {
+               this.router.navigate(['/portal-tr/primeiro-acesso']).then(() => {
+                  this.loadingService.show = false;
+               });
+            } else {
                this.loadingService.show = false;
             }
          });
       } else {
-         this.router.navigate(['/portal-tr/primeiro-acesso']);
+         this.router.navigate(['/portal-tr/primeiro-acesso']).then(() => {
+            this.loadingService.show = false;
+         });
       }
    }
 

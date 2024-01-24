@@ -24,19 +24,6 @@ export class PrimeiroAcessoComponent implements OnInit {
       }
    ];
 
-   public menuItems = [
-      {
-         label: 'SOLICITAR HABILITAÇÃO',
-         icon: 'ship',
-         url: '/solicitar'
-      },
-      {
-         label: 'MINHAS SOLICITAÇÕES',
-         icon: 'list',
-         url: '/minhas-solicitacoes'
-      },
-   ];
-
    constructor(private trService: TrService, private loadingService: LoadingService, private router: Router, private auth: AuthService) {}
 
    ngOnInit() {
