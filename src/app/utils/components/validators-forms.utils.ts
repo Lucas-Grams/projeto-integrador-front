@@ -38,7 +38,7 @@ export class ValidatorsFormsUtils {
 
    public getStateOfField(attr: string) {
       return (!this.formGroup || !this.formGroup.get(attr)?.touched) && !this.formGroup.get(attr)?.value ? null :
-             (this.formGroup.get(attr)?.invalid ? 'danger' : (this.formGroup.get(attr)?.value ? 'success' : null));
+             (this.formGroup.get(attr)?.invalid ? 'danger' : null);
    }
 
 }

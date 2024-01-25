@@ -54,6 +54,7 @@ export class DadosPessoaisComponent implements OnInit {
    submit(goToStep = false) {
       if (this.formGroup.valid) {
          const form: HabilitarTRDTO = <HabilitarTRDTO>{...this.formGroup.value};
+               form.cep = form.cep.toString();
                form.cpf = form.cpf.toString();
                form.telefone = form.telefone ? form.telefone.toString() : form.telefone;
          for (let attr in form) {
