@@ -1,7 +1,8 @@
-declare var core: any;
-
 import {Component, OnInit} from "@angular/core";
+import { DomSanitizer } from "@angular/platform-browser";
 import {ActivatedRoute, Router} from "@angular/router";
+
+import Swal from "sweetalert2";
 
 import {TrService} from "../../../../core/services/tr.service";
 import {PdfUtils} from "../../../../utils/components/pdf.utils";
@@ -35,7 +36,7 @@ export class ViewSolicitacaoComponent implements OnInit {
    responseOperacao = '';
    statusSolicitacao = '';
 
-   constructor(private trService: TrService, private route: ActivatedRoute, public router: Router) {
+   constructor(private trService: TrService, private route: ActivatedRoute, public router: Router, private sanitizer: DomSanitizer) {
 
    }
 
@@ -83,13 +84,40 @@ export class ViewSolicitacaoComponent implements OnInit {
       });
    }
 
-   showModal(modalId: string, close: string) {
-      const modal: any = document.getElementById("modal-" + modalId);
-      const scrimfoco = new core.Scrim({
-         closeElement: close,
-         trigger: modal,
-      });
-      scrimfoco.showScrim();
+   confirmarOperacao(opcao: string) {
+      if (opcao === 'deferir') {
+         Swal.fire({
+            title: 'Deferir a solicitação de habilitação',
+            text: `Esta opção aprova a solicitação do habilitação de TR, para o Técnico Responsável - ${this.metadado?.habilitarTRDTO?.nome} \n
+                  Você pode suspender este credenciamento a qualquer momento acessando a opção Técnicos Responsáveis, na home do portal`,
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Deferir'
+         }).then((result) => {
+            if (result.value) {
+               this.statusSolicitacao = opcao;
+               this.enviarSolicitacao();
+            }
+         });
+      } else {
+         Swal.fire({
+            input: "text",
+            title: 'Indeferir solicitação',
+            text: `Esta opção encerra o processo para habilitação do TR. \n
+                   Se necessário, informe, no campo abaixo, o(s) motivo(s) do indeferimento.`,
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Indeferir'
+         }).then((result) => {
+            if (result.isConfirmed) {
+               this.statusSolicitacao = opcao;
+               this.msgIndeferir = result.value;
+               this.enviarSolicitacao();
+            }
+         });
+      }
    }
 
 }
