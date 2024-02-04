@@ -40,6 +40,13 @@ export class DadosProfissionaisComponent implements OnInit {
       });
    }
 
+   setConselho() {
+      this.formGroup.get('ufConselho')?.setValue(null);
+      if (this.conselhoClasseSelect && this.conselhoClasseSelect.getOptionSelected().length) {
+         this.formGroup.get('conselhoClasse')?.setValue(this.conselhoClasseSelect.getOptionSelected());
+      }
+   }
+
    submit(goToStep = false) {
       if (this.conselhoClasseSelect && this.conselhoClasseSelect.getOptionSelected().length) {
           this.formGroup.get('conselhoClasse')?.setValue(this.conselhoClasseSelect.getOptionSelected());
