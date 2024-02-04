@@ -24,16 +24,68 @@
                {label: 'CONFEA', value: 'CONFEA'}
             ]"
             [optionSelected]="dto.conselhoClasse"
+            (click)="setConselho()"
             #conselhoClasseSelect>
          </br-select-pnip>
       </div>
-      <div class="col-2">
+      <div class="col-2" *ngIf="this.formGroup.get('conselhoClasse')?.value === 'CONFEA' ||
+               this.formGroup.get('conselhoClasse')?.value === 'CRMV' || this.formGroup.get('conselhoClasse')?.value === null">
          <br-select-pnip
             id="ufConselho"
             label="UF/Região"
             [options]="ufs"
             [optionSelected]="dto.ufConselho"
             #ufConselhoSelect>
+         </br-select-pnip>
+      </div>
+      <div class="col-2" *ngIf="this.formGroup.get('conselhoClasse')?.value === 'CRQ' ||
+            this.formGroup.get('conselhoClasse')?.value === 'CRN'">
+         <br-select-pnip *ngIf="this.formGroup.get('conselhoClasse')?.value === 'CRN'"
+            id="ufConselhoCRN"
+            label="UF/Região"
+            [options]="[
+               {label: 'CRN-1', value: 'CRN-1'},
+               {label: 'CRN-2', value: 'CRN-2'},
+               {label: 'CRN-3', value: 'CRN-3'},
+               {label: 'CRN-4', value: 'CRN-4'},
+               {label: 'CRN-5', value: 'CRN-5'},
+               {label: 'CRN-6', value: 'CRN-6'},
+               {label: 'CRN-7', value: 'CRN-7'},
+               {label: 'CRN-8', value: 'CRN-8'},
+               {label: 'CRN-9', value: 'CRN-9'},
+               {label: 'CRN-10', value: 'CRN-10'},
+               {label: 'CRN-11', value: 'CRN-11'}
+            ]"
+            [optionSelected]="dto.ufConselho"
+            #ufConselhoSelect>
+         </br-select-pnip>
+
+         <br-select-pnip *ngIf="this.formGroup.get('conselhoClasse')?.value === 'CRQ'" id="ufConselhoCRQ" label="UF/Região"
+             [options]="[
+               {label: 'CRQ-1', value: 'CRQ-1'},
+               {label: 'CRQ-2', value: 'CRQ-2'},
+               {label: 'CRQ-3', value: 'CRQ-3'},
+               {label: 'CRQ-4', value: 'CRQ-4'},
+               {label: 'CRQ-5', value: 'CRQ-5'},
+               {label: 'CRQ-6', value: 'CRQ-6'},
+               {label: 'CRQ-7', value: 'CRQ-7'},
+               {label: 'CRQ-8', value: 'CRQ-8'},
+               {label: 'CRQ-9', value: 'CRQ-9'},
+               {label: 'CRQ-10', value: 'CRQ-10'},
+               {label: 'CRQ-11', value: 'CRQ-11'},
+               {label: 'CRQ-12', value: 'CRQ-12'},
+               {label: 'CRQ-13', value: 'CRQ-13'},
+               {label: 'CRQ-14', value: 'CRQ-14'},
+               {label: 'CRQ-15', value: 'CRQ-15'},
+               {label: 'CRQ-16', value: 'CRQ-16'},
+               {label: 'CRQ-17', value: 'CRQ-17'},
+               {label: 'CRQ-18', value: 'CRQ-18'},
+               {label: 'CRQ-19', value: 'CRQ-19'},
+               {label: 'CRQ-20', value: 'CRQ-20'},
+               {label: 'CRQ-21', value: 'CRQ-21'}
+             ]"
+             [optionSelected]="dto.ufConselho"
+             #ufConselhoSelect>
          </br-select-pnip>
       </div>
    </div>
