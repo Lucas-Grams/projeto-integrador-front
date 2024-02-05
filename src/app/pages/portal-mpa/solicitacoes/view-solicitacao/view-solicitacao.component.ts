@@ -1,11 +1,11 @@
 import {Component, OnInit} from "@angular/core";
-import { DomSanitizer } from "@angular/platform-browser";
 import {ActivatedRoute, Router} from "@angular/router";
 
 import Swal from "sweetalert2";
 
 import {TrService} from "../../../../core/services/tr.service";
 import {PdfUtils} from "../../../../utils/components/pdf.utils";
+import {LoadingService} from "../../../../core/services/loading.service";
 
 @Component({
    selector: 'pnip-mpa-view-solicitacao',
@@ -26,7 +26,8 @@ export class ViewSolicitacaoComponent implements OnInit {
       },
       {
          label: 'Detalhes da solicitação',
-         url: '/portal-mpa/solicitacoes'
+         url: '/portal-mpa/solicitacoes',
+         active: true
       }
    ];
 
@@ -36,9 +37,8 @@ export class ViewSolicitacaoComponent implements OnInit {
    responseOperacao = '';
    statusSolicitacao = '';
 
-   constructor(private trService: TrService, private route: ActivatedRoute, public router: Router, private sanitizer: DomSanitizer) {
-
-   }
+   constructor(private trService: TrService, private loadingService: LoadingService, private route: ActivatedRoute,
+               public router: Router) {}
 
    ngOnInit() {
       this.route.params.subscribe(params => {
@@ -51,10 +51,11 @@ export class ViewSolicitacaoComponent implements OnInit {
    }
 
    findSolicitacaoByUuid(uuid: string) {
+      this.loadingService.show = true;
       this.trService.findSolicitacaoByUuid(uuid).subscribe((response: any) => {
          this.solicitacao = response.data;
-
          this.metadado = JSON.parse(this.solicitacao.metadado);
+         this.loadingService.show = false;
       });
    }
 
@@ -67,12 +68,15 @@ export class ViewSolicitacaoComponent implements OnInit {
          msgSolicitacao: (this.statusSolicitacao === 'deferir'? '' : this.msgIndeferir)
       }
 
+      this.loadingService.show = true;
       this.trService.finalizarSolicitacao(finalizarSolicitacao).subscribe(response => {
          if (response) {
+            this.loadingService.show = false;
             this.router.navigate(['portal-mpa/solicitacoes']);
          }
       }, (responseError: any) => {
          this.responseOperacao = responseError.error.message;
+         this.loadingService.show = false;
       });
    }
 
