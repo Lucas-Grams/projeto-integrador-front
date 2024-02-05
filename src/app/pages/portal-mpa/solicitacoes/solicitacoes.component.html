@@ -1,13 +1,14 @@
 <br-breadcrumb [links]="breadcrumb"></br-breadcrumb>
 <br-divider size="medium" class="mt-0 mb-0"></br-divider>
+<div class="p-5">
+   <h2 class="text-bold text-blue-vivid-60 mt-0 mb-4 pb-0">Processos</h2>
 
-<h2 class="text-bold text-blue-vivid-60 mt-4 mb-4 pb-0">Processos</h2>
-
-<br-tab label (onTabItemClick)="onTabItemClick($event)">
-   <br-tab-item title="Em análise" id="panel-1" on>
-      <pnip-mpa-list-solicitacoes *ngIf="statusSolicitacao === 'EM_ANALISE'" [statusSolicitacao]="statusSolicitacao"></pnip-mpa-list-solicitacoes>
-   </br-tab-item>
-   <br-tab-item title="Histórico de processos" id="panel-2">
-      <pnip-mpa-list-solicitacoes *ngIf="statusSolicitacao === 'ALL'" [statusSolicitacao]="statusSolicitacao"></pnip-mpa-list-solicitacoes>
-   </br-tab-item>
-</br-tab>
+   <br-tab label (onTabItemClick)="onTabItemClick($event)">
+      <br-tab-item title="Em análise" id="panel-1" on>
+         <pnip-mpa-list-solicitacoes *ngIf="statusSolicitacao === 'EM_ANALISE'" [statusSolicitacao]="statusSolicitacao"/>
+      </br-tab-item>
+      <br-tab-item title="Histórico de processos" id="panel-2">
+         <pnip-mpa-list-solicitacoes *ngIf="statusSolicitacao === 'ALL'" [statusSolicitacao]="statusSolicitacao"/>
+      </br-tab-item>
+   </br-tab>
+</div>

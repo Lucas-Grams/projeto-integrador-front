@@ -32,8 +32,9 @@ export class PrincipalComponent {
          home: true
       },
       {
-         label: 'Dashboard',
-         url: '/portal-mpa'
+         label: 'Principal',
+         url: '/portal-mpa',
+         active: true
       }
    ];
 
