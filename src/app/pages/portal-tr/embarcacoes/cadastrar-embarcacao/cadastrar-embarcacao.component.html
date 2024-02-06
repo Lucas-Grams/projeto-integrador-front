@@ -129,14 +129,14 @@
                         </div>
                         <!-- capacidade total -->
                         <div class="col">
-                           <br-input density="small" label="Capacidade total" placeholder="Tempo em quilogramas" mask="########"
+                           <br-input density="small" label="Capacidade total" placeholder="Total em quilogramas" mask="########"
                                      tooltip-text="Informe a capacidade total do local de armazenamento, em kg." tooltip-place="bottom"
                                      formControlName="capacidadeTotal" [attr.state]="validatorsFormsUtils.getStateOfField('capacidadeTotal')"/>
                            <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'capacidadeTotal'}"></ng-container>
                         </div>
                         <!-- capacidade pescado -->
                         <div class="col">
-                           <br-input density="small" label="Capacidade para pescado" placeholder="Tempo em quilogramas" mask="########"
+                           <br-input density="small" label="Capacidade para pescado" placeholder="Total em quilogramas" mask="########"
                                      tooltip-text="Informe a capacidade de armazenamento de pescado, em kg." tooltip-place="bottom"
                                      formControlName="capacidadePescado" [attr.state]="validatorsFormsUtils.getStateOfField('capacidadePescado')"/>
                            <ng-container *ngTemplateOutlet="validatorsFormsUtils.templateValidacao; context: {attr: 'capacidadePescado'}"></ng-container>

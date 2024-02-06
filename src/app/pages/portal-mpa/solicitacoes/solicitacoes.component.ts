@@ -2,8 +2,7 @@ import {Component} from "@angular/core";
 
 @Component({
    selector: 'pnip-mpa-solicitacoes',
-   templateUrl: './solicitacoes.component.html',
-   styleUrls: ['./solicitacoes.component.scss']
+   templateUrl: './solicitacoes.component.html'
 })
 export class SolicitacoesComponent {
 
@@ -17,7 +16,8 @@ export class SolicitacoesComponent {
       },
       {
          label: 'Processos',
-         url: '/portal-mpa/solicitacoes'
+         url: '/portal-mpa/solicitacoes',
+         active: true
       }
    ];
 

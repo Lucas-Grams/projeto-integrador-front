@@ -1,10 +1,11 @@
-declare var core: any;
-
 import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 
+import Swal from "sweetalert2";
+
 import {TrService} from "../../../../core/services/tr.service";
 import {PdfUtils} from "../../../../utils/components/pdf.utils";
+import {LoadingService} from "../../../../core/services/loading.service";
 
 @Component({
    selector: 'pnip-mpa-view-solicitacao',
@@ -25,7 +26,8 @@ export class ViewSolicitacaoComponent implements OnInit {
       },
       {
          label: 'Detalhes da solicitação',
-         url: '/portal-mpa/solicitacoes'
+         url: '/portal-mpa/solicitacoes',
+         active: true
       }
    ];
 
@@ -35,9 +37,8 @@ export class ViewSolicitacaoComponent implements OnInit {
    responseOperacao = '';
    statusSolicitacao = '';
 
-   constructor(private trService: TrService, private route: ActivatedRoute, public router: Router) {
-
-   }
+   constructor(private trService: TrService, private loadingService: LoadingService, private route: ActivatedRoute,
+               public router: Router) {}
 
    ngOnInit() {
       this.route.params.subscribe(params => {
@@ -50,10 +51,11 @@ export class ViewSolicitacaoComponent implements OnInit {
    }
 
    findSolicitacaoByUuid(uuid: string) {
+      this.loadingService.show = true;
       this.trService.findSolicitacaoByUuid(uuid).subscribe((response: any) => {
          this.solicitacao = response.data;
-
          this.metadado = JSON.parse(this.solicitacao.metadado);
+         this.loadingService.show = false;
       });
    }
 
@@ -66,12 +68,15 @@ export class ViewSolicitacaoComponent implements OnInit {
          msgSolicitacao: (this.statusSolicitacao === 'deferir'? '' : this.msgIndeferir)
       }
 
+      this.loadingService.show = true;
       this.trService.finalizarSolicitacao(finalizarSolicitacao).subscribe(response => {
          if (response) {
+            this.loadingService.show = false;
             this.router.navigate(['portal-mpa/solicitacoes']);
          }
       }, (responseError: any) => {
          this.responseOperacao = responseError.error.message;
+         this.loadingService.show = false;
       });
    }
 
@@ -83,13 +88,40 @@ export class ViewSolicitacaoComponent implements OnInit {
       });
    }
 
-   showModal(modalId: string, close: string) {
-      const modal: any = document.getElementById("modal-" + modalId);
-      const scrimfoco = new core.Scrim({
-         closeElement: close,
-         trigger: modal,
-      });
-      scrimfoco.showScrim();
+   confirmarOperacao(opcao: string) {
+      if (opcao === 'deferir') {
+         Swal.fire({
+            title: 'Deferir a solicitação de habilitação',
+            text: `Esta opção aprova a solicitação do habilitação de TR, para o Técnico Responsável - ${this.metadado?.habilitarTRDTO?.nome} \n
+                  Você pode suspender este credenciamento a qualquer momento acessando a opção Técnicos Responsáveis, na home do portal`,
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Deferir'
+         }).then((result) => {
+            if (result.value) {
+               this.statusSolicitacao = opcao;
+               this.enviarSolicitacao();
+            }
+         });
+      } else {
+         Swal.fire({
+            input: "text",
+            title: 'Indeferir solicitação',
+            text: `Esta opção encerra o processo para habilitação do TR. \n
+                   Se necessário, informe, no campo abaixo, o(s) motivo(s) do indeferimento.`,
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Indeferir'
+         }).then((result) => {
+            if (result.isConfirmed) {
+               this.statusSolicitacao = opcao;
+               this.msgIndeferir = result.value;
+               this.enviarSolicitacao();
+            }
+         });
+      }
    }
 
 }

@@ -11,7 +11,7 @@ COPY *.json ts* ./
 
 ARG HREF="/"
 ARG ENV="production"
-RUN rm -rf package-lock.json 
+RUN rm -rf package-lock.json
 RUN ng build
 
 
