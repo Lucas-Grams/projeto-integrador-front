@@ -11,12 +11,11 @@ COPY *.json ts* ./
 
 ARG HREF="/"
 ARG ENV="production"
-RUN rm -rf package-lock.json 
+RUN rm -rf package-lock.json
 RUN ng build
 
 
 FROM nginx:1.25 as RUNNER
-
 
 RUN echo "server{listen 80; add_header Content-Security-Policy \"frame-ancestors https://*.pdsa-rs.com.br\"; location /{root /usr/share/nginx/html;index index.html;try_files \$uri /index.html \$uri/ =404; }}" > /etc/nginx/conf.d/default.conf \
    && rm -rf /usr/share/nginx/html/*
